@@ -1,0 +1,36 @@
+.topBar{
+    -fx-alignment: center;
+    -fx-spacing: 10;
+    -fx-padding: 20;
+    -fx-start-margin: 100;
+
+}
+.topBar Label{
+    -fx-text-fill: white;
+}
+.centerBar{
+    -fx-alignment: center;
+    -fx-spacing: 10;
+}
+#infoLabel{
+    -fx-text-fill: white;
+}
+.bottomBar{
+    -fx-spacing: 10;
+    -fx-alignment: center;
+}
+.bottomBar Label{
+    -fx-text-fill: white;
+}
+.border-pane{
+    -fx-background-color: #1f1f1f;
+
+}.border-pane bottom{
+    -fx-start-margin: 10;
+ }
+#mapGrid Line{
+    -fx-stroke: #a4a2a2;
+}
+#mapGrid Label{
+    -fx-text-fill: white;
+}

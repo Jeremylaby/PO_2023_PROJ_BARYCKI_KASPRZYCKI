@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.VBox?>
+
+<?import java.net.URL?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            minHeight="550.0" minWidth="850.0"
+            fx:controller="agh.ics.oop.presenter.SimulationPresenter"
+styleClass="border-pane">
+    <stylesheets>
+        <URL value="@style.css" />
+    </stylesheets>
+    <top><HBox styleClass="topBar">
+        <Label text="Wprowadź listę ruchów:"/>
+        <TextField fx:id="movesTextField"/></HBox></top>
+
+    <bottom><VBox styleClass="bottomBar">
+        <Label text="Rozpocznij symulację:"/>
+        <Button text="Start" onAction="#onSimulationStartClicked"/></VBox></bottom>
+</BorderPane>
