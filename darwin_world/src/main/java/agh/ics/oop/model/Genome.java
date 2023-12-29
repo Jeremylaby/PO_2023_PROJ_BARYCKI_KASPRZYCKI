@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Genome {
-    private List<Integer> genes;
+    private final List<Integer> genes;
     private int currentGeneIndex=0;
-    private boolean isalternative;
+    private final boolean isalternative;
     private boolean flag;
 
 
@@ -19,10 +19,9 @@ public class Genome {
         this.genes=list;
         this.isalternative=isalternative;
     }
-    public Genome(List<Integer> genes,int min,int max) {
-        this.genes=genes;
+    public Genome(List<Integer> genes,int min,int max,boolean isalternative) {
         this.isalternative=isalternative;
-        mutate(min,max);
+        this.genes=mutate(genes,min,max);
     }
     public List<Integer> getGenes() {
         return List.copyOf(genes);
@@ -30,9 +29,6 @@ public class Genome {
 
     public int getCurrentGeneIndex() {
         return currentGeneIndex;
-    }
-    private void setGenes(List<Integer> genes) {
-        this.genes = genes;
     }
     public int getCurentGene(){
         int ind=this.currentGeneIndex;
@@ -51,8 +47,11 @@ public class Genome {
         return new ArrayList<>(genes.subList(0,n));
     }
 
-    private void mutate(int min,int max){
-        List<Integer> newGenes=new ArrayList<>(this.getGenes());
+    private List<Integer> mutate(List<Integer> genes, int min,int max){
+        if(min==0 && max==0){
+            return genes;
+        }
+        List<Integer> newGenes=new ArrayList<>(genes);
         RandomNumGenerator randomNumGenerator=new RandomNumGenerator(min,max);
         int n = genes.size();
         int k = randomNumGenerator.generateRandomInt();
@@ -63,7 +62,7 @@ public class Genome {
             int mutatedGene = randomNumGenerator2.generateRandomIntWithoutK(newGenes.get(gene));
             newGenes.set(gene,mutatedGene);
         });
-        this.setGenes(newGenes);
+        return newGenes;
     }
     private void nextGene(){
         currentGeneIndex+=1%genes.size();
