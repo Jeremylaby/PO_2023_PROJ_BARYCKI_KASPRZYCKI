@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GrassField extends AbstractWorldMap {
-    private final Map<Vector2d, Grass> grasses = new HashMap<>();
+    private final Map<Vector2d, Plant> grasses = new HashMap<>();
     public GrassField( int grassCount) {
         generateGrass(grassCount);
     }
@@ -17,12 +17,12 @@ public class GrassField extends AbstractWorldMap {
         int maxHeight=maxWidth;
         RandomPositionGenerator randomPositionGenerator = new RandomPositionGenerator(maxWidth, maxHeight, grassCount);
         for(Vector2d grassPosition : randomPositionGenerator) {
-            grasses.put(grassPosition, new Grass(grassPosition));
+            grasses.put(grassPosition, new Plant(grassPosition, isPoisonous));
         }
     }
 
 
-    public Map<Vector2d, Grass> getGrasses() {
+    public Map<Vector2d, Plant> getGrasses() {
         return Map.copyOf(grasses);
     }
     @Override
@@ -56,7 +56,7 @@ public class GrassField extends AbstractWorldMap {
     @Override
     public Map<Vector2d, WorldElement> getElements() {
         Map<Vector2d,WorldElement> worldElementMap=super.getElements();
-        for (Grass grass: grasses.values()){
+        for (Plant grass: grasses.values()){
             if(!worldElementMap.containsKey(grass.getPosition())) {
                 worldElementMap.put(grass.getPosition(), grass);
             }
