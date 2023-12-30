@@ -102,13 +102,11 @@ public class Animal implements WorldElement{
     }
     public Animal makeChild(Animal animal){//w założeniu wywyołujemy tą metodę jeśli wiemy że this jest silniejszy
         updateFamilyTree(this,animal);
-        int k;
-        int l;
         Animal father =this;
         Animal mother=animal;
 
-        k=Math.round((float) (genomeLength * father.getEnergy()) /mother.getEnergy());
-        l=genomeLength-k;
+        int k=Math.round((float) (genomeLength * father.getEnergy()) /mother.getEnergy());
+        int l=genomeLength-k;
         List<Integer> fatherGenes=new ArrayList<>();
         List<Integer> motherGenes=new ArrayList<>();
         RandomNumGenerator randomNumGenerator =new RandomNumGenerator(0,1);

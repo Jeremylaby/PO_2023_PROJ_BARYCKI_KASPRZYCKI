@@ -114,7 +114,7 @@ public class SimulationPresenter implements MapChangeListener {
             List<Vector2d> positions = List.of(new Vector2d(2, 2), new Vector2d(6,3));
             ConsoleMapDisplay consoleMapDisplay = new ConsoleMapDisplay();
             List<Simulation> simulations = new ArrayList<>();
-            GrassField grassField = new GrassField(10);
+            EquatorMap grassField = new EquatorMap(10);
             newPresenter.setWorldMap(grassField);
             grassField.addObserver(newPresenter);
             simulations.add(new Simulation(positions,directions,grassField));
