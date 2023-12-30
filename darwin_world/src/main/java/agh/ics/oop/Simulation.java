@@ -22,12 +22,9 @@ public class Simulation implements Runnable {
         this.animals = new ArrayList<>();
         for (Vector2d position : positions) {
             Animal animal = new Animal(position);
-            try {
-                worldMap.place(animal);
-                animals.add(animal);
-            } catch (PositionAlreadyOccupiedException e) {
-                e.printStackTrace();
-            }
+            worldMap.place(animal);
+            animals.add(animal);
+
         }
         this.moves = moves;
     }

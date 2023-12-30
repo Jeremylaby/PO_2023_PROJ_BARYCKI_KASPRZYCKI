@@ -11,7 +11,7 @@ import java.util.UUID;
  *
  * @author apohllo, idzik
  */
-public interface WorldMap extends MoveValidator {
+public interface WorldMap {
 
     /**
      * Place a animal on the map.
@@ -19,7 +19,7 @@ public interface WorldMap extends MoveValidator {
      * @param animal The animal to place on the map.
      * @return True if the animal was placed. The animal cannot be placed if the move is not valid.
      */
-    void place(Animal animal) throws PositionAlreadyOccupiedException;
+    void place(Animal animal);
 
     /**
      * Moves an animal (if it is present on the map) according to specified direction.
