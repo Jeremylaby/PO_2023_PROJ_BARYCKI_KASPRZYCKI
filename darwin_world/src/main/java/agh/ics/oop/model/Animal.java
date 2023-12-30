@@ -84,13 +84,13 @@ public class Animal implements WorldElement{
     public void eat(int n){
         this.energy+=n;
     }
-    public void move(Boundary boundary){
+    public void move(int width,int height){
         this.rotate();
         Vector2d newposition=position.add(orientation.toUnitVector());
-        if (newposition.getY()>=0&&newposition.getY()<=boundary.rightUpper().getY()){
+        if (newposition.getY()>=0&&newposition.getY()<=height-1){
             if(newposition.getX()<0){
-                position=new Vector2d(boundary.rightUpper().getX(), newposition.getY());
-            } else if (newposition.getX()>boundary.rightUpper().getX()) {
+                position=new Vector2d(width-1, newposition.getY());
+            } else if (newposition.getX()>width-1) {
                 position=new Vector2d(0, newposition.getY());
 
             }else {

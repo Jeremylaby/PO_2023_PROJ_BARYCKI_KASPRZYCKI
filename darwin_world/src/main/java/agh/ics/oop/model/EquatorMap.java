@@ -13,7 +13,6 @@ public class EquatorMap extends AbstractWorldMap {
     private int equatorStart;
     private int equatorEnd;
     private Configuration conf;
-    private Boundary boundary;
     public EquatorMap(Configuration conf) {
         generateEquator(conf.mapHeight(),conf.mapWidth());
         generatePlants(conf.plantsStartNum());
