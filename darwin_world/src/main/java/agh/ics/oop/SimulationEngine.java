@@ -21,7 +21,7 @@ public class SimulationEngine {
         simulations.forEach(simulation -> simulation.run());
     }
 
-    public void runAsync() throws InterruptedException{
+    public void runAsync() {
         threads.forEach(thread -> thread.start());
     }
 

@@ -1,46 +1,50 @@
 package agh.ics.oop.presenter;
 
-import agh.ics.oop.Simulation;
-import agh.ics.oop.SimulationEngine;
 import agh.ics.oop.model.*;
 import agh.ics.oop.model.util.Boundary;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.stage.Stage;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class SimulationPresenter implements MapChangeListener {
-    @FXML
-    private Label infoLabel;
-    @FXML
-    private TextField movesTextField;
-    @FXML
-    private GridPane mapGrid;
-    private WorldMap map;
     private final static double CELL_WIDTH = 50;
     private final static double CELL_HEIGHT = 50;
+
+    @FXML
+    private Label infoLabel;
+
+    @FXML
+    private GridPane mapGrid;
+
+    private WorldMap map;
 
     public void setWorldMap(WorldMap map) {
         this.map = map;
     }
 
-    private void createGrid(Boundary boundary) {
+    public void drawMap(WorldMap worldMap) {
+        clearGrid();
+        Boundary boundary = worldMap.getCurrentBounds();
+        setGrid(boundary);
+        drawWorldElements(worldMap, boundary);
+    }
+
+    private void clearGrid() {
+        mapGrid.getChildren().retainAll(mapGrid.getChildren().get(0)); // hack to retain visible grid lines
+        mapGrid.getColumnConstraints().clear();
+        mapGrid.getRowConstraints().clear();
+    }
+
+    private void setGrid(Boundary boundary) {
         Vector2d lhvector = boundary.rightUpper().subtract(boundary.leftLower());
         int x = boundary.leftLower().getX();
         int y = boundary.rightUpper().getY();
+
         for (int i = 0; i <= lhvector.getX() + 1; i++) {
             mapGrid.getColumnConstraints().add(new ColumnConstraints(CELL_WIDTH));
         }
@@ -62,15 +66,6 @@ public class SimulationPresenter implements MapChangeListener {
         Label label = new Label("x/y");
         GridPane.setHalignment(label, HPos.CENTER);
         mapGrid.add(label, 0, 0);
-    }
-
-    public void drawMap(WorldMap worldMap) {
-        clearGrid();
-        Boundary boundary = worldMap.getCurrentBounds();
-        createGrid(boundary);
-        drawWorldElements(worldMap, boundary);
-        mapGrid.setAlignment(Pos.CENTER);
-
     }
 
     private void drawWorldElements(WorldMap worldMap, Boundary boundary) {
@@ -109,59 +104,10 @@ public class SimulationPresenter implements MapChangeListener {
         });
     }
 
-    public void onSimulationStartClicked() {
-        String[] moves = movesTextField.getText().split("\\s+");
-        System.out.println("System wystartował");
-        try {
-            Stage newStage = new Stage();
-            SimulationPresenter newPresenter = createNewSimulationWindow(newStage);
-
-            List<Vector2d> positions = List.of(new Vector2d(2, 2), new Vector2d(6, 3));
-            List<Simulation> simulations = new ArrayList<>();
-            GrassField grassField = new GrassField(10);
-            newPresenter.setWorldMap(grassField);
-            grassField.addObserver(newPresenter);
-            simulations.add(new Simulation(positions, grassField));
-            SimulationEngine engine = new SimulationEngine(simulations);
-            engine.runAsync();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("System Zakończył działanie");
-    }
-
-    private SimulationPresenter createNewSimulationWindow(Stage newStage) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("simulationwindow.fxml"));
-        BorderPane viewRoot = loader.load();
-        SimulationPresenter newPresenter = loader.getController();
-        configureStage(viewRoot, newStage);
-        newStage.show();
-        return newPresenter;
-    }
-
-    private static void configureStage(BorderPane viewRoot, Stage newStage) {
-//        Image icon = new Image("/images/pig2.png");
-//        newStage.getIcons().add(icon);
-        Scene scene = new Scene(viewRoot);
-        newStage.setScene(scene);
-        newStage.setTitle("Simulation Window");
-    }
-
-    private void clearGrid() {
-        mapGrid.getChildren().retainAll(mapGrid.getChildren().get(0)); // hack to retain visible grid lines
-        mapGrid.getColumnConstraints().clear();
-        mapGrid.getRowConstraints().clear();
-    }
-
     @Override
     public synchronized void mapChanged(WorldMap worldMap, String message) {
         Platform.runLater(() -> {
             drawMap(worldMap);
-            System.out.println(worldMap.toString());
             infoLabel.setText(message);
         });
 

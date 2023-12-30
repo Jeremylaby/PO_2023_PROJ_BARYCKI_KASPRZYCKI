@@ -16,10 +16,12 @@
         <URL value="@style.css" />
     </stylesheets>
     <center>
-        <VBox styleClass="centerBar">
-            <Label fx:id="infoLabel" text="All animals will be living here!" textAlignment="CENTER"/>
-            <GridPane styleClass="grid-pane" fx:id="mapGrid" gridLinesVisible="true" />
-        </VBox>
+        <HBox alignment="CENTER">
+            <VBox styleClass="centerBar">
+                <Label fx:id="infoLabel" text="All animals will be living here!" textAlignment="CENTER"/>
+                <GridPane styleClass="grid-pane" fx:id="mapGrid" gridLinesVisible="true" />
+            </VBox>
+        </HBox>
     </center>
 
 </BorderPane>

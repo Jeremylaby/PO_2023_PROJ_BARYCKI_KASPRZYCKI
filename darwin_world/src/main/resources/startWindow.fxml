@@ -12,16 +12,15 @@
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             minHeight="550.0" minWidth="850.0"
-            fx:controller="agh.ics.oop.presenter.SimulationPresenter"
-styleClass="border-pane">
+            fx:controller="agh.ics.oop.presenter.StartPresenter"
+            styleClass="border-pane">
     <stylesheets>
-        <URL value="@style.css" />
+        <URL value="@style.css"/>
     </stylesheets>
-    <top><HBox styleClass="topBar">
-        <Label text="Wprowadź listę ruchów:"/>
-        <TextField fx:id="movesTextField"/></HBox></top>
-
-    <bottom><VBox styleClass="bottomBar">
-        <Label text="Rozpocznij symulację:"/>
-        <Button text="Start" onAction="#onSimulationStartClicked"/></VBox></bottom>
+    <bottom>
+        <VBox styleClass="bottomBar">
+            <Label text="Rozpocznij symulację:"/>
+            <Button text="Start" onAction="#onSimulationStartClicked"/>
+        </VBox>
+    </bottom>
 </BorderPane>
