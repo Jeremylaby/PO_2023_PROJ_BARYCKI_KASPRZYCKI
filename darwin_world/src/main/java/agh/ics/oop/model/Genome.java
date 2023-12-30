@@ -18,13 +18,19 @@ public class Genome {
         List<Integer> list = randomNumGenerator.generateRandomIntList(n);
         this.genes=list;
         this.isalternative=isalternative;
+        this.flag=isalternative;
     }
     public Genome(List<Integer> genes,int min,int max,boolean isalternative) {
         this.isalternative=isalternative;
         this.genes=mutate(genes,min,max);
+        this.flag=isalternative;
     }
     public List<Integer> getGenes() {
         return List.copyOf(genes);
+    }
+
+    public boolean isIsalternative() {
+        return isalternative;
     }
 
     public int getCurrentGeneIndex() {
@@ -65,7 +71,7 @@ public class Genome {
         return newGenes;
     }
     private void nextGene(){
-        currentGeneIndex+=1%genes.size();
+        currentGeneIndex=(currentGeneIndex+1)%genes.size();
     }
     private void nextGeneBackAndForth(){
         if(flag){

@@ -4,15 +4,19 @@ import agh.ics.oop.model.util.Boundary;
 import agh.ics.oop.model.util.MapVisualizer;
 
 import java.util.*;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 
 public abstract class AbstractWorldMap implements WorldMap {
     private final UUID id = UUID.randomUUID();
-    protected final Map<Vector2d, Animal> animals = new HashMap<>();
+    protected Multimap<Vector2d, Animal> animals = ArrayListMultimap.create();
+    protected Map<Vector2d,Plant> plants=new HashMap<>();
     private List<MapChangeListener> observers = new ArrayList<>();
 
-    public Map<Vector2d, Animal> getAnimals() {
-        return Map.copyOf(animals);
-    }
+    protected int nutrition;
+    protected int height;
+    protected int width;
+    protected Boundary boundary=new Boundary(new Vector2d(0,0),new Vector2d(width-1,height-1));
 
     public void addObserver(MapChangeListener observer) {
         observers.add(observer);

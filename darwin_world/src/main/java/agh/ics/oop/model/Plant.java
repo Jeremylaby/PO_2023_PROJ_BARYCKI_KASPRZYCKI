@@ -7,6 +7,11 @@ public class Plant implements WorldElement {
         this.position = position;
         this.isPoisonous = isPoisonous;
     }
+
+    public boolean isPoisonous() {
+        return isPoisonous;
+    }
+
     public Plant(Vector2d position){
         this(position,false);
     }
