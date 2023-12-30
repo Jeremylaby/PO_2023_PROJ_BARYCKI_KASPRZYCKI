@@ -37,17 +37,19 @@ public abstract class AbstractWorldMap implements WorldMap {
         }
     }
 
-    public synchronized void move(Animal animal, MoveDirection direction) {
-        if (this.isOccupied(animal.getPosition()) && this.objectAt(animal.getPosition()).equals(animal)) {
+    public synchronized void move(Animal animal) {
+        if (this.animalsAt(animal.getPosition()).contains(animal)) {
             Vector2d oldPosition = animal.getPosition();
-            MapDirection oldOrientation =animal.getOrientation();
-            animals.remove(animal.getPosition());
-            animal.move(direction, this);
+            MapDirection oldOrientation = animal.getOrientation();
+
+            animals.remove(animal.getPosition(), animal);
+            animal.move(getCurrentBounds());
             animals.put(animal.getPosition(), animal);
-            if (!oldPosition.equals(animal.getPosition())) {//Nie wiem czy mam sygnalizować każdą próbę ruchu czy tyl;ko faktyczną zmianę więc zostawiam to tak
-                mapChanged("Animal was moved from " + oldPosition.toString() + " to " + animal.getPosition().toString());
-            }else if(oldOrientation!=animal.getOrientation()){
-                mapChanged("Animal " +animal.getPosition()+ " rotated from "+oldOrientation+" to "+animal.getOrientation());
+
+            if (!oldPosition.equals(animal.getPosition())) {
+                mapChanged("Animal was moved from " + oldPosition + " to " + animal.getPosition().toString());
+            } else if (oldOrientation != animal.getOrientation()) {
+                mapChanged("Animal " + animal.getPosition() + " rotated from " + oldOrientation + " to " + animal.getOrientation());
             }
         }
     }
@@ -57,7 +59,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         return !animals.containsKey(position);
     }
 
-    public WorldElement objectAt(Vector2d position) {
+    public Collection<Animal> animalsAt(Vector2d position) {
         return animals.get(position);
     }
 
@@ -73,9 +75,4 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     @Override
     public abstract Boundary getCurrentBounds();
-
-    @Override
-    public UUID getId() {
-        return id;
-    }
 }

@@ -17,7 +17,7 @@ public class GrassField extends AbstractWorldMap {
         int maxHeight=maxWidth;
         RandomPositionGenerator randomPositionGenerator = new RandomPositionGenerator(maxWidth, maxHeight, grassCount);
         for(Vector2d grassPosition : randomPositionGenerator) {
-            grasses.put(grassPosition, new Plant(grassPosition, isPoisonous));
+            grasses.put(grassPosition, new Plant(grassPosition, false));
         }
     }
 
@@ -25,20 +25,20 @@ public class GrassField extends AbstractWorldMap {
     public Map<Vector2d, Plant> getGrasses() {
         return Map.copyOf(grasses);
     }
-    @Override
-    public boolean isOccupied(Vector2d position) {
-        return super.isOccupied(position)||grasses.get(position)!=null;
-    }
+//    @Override
+//    public boolean isOccupied(Vector2d position) {
+//        return super.isOccupied(position)||grasses.get(position)!=null;
+//    }
 
 
-    @Override
-    public WorldElement objectAt(Vector2d position) {
-        WorldElement worldElement =super.objectAt(position);
-        return worldElement!=null
-                ?worldElement
-                :grasses.get(position);
-
-    }
+//    @Override
+//    public WorldElement objectAt(Vector2d position) {
+//        WorldElement worldElement =super.objectAt(position);
+//        return worldElement!=null
+//                ?worldElement
+//                :grasses.get(position);
+//
+//    }
 
 
     @Override

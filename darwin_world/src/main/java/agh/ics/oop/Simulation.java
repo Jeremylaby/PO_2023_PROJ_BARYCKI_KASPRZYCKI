@@ -13,28 +13,24 @@ public class Simulation implements Runnable {
         return animals;
     }
 
-    public List<MoveDirection> getMoves() {
-        return moves;
-    }
-
-    public Simulation(List<Vector2d> positions, List<MoveDirection> moves, WorldMap worldMap) {
+    public Simulation(List<Vector2d> positions, WorldMap worldMap) {
         this.worldMap = worldMap;
         this.animals = new ArrayList<>();
         for (Vector2d position : positions) {
-            Animal animal = new Animal(position);
+            Animal animal = new Animal(position, 0, 0, 10, false, 100);
             worldMap.place(animal);
             animals.add(animal);
 
         }
-        this.moves = moves;
     }
 
     public void run() {
         int ind = 0;
-        for (MoveDirection move : moves) {
-            worldMap.move(animals.get(ind), move);
+
+        while (true) {
+            worldMap.move(animals.get(ind));
             try {
-                Thread.sleep(500);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
