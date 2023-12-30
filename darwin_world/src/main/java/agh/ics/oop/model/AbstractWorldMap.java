@@ -9,7 +9,7 @@ import com.google.common.collect.Multimap;
 
 public abstract class AbstractWorldMap implements WorldMap {
     private final UUID id = UUID.randomUUID();
-    protected Multimap<Vector2d, Animal> animals = ArrayListMultimap.create();
+    protected Multimap<Vector2d, Animal> animalsMap= ArrayListMultimap.create();
     protected Map<Vector2d,Plant> plants=new HashMap<>();
     private List<MapChangeListener> observers = new ArrayList<>();
 
@@ -21,7 +21,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         observers.remove(observer);
     }
 
-    private void mapChanged(String message) {
+    protected void mapChanged(String message) {
         observers.forEach(observer -> observer.mapChanged(this, message));
     }
 
@@ -49,13 +49,13 @@ public abstract class AbstractWorldMap implements WorldMap {
         }
     }
 
-    public boolean canMoveTo(Vector2d position) {
+    public boolean isanimal(Vector2d position) {
 
-        return !animals.containsKey(position);
+        return animalsMap.containsKey(position);
     }
 
     public Collection<Animal> animalsAt(Vector2d position) {
-        return animals.get(position);
+        return animalsMap.get(position);
     }
 
 
@@ -67,22 +67,9 @@ public abstract class AbstractWorldMap implements WorldMap {
         }
         return worldElementMap;
     }
-
-<<<<<<< Updated upstream
-    @Override
-    public abstract Boundary getCurrentBounds();
-=======
-
     @Override
     public UUID getId() {
         return id;
     }
 
-    @Override
-    public String toString() {
-        MapVisualizer visualizer = new MapVisualizer(this);
-        Boundary boundary = getCurrentBounds();
-        return visualizer.draw(boundary.leftLower(), boundary.rightUpper());
-    }
->>>>>>> Stashed changes
 }

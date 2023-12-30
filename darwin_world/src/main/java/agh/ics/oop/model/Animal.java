@@ -15,6 +15,7 @@ public class Animal implements WorldElement{
     private final int genomeMin;
     private final  int genomeMax;
     private int energy;
+    private int age=0;
     private final int genomeLength;
     private final boolean customNextGene;//wydaje mi się że tych 2 rzeczy nie musimy przechowywać
     private final int startingEnergy;
@@ -85,6 +86,7 @@ public class Animal implements WorldElement{
         this.energy+=n;
     }
     public void move(int width,int height){
+        this.age+=1;
         this.rotate();
         Vector2d newposition=position.add(orientation.toUnitVector());
         if (newposition.getY()>=0&&newposition.getY()<=height-1){
