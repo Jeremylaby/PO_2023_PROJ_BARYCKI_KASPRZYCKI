@@ -7,7 +7,7 @@ import agh.ics.oop.model.util.RandomPositionGenerator;
 import java.util.*;
 
 public class EquatorMap extends AbstractWorldMap {
-    private Map<Vector2d, Plant> Plants = new HashMap<>();
+    private Map<Vector2d, Plant> plants = new HashMap<>();
     private List<Vector2d> equator = new ArrayList<>();
     private List<Vector2d> wasteland =new ArrayList<>();
     private int equatorStart;
@@ -29,12 +29,12 @@ public class EquatorMap extends AbstractWorldMap {
             if(m>0 && equatororwasteland.generateRandomInt()<=8){
                 Collections.shuffle(equator);
                 Vector2d vector2d=equator.get(m-1);
-                Plants.put(vector2d,new Plant(vector2d));
+                plants.put(vector2d,new Plant(vector2d));
                 equator.remove(m-1);
             }else{
                 Collections.shuffle(wasteland);
                 Vector2d vector2d=wasteland.get(k-1);
-                Plants.put(vector2d,new Plant(vector2d));
+                plants.put(vector2d,new Plant(vector2d));
                 wasteland.remove(k-1);
             }
 
@@ -67,12 +67,11 @@ public class EquatorMap extends AbstractWorldMap {
         }
 
     }
-
-
-
-
-    public Map<Vector2d, Plant> getGrasses() {
-        return Map.copyOf(grasses);
+    public Map<Vector2d, Plant> getPlants() {
+        return Map.copyOf(plants);
+    }
+    public void move(Animal animal){
+        animal.move(conf.mapWidth(),conf.mapHeight());
     }
     @Override
     public boolean isOccupied(Vector2d position) {
@@ -90,17 +89,6 @@ public class EquatorMap extends AbstractWorldMap {
     }
 
 
-    @Override
-    public Boundary getCurrentBounds() {
-        Vector2d minVector=new Vector2d(Integer.MAX_VALUE,Integer.MAX_VALUE);
-        Vector2d maxVector=new Vector2d(Integer.MIN_VALUE,Integer.MIN_VALUE);
-        Map<Vector2d,WorldElement> worldElementMap=getElements();
-        for(WorldElement worldElement:worldElementMap.values()){
-            minVector=minVector.lowerLeft(worldElement.getPosition());
-            maxVector=maxVector.upperRight(worldElement.getPosition());
-        }
-        return new Boundary(minVector,maxVector);
-    }
 
     @Override
     public Map<Vector2d, WorldElement> getElements() {

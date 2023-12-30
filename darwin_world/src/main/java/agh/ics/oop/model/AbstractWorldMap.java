@@ -13,11 +13,6 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected Map<Vector2d,Plant> plants=new HashMap<>();
     private List<MapChangeListener> observers = new ArrayList<>();
 
-    protected int nutrition;
-    protected int height;
-    protected int width;
-    protected Boundary boundary=new Boundary(new Vector2d(0,0),new Vector2d(width-1,height-1));
-
     public void addObserver(MapChangeListener observer) {
         observers.add(observer);
     }
@@ -73,6 +68,21 @@ public abstract class AbstractWorldMap implements WorldMap {
         return worldElementMap;
     }
 
+<<<<<<< Updated upstream
     @Override
     public abstract Boundary getCurrentBounds();
+=======
+
+    @Override
+    public UUID getId() {
+        return id;
+    }
+
+    @Override
+    public String toString() {
+        MapVisualizer visualizer = new MapVisualizer(this);
+        Boundary boundary = getCurrentBounds();
+        return visualizer.draw(boundary.leftLower(), boundary.rightUpper());
+    }
+>>>>>>> Stashed changes
 }
