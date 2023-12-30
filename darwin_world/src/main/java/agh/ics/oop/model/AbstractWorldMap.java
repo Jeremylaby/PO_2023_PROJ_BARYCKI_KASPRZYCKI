@@ -1,10 +1,10 @@
 package agh.ics.oop.model;
 
 import agh.ics.oop.model.util.Boundary;
-import agh.ics.oop.model.util.MapVisualizer;
 
 import java.util.*;
 import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
 public abstract class AbstractWorldMap implements WorldMap {
@@ -30,12 +30,10 @@ public abstract class AbstractWorldMap implements WorldMap {
         observers.forEach(observer -> observer.mapChanged(this, message));
     }
 
-    public void place(Animal animal) throws PositionAlreadyOccupiedException {
+    public void place(Animal animal) {
         if (canMoveTo(animal.getPosition())) {
             animals.put(animal.getPosition(), animal);
             mapChanged("Animal was placed on: " + animal.getPosition().toString());
-        } else {
-            throw new PositionAlreadyOccupiedException(animal.getPosition());
         }
     }
 
@@ -79,12 +77,5 @@ public abstract class AbstractWorldMap implements WorldMap {
     @Override
     public UUID getId() {
         return id;
-    }
-
-    @Override
-    public String toString() {
-        MapVisualizer visualizer = new MapVisualizer(this);
-        Boundary boundary = getCurrentBounds();
-        return visualizer.draw(boundary.leftLower(), boundary.rightUpper());
     }
 }

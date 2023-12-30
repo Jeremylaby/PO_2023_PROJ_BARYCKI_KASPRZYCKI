@@ -1,6 +1,5 @@
 package agh.ics.oop.presenter;
 
-import agh.ics.oop.OptionsParser;
 import agh.ics.oop.Simulation;
 import agh.ics.oop.SimulationEngine;
 import agh.ics.oop.model.*;
@@ -110,9 +109,7 @@ public class SimulationPresenter implements MapChangeListener {
             Stage newStage = new Stage();
             SimulationPresenter newPresenter = createNewSimulationWindow(newStage);
 
-            List<MoveDirection> directions = OptionsParser.parse(moves);
             List<Vector2d> positions = List.of(new Vector2d(2, 2), new Vector2d(6,3));
-            ConsoleMapDisplay consoleMapDisplay = new ConsoleMapDisplay();
             List<Simulation> simulations = new ArrayList<>();
             EquatorMap grassField = new EquatorMap(10);
             newPresenter.setWorldMap(grassField);
