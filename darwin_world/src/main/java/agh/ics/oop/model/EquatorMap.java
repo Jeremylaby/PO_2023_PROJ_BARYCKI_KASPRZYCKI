@@ -19,7 +19,6 @@ public class EquatorMap extends AbstractWorldMap {
     }
 
     private void generatePlants(int n) {//jak będziemy zjadać planta to będziemy go dodawać do equatora albo wasteland
-        RandomNumGenerator equatororwasteland = new RandomNumGenerator(1,10);
         Collections.shuffle(equator);
         Collections.shuffle(wasteland);
         for(int i=0;i<n;i++){
@@ -28,7 +27,7 @@ public class EquatorMap extends AbstractWorldMap {
             if(m==0&&k==0){
                 return;
             }
-            if(m>0 && equatororwasteland.generateRandomInt()<=8){;
+            if(m>0 && RandomNumGenerator.generateRandomInt(1,10)<=8){;
                 Vector2d vector2d=equator.get(m-1);
                 plants.put(vector2d,new Plant(vector2d));
                 equator.remove(m-1);
@@ -93,7 +92,7 @@ public class EquatorMap extends AbstractWorldMap {
             }else if(strongestAnimal.getEnergy()<animal.getEnergy()){
                 candidates.clear();
                 strongestAnimal=animal;
-                animals.add(animal);
+                candidates.add(animal);
             } else if (strongestAnimal.getEnergy()==animal.getEnergy()) {
                 candidates.add(animal);
             }

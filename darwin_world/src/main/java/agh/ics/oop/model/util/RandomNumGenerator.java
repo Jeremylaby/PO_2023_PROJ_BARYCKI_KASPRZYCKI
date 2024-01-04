@@ -3,25 +3,15 @@ package agh.ics.oop.model.util;
 import java.util.*;
 
 public class RandomNumGenerator {
-    private final int min;
-    private final int max;
 
-    public RandomNumGenerator(int min, int max) {
-        if (max<min){
-            throw new IllegalArgumentException("The (min) value have to be lower than the (max) value");
-        }
-        this.min = min;
-        this.max = max;
-    }
-
-    public List<Integer> generateRandomIntList(int n){
+    public static List<Integer> generateRandomIntList(int min, int max, int n){
         List<Integer> list = new ArrayList<>();
         for(int i=0;i<n;i++){
-            list.add(generateRandomInt());
+            list.add(generateRandomInt(min,max));
         }
         return list;
     }
-    public List<Integer> generateRandomIntListK(int k,int n){
+    public static List<Integer> generateRandomIntListK(int min, int max, int k, int n){
         List<Integer> list = new ArrayList<>();
         for(int i=0;i<n;i++){
             list.add(i);
@@ -33,11 +23,11 @@ public class RandomNumGenerator {
         }
         return results;
     }
-    public int generateRandomInt(){
+    public static int generateRandomInt(int min, int max){
         Random random = new Random();
         return random.nextInt((max-min)+1)+min;
     }
-    public int generateRandomIntWithoutK(int k){
+    public static int generateRandomIntWithoutK(int min, int max, int k){
         List<Integer> list=new ArrayList<>();
         for (int i=min;i<=max;i++){
             if(i!=k){

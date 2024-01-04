@@ -14,8 +14,8 @@ public class Genome {
 
 
     public Genome(int n,boolean isalternative){
-        RandomNumGenerator randomNumGenerator=new RandomNumGenerator(0,7);
-        List<Integer> list = randomNumGenerator.generateRandomIntList(n);
+
+        List<Integer> list = RandomNumGenerator.generateRandomIntList(0,7,n);
         this.genes=list;
         this.isalternative=isalternative;
         this.flag=isalternative;
@@ -58,14 +58,12 @@ public class Genome {
             return genes;
         }
         List<Integer> newGenes=new ArrayList<>(genes);
-        RandomNumGenerator randomNumGenerator=new RandomNumGenerator(min,max);
+
         int n = genes.size();
-        int k = randomNumGenerator.generateRandomInt();
-        RandomNumGenerator randomNumGenerator1=new RandomNumGenerator(0,n-1);
-        RandomNumGenerator randomNumGenerator2=new RandomNumGenerator(0,7);
-        List<Integer> genesToMutate=randomNumGenerator1.generateRandomIntListK(k,n);
+        int k = RandomNumGenerator.generateRandomInt(min,max);
+        List<Integer> genesToMutate=RandomNumGenerator.generateRandomIntListK(0,n-1,k,n);
         genesToMutate.forEach((gene)-> {
-            int mutatedGene = randomNumGenerator2.generateRandomIntWithoutK(newGenes.get(gene));
+            int mutatedGene = RandomNumGenerator.generateRandomIntWithoutK(0,7,newGenes.get(gene));
             newGenes.set(gene,mutatedGene);
         });
         return newGenes;

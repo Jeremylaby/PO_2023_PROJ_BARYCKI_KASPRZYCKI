@@ -15,7 +15,10 @@ public class Animal implements WorldElement{
     private final int genomeMin;
     private final  int genomeMax;
     private int energy;
+    private List<Animal> parents=new ArrayList<>();
     private int age=0;
+    private int dayOfDeath=0;
+    private int plantsEaten=0;
     private final int genomeLength;
     private final boolean customNextGene;//wydaje mi się że tych 2 rzeczy nie musimy przechowywać
     private final int startingEnergy;
@@ -30,9 +33,10 @@ public class Animal implements WorldElement{
         this.orientation = MapDirection.NORTH;
         this.position=position;
         this.energy=energy;
+        this.parents=List.of(null,null);
     }
 
-    public Animal(Vector2d position, Genome genome, int genomeMin, int genomeMax, int energy) {
+    public Animal(Vector2d position, Genome genome, int genomeMin, int genomeMax, int energy,Animal father,Animal mother) {
         this.startingEnergy = energy;
         this.orientation = MapDirection.NORTH;
         this.position = position;
@@ -42,6 +46,7 @@ public class Animal implements WorldElement{
         this.genomeLength = genome.getGenes().size();
         this.customNextGene = genome.isIsalternative();
         this.energy=energy;
+        this.parents=List.of(father,mother);
     }
 
     public MapDirection getOrientation() {
@@ -83,8 +88,14 @@ public class Animal implements WorldElement{
         orientation=(orientation.rotate(genome.getCurentGene()));
     }
     public void eat(int n){
-        this.energy+=n;
+        plantsEaten+=1;
+        updateEnergy(n);
     }
+
+    private void updateEnergy(int n) {
+        this.energy+= n;
+    }
+
     public void move(int width,int height){
         this.age+=1;
         this.rotate();
@@ -111,8 +122,7 @@ public class Animal implements WorldElement{
         int l=genomeLength-k;
         List<Integer> fatherGenes=new ArrayList<>();
         List<Integer> motherGenes=new ArrayList<>();
-        RandomNumGenerator randomNumGenerator =new RandomNumGenerator(0,1);
-        if(randomNumGenerator.generateRandomInt()==0){
+        if(RandomNumGenerator.generateRandomInt(0,1)==0){
             fatherGenes=father.genome.getLeftGenesSlice(k);
             motherGenes=mother.genome.getRightGenesSlice(l);
         }else {
@@ -122,12 +132,16 @@ public class Animal implements WorldElement{
         List<Integer> childGenes=new ArrayList<>(fatherGenes);
         childGenes.addAll(motherGenes);
         Genome childGenome=new Genome(childGenes,genomeMin,genomeMax,customNextGene);
-        return new Animal(position,childGenome,genomeMin,genomeMax,startingEnergy);//todo
+        return new Animal(position,childGenome,genomeMin,genomeMax,startingEnergy,father,mother);//todo
 
     }
 
     private void updateFamilyTree(Animal mother, Animal father) {//todo
         mother.kidsnumber=+1;
         father.kidsnumber=+1;
+
+    }
+    public void die(int n){
+        this.dayOfDeath=n;
     }
 }
