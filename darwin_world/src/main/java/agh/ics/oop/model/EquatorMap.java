@@ -77,7 +77,7 @@ public class EquatorMap extends AbstractWorldMap {
         animalsMap.put(animal.getPosition(),animal);
         if(oldposition!=animal.getPosition()){
             mapChanged("Animal rotated from: "+oldorientation+" to: "+animal.getOrientation()
-            " and noved from : "+oldposition+" to: "+animal.getPosition());
+            +" and noved from : "+oldposition+" to: "+animal.getPosition());
         }else{
             mapChanged("Animal bounced new orientation: "+animal.getOrientation());
         }
@@ -100,7 +100,7 @@ public class EquatorMap extends AbstractWorldMap {
         if (candidates.size()==1){
             return candidates.get(0);
         }
-        
+        return candidates.get(0);//todo
     }
     public void feedAnimals(){
        for (Vector2d key: plants.keySet()) {
@@ -110,7 +110,7 @@ public class EquatorMap extends AbstractWorldMap {
                    animals.get(0).eat(conf.plantsEnergyValue());
                    }
                }else {
-                    Animal animal = findStrongest(animals);
+                    //Animal animal = findStrongest(animals);//todo
            }
        }
     }

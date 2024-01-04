@@ -3,19 +3,19 @@ package agh.ics.oop.model;
 import agh.ics.oop.model.util.Boundary;
 import agh.ics.oop.model.util.RandomNumGenerator;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Animal implements WorldElement{
     private MapDirection orientation;
     private Vector2d position;
     private int kidsnumber=0;
+    private int descendantsnumber=0;
     private final Genome genome;
     private final int genomeMin;
     private final  int genomeMax;
     private int energy;
-    private List<Animal> parents=new ArrayList<>();
+    private Animal father;
+    private Animal mother;
     private int age=0;
     private int dayOfDeath=0;
     private int plantsEaten=0;
@@ -33,7 +33,8 @@ public class Animal implements WorldElement{
         this.orientation = MapDirection.NORTH;
         this.position=position;
         this.energy=energy;
-        this.parents=List.of(null,null);
+        this.father=null;
+        this.mother=null;
     }
 
     public Animal(Vector2d position, Genome genome, int genomeMin, int genomeMax, int energy,Animal father,Animal mother) {
@@ -46,9 +47,26 @@ public class Animal implements WorldElement{
         this.genomeLength = genome.getGenes().size();
         this.customNextGene = genome.isIsalternative();
         this.energy=energy;
-        this.parents=List.of(father,mother);
+        this.mother=mother;
+        this.father=father;
+        updateFamilyTree();
     }
-
+    private void dfs(Animal animal,Set<Animal> visited){
+        if(animal == null || visited.contains(animal)){
+            return;
+        }
+        animal.descendantsnumber+=1;
+        visited.add(animal);
+        dfs(animal.mother,visited);
+        dfs(animal.father,visited);
+    }
+    private void updateFamilyTree() {//todo
+        Set<Animal> visited = new HashSet<>();
+        dfs(this,visited);
+        this.descendantsnumber=0;
+        this.mother.kidsnumber+=1;
+        this.father.kidsnumber+=1;//potomkowie to dzieci+ inni potomkowie więc musze dodać jeszcz dzieci
+    }
     public MapDirection getOrientation() {
         return orientation;
     }
@@ -114,7 +132,6 @@ public class Animal implements WorldElement{
         }
     }
     public Animal makeChild(Animal animal){//w założeniu wywyołujemy tą metodę jeśli wiemy że this jest silniejszy
-        updateFamilyTree(this,animal);
         Animal father =this;
         Animal mother=animal;
 
@@ -136,11 +153,6 @@ public class Animal implements WorldElement{
 
     }
 
-    private void updateFamilyTree(Animal mother, Animal father) {//todo
-        mother.kidsnumber=+1;
-        father.kidsnumber=+1;
-
-    }
     public void die(int n){
         this.dayOfDeath=n;
     }
