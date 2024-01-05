@@ -7,87 +7,86 @@ import java.util.Collections;
 import java.util.List;
 
 public class Genome {
-    private static final int minGene = 0;
-    private static final int maxGene = 7;
+    private static final int MIN_GENE = 0;
+    private static final int MAX_GENE = 7;
     private final List<Integer> genes;
-    private int currentGeneIndex=0;
-    private final boolean isalternative;
+    private int currentGeneIndex = 0;
+    private final boolean isBackAndForth;
     private boolean flag;
 
-
-
-    public Genome(int n,boolean isalternative){
-        this.genes= RandomNumGenerator.generateRandomIntList(minGene, maxGene, n);
-        this.isalternative=isalternative;
-        this.flag=isalternative;
+    public Genome(int size, boolean isBackAndForth) {
+        this.genes = RandomNumGenerator.generateRandomIntList(MIN_GENE, MAX_GENE, size);
+        this.isBackAndForth = isBackAndForth;
+        this.flag = isBackAndForth;
     }
 
-    public Genome(List<Integer> genes,int min,int max,boolean isalternative) {
-        this.isalternative=isalternative;
-        this.genes=mutate(genes,min,max);
-        this.flag=isalternative;
+    public Genome(List<Integer> genes, int minMutations, int maxMutations, boolean isBackAndForth) {
+        this.genes = genes;
+        this.isBackAndForth = isBackAndForth;
+        this.flag = isBackAndForth;
+        mutate(minMutations, maxMutations);
     }
+
+    private void mutate(int min, int max) {
+        if (min >= 0 && max >= min) {
+            int k = RandomNumGenerator.generateRandomInt(min, max);
+            List<Integer> genesToMutate = RandomNumGenerator.generateRandomUniqueIndexes(k, genes.size());
+
+            genesToMutate.forEach((gene) -> {
+                genes.set(gene, RandomNumGenerator.generateRandomIntWithoutK(MIN_GENE, MAX_GENE, genes.get(gene)));
+            });
+        } else {
+            throw new IllegalArgumentException();
+        }
+    }
+
     public List<Integer> getGenes() {
         return Collections.unmodifiableList(genes);
     }
 
-    public boolean isIsalternative() {
-        return isalternative;
+    public int getCurrentGene() {
+        int gene = genes.get(this.currentGeneIndex);
+        sequenceGenes();
+        return gene;
     }
 
-    public int getCurrentGeneIndex() {
-        return currentGeneIndex;
+    public List<Integer> getRightGenesSlice(int n) {
+        return new ArrayList<>(genes.subList(genes.size() - n, genes.size()));
     }
-    public int getCurentGene(){
-        int ind=this.currentGeneIndex;
-        if(isalternative){
+
+    public List<Integer> getLeftGenesSlice(int n) {
+        return new ArrayList<>(genes.subList(0, n));
+    }
+
+    private void sequenceGenes() {
+        if (isBackAndForth) {
             nextGeneBackAndForth();
-        }else{
+        } else {
             nextGene();
         }
-        return genes.get(ind);
-
-    }
-    public List<Integer> getRightGenesSlice(int n){
-        return new ArrayList<>(genes.subList( genes.size()-n,genes.size()));
-    }
-    public List<Integer> getLeftGenesSlice(int n){
-        return new ArrayList<>(genes.subList(0,n));
     }
 
-    private List<Integer> mutate(List<Integer> genes, int min, int max){
-        if (min == 0 && max == 0) {
-            return genes;
-        }
-        List<Integer> newGenes = new ArrayList<>(genes);
-
-        int k = RandomNumGenerator.generateRandomInt(min, max);
-        List<Integer> genesToMutate = RandomNumGenerator.generateRandomUniqueIndexes(k, genes.size());
-
-        genesToMutate.forEach((gene) -> {
-            int mutatedGene = RandomNumGenerator.generateRandomIntWithoutK(0, 7, newGenes.get(gene));
-            newGenes.set(gene, mutatedGene);
-        });
-
-        return newGenes;
-    }
-    private void nextGene(){
-        currentGeneIndex=(currentGeneIndex+1)%genes.size();
-    }
-    private void nextGeneBackAndForth(){
-        if(flag){
-            currentGeneIndex+=1;
-            if(currentGeneIndex==genes.size()-1){
-                flag=false;
+    private void nextGeneBackAndForth() {
+        if (flag) {
+            currentGeneIndex += 1;
+            if (currentGeneIndex == genes.size() - 1) {
+                flag = false;
             }
-        }else{
-            currentGeneIndex-=1;
-            if(currentGeneIndex==0){
-                flag=true;
+        } else {
+            currentGeneIndex -= 1;
+            if (currentGeneIndex == 0) {
+                flag = true;
             }
         }
     }
 
+    private void nextGene() {
+        currentGeneIndex = (currentGeneIndex + 1) % genes.size();
+    }
+
+    public boolean isBackAndForth() {
+        return isBackAndForth;
+    }
 
     @Override
     public String toString() {

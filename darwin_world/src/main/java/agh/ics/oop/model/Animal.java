@@ -1,6 +1,5 @@
 package agh.ics.oop.model;
 
-import agh.ics.oop.model.util.Boundary;
 import agh.ics.oop.model.util.RandomNumGenerator;
 
 import java.util.*;
@@ -45,7 +44,7 @@ public class Animal implements WorldElement{
         this.genomeMin = genomeMin;
         this.genomeMax = genomeMax;
         this.genomeLength = genome.getGenes().size();
-        this.customNextGene = genome.isIsalternative();
+        this.customNextGene = genome.isBackAndForth();
         this.energy=energy;
         this.mother=mother;
         this.father=father;
@@ -103,7 +102,7 @@ public class Animal implements WorldElement{
         return Objects.equals(this.position,position);
     }
     public void rotate(){
-        orientation=(orientation.rotate(genome.getCurentGene()));
+        orientation=(orientation.rotate(genome.getCurrentGene()));
     }
     public void eat(int n){
         plantsEaten+=1;
@@ -149,7 +148,7 @@ public class Animal implements WorldElement{
         }
         List<Integer> childGenes=new ArrayList<>(fatherGenes);
         childGenes.addAll(motherGenes);
-        Genome childGenome=new Genome(childGenes,genomeMin,genomeMax,customNextGene);
+        Genome childGenome=new Genome(childGenes,genomeMin,genomeMax,genome.isBackAndForth());
         return new Animal(position,childGenome,genomeMin,genomeMax,startingEnergy,father,mother);//todo
 
     }
