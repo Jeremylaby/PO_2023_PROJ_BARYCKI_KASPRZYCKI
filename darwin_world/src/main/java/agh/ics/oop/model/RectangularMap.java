@@ -23,15 +23,14 @@ public class RectangularMap extends AbstractWorldMap {
         return height;
     }
 
-    @Override
-    public boolean canMoveTo(Vector2d position) {
-        return super.canMoveTo(position)
-                && position.follows(LEFT_LOWER_CORNER)
-                && position.precedes(rightuppercorner);
-    }
+//    public boolean canMoveTo(Vector2d position) {
+//        return super.canMoveTo(position)
+//                && position.follows(LEFT_LOWER_CORNER)
+//                && position.precedes(rightuppercorner);
+//    }
 
-    @Override
-    public Boundary getCurrentBounds() {
-        return new Boundary(LEFT_LOWER_CORNER,rightuppercorner);
-    }
+//    @Override
+//    public Boundary getCurrentBounds() {
+//        return new Boundary(LEFT_LOWER_CORNER,rightuppercorner);
+//    }
 }

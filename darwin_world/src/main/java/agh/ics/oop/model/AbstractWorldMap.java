@@ -26,10 +26,8 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
     public void place(Animal animal) {
-        if (canMoveTo(animal.getPosition())) {
-            animals.put(animal.getPosition(), animal);
-            mapChanged("Animal was placed on: " + animal.getPosition().toString());
-        }
+        animalsMap.put(animal.getPosition(), animal);
+        mapChanged("Animal was placed on: " + animal.getPosition().toString());
     }
 
     public synchronized void move(Animal animal) {
@@ -37,9 +35,9 @@ public abstract class AbstractWorldMap implements WorldMap {
             Vector2d oldPosition = animal.getPosition();
             MapDirection oldOrientation = animal.getOrientation();
 
-            animals.remove(animal.getPosition(), animal);
-            animal.move(getCurrentBounds());
-            animals.put(animal.getPosition(), animal);
+            animalsMap.remove(animal.getPosition(), animal);
+            animal.move(100 , 100);
+            animalsMap.put(animal.getPosition(), animal);
 
             if (!oldPosition.equals(animal.getPosition())) {
                 mapChanged("Animal was moved from " + oldPosition + " to " + animal.getPosition().toString());
@@ -62,14 +60,9 @@ public abstract class AbstractWorldMap implements WorldMap {
     @Override
     public Map<Vector2d, WorldElement> getElements() {
         Map<Vector2d, WorldElement> worldElementMap = new HashMap<>();
-        for (Animal animal : animals.values()) {
+        for (Animal animal : animalsMap.values()) {
             worldElementMap.put(animal.getPosition(), animal);
         }
         return worldElementMap;
     }
-    @Override
-    public UUID getId() {
-        return id;
-    }
-
 }

@@ -115,19 +115,20 @@ public class Animal implements WorldElement{
     }
 
     public void move(int width,int height){
-        this.age+=1;
+        this.age += 1;
         this.rotate();
-        Vector2d newposition=position.add(orientation.toUnitVector());
-        if (newposition.getY()>=0&&newposition.getY()<=height-1){
-            if(newposition.getX()<0){
-                position=new Vector2d(width-1, newposition.getY());
-            } else if (newposition.getX()>width-1) {
-                position=new Vector2d(0, newposition.getY());
+        Vector2d newPosition = position.add(orientation.toUnitVector());
 
-            }else {
-                position = newposition;
+        if (newPosition.getY() >= 0 && newPosition.getY() <= height - 1) {
+            if (newPosition.getX() < 0) {
+                position = new Vector2d(width - 1, newPosition.getY());
+            } else if (newPosition.getX() > width - 1) {
+                position = new Vector2d(0, newPosition.getY());
+
+            } else {
+                position = newPosition;
             }
-        }else {
+        } else {
             orientation = orientation.opposite();
         }
     }
