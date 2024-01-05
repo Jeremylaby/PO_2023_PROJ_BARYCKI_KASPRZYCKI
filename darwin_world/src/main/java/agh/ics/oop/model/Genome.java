@@ -21,6 +21,7 @@ public class Genome {
         this.minMutations = minMutations;
         this.maxMutations = maxMutations;
         this.genes = RandomNumGenerator.generateRandomIntList(MIN_GENE, MAX_GENE, size);
+        currentGeneIndex = RandomNumGenerator.generateRandomInt(0, size-1);
     }
 
     public Genome(boolean isBackAndForth, int minMutations, int maxMutations, List<Integer> genes) {
@@ -29,6 +30,7 @@ public class Genome {
         this.minMutations = minMutations;
         this.maxMutations = maxMutations;
         this.genes = genes;
+        currentGeneIndex = RandomNumGenerator.generateRandomInt(0, genes.size()-1);
         mutate();
     }
 

@@ -23,7 +23,7 @@ public class Animal implements WorldElement {
         this.energy = energy;
         this.father = father;
         this.mother = mother;
-        this.orientation = MapDirection.NORTH;
+        this.orientation = MapDirection.NORTH.rotate(RandomNumGenerator.generateRandomInt(0, 7));
     }
 
     public Animal(Vector2d position, Genome genome, int energy) {
