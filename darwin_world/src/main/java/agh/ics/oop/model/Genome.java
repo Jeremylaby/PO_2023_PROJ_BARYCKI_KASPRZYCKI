@@ -3,9 +3,12 @@ package agh.ics.oop.model;
 import agh.ics.oop.model.util.RandomNumGenerator;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Genome {
+    private static final int minGene = 0;
+    private static final int maxGene = 7;
     private final List<Integer> genes;
     private int currentGeneIndex=0;
     private final boolean isalternative;
@@ -14,19 +17,18 @@ public class Genome {
 
 
     public Genome(int n,boolean isalternative){
-
-        List<Integer> list = RandomNumGenerator.generateRandomIntList(0,7,n);
-        this.genes=list;
+        this.genes= RandomNumGenerator.generateRandomIntList(minGene, maxGene, n);
         this.isalternative=isalternative;
         this.flag=isalternative;
     }
+
     public Genome(List<Integer> genes,int min,int max,boolean isalternative) {
         this.isalternative=isalternative;
         this.genes=mutate(genes,min,max);
         this.flag=isalternative;
     }
     public List<Integer> getGenes() {
-        return List.copyOf(genes);
+        return Collections.unmodifiableList(genes);
     }
 
     public boolean isIsalternative() {
@@ -53,19 +55,20 @@ public class Genome {
         return new ArrayList<>(genes.subList(0,n));
     }
 
-    private List<Integer> mutate(List<Integer> genes, int min,int max){
-        if(min==0 && max==0){
+    private List<Integer> mutate(List<Integer> genes, int min, int max){
+        if (min == 0 && max == 0) {
             return genes;
         }
-        List<Integer> newGenes=new ArrayList<>(genes);
+        List<Integer> newGenes = new ArrayList<>(genes);
 
-        int n = genes.size();
-        int k = RandomNumGenerator.generateRandomInt(min,max);
-        List<Integer> genesToMutate=RandomNumGenerator.generateRandomIntListK(0,n-1,k,n);
-        genesToMutate.forEach((gene)-> {
-            int mutatedGene = RandomNumGenerator.generateRandomIntWithoutK(0,7,newGenes.get(gene));
-            newGenes.set(gene,mutatedGene);
+        int k = RandomNumGenerator.generateRandomInt(min, max);
+        List<Integer> genesToMutate = RandomNumGenerator.generateRandomUniqueIndexes(k, genes.size());
+
+        genesToMutate.forEach((gene) -> {
+            int mutatedGene = RandomNumGenerator.generateRandomIntWithoutK(0, 7, newGenes.get(gene));
+            newGenes.set(gene, mutatedGene);
         });
+
         return newGenes;
     }
     private void nextGene(){
