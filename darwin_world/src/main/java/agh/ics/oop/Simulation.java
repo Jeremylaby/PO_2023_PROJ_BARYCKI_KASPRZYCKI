@@ -17,7 +17,8 @@ public class Simulation implements Runnable {
         this.worldMap = worldMap;
         this.animals = new ArrayList<>();
         for (Vector2d position : positions) {
-            Animal animal = new Animal(position, 0, 0, 10, false, 100);
+            Genome initalGenome = new Genome(false, 0, 0, 10);
+            Animal animal = new Animal(position, initalGenome, 100);
             worldMap.place(animal);
             animals.add(animal);
 

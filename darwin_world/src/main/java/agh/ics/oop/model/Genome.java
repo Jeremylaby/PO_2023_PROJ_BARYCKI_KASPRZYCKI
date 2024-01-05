@@ -3,33 +3,38 @@ package agh.ics.oop.model;
 import agh.ics.oop.model.util.RandomNumGenerator;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Genome {
     private static final int MIN_GENE = 0;
     private static final int MAX_GENE = 7;
     private final List<Integer> genes;
-    private int currentGeneIndex = 0;
     private final boolean isBackAndForth;
-    private boolean flag;
+    private final int minMutations;
+    private final int maxMutations;
+    private int currentGeneIndex = 0;
+    private boolean sequencingDirection;
 
-    public Genome(int size, boolean isBackAndForth) {
+    public Genome(boolean isBackAndForth, int minMutations, int maxMutations, int size) {
+        this.isBackAndForth = isBackAndForth;
+        this.sequencingDirection = isBackAndForth;
+        this.minMutations = minMutations;
+        this.maxMutations = maxMutations;
         this.genes = RandomNumGenerator.generateRandomIntList(MIN_GENE, MAX_GENE, size);
-        this.isBackAndForth = isBackAndForth;
-        this.flag = isBackAndForth;
     }
 
-    public Genome(List<Integer> genes, int minMutations, int maxMutations, boolean isBackAndForth) {
+    public Genome(boolean isBackAndForth, int minMutations, int maxMutations, List<Integer> genes) {
+        this.isBackAndForth = isBackAndForth;
+        this.sequencingDirection = isBackAndForth;
+        this.minMutations = minMutations;
+        this.maxMutations = maxMutations;
         this.genes = genes;
-        this.isBackAndForth = isBackAndForth;
-        this.flag = isBackAndForth;
-        mutate(minMutations, maxMutations);
+        mutate();
     }
 
-    private void mutate(int min, int max) {
-        if (min >= 0 && max >= min) {
-            int k = RandomNumGenerator.generateRandomInt(min, max);
+    private void mutate() {
+        if (minMutations >= 0 && maxMutations >= minMutations) {
+            int k = RandomNumGenerator.generateRandomInt(minMutations, maxMutations);
             List<Integer> genesToMutate = RandomNumGenerator.generateRandomUniqueIndexes(k, genes.size());
 
             genesToMutate.forEach((gene) -> {
@@ -38,10 +43,6 @@ public class Genome {
         } else {
             throw new IllegalArgumentException();
         }
-    }
-
-    public List<Integer> getGenes() {
-        return Collections.unmodifiableList(genes);
     }
 
     public int getCurrentGene() {
@@ -67,15 +68,15 @@ public class Genome {
     }
 
     private void nextGeneBackAndForth() {
-        if (flag) {
+        if (sequencingDirection) {
             currentGeneIndex += 1;
             if (currentGeneIndex == genes.size() - 1) {
-                flag = false;
+                sequencingDirection = false;
             }
         } else {
             currentGeneIndex -= 1;
             if (currentGeneIndex == 0) {
-                flag = true;
+                sequencingDirection = true;
             }
         }
     }
@@ -86,6 +87,26 @@ public class Genome {
 
     public boolean isBackAndForth() {
         return isBackAndForth;
+    }
+
+    public int size() {
+        return genes.size();
+    }
+
+    public List<Integer> getGenes() {
+        return genes;
+    }
+
+    public int getCurrentGeneIndex() {
+        return currentGeneIndex;
+    }
+
+    public int getMinMutations() {
+        return minMutations;
+    }
+
+    public int getMaxMutations() {
+        return maxMutations;
     }
 
     @Override
