@@ -7,12 +7,10 @@ import agh.ics.oop.model.util.RandomPositionGenerator;
 import java.util.*;
 
 public class EquatorMap extends AbstractWorldMap {
-    private Map<Vector2d, Plant> plants = new HashMap<>();
     private List<Vector2d> equator = new ArrayList<>();
     private List<Vector2d> wasteland =new ArrayList<>();
     private int equatorStart;
     private int equatorEnd;
-    private Configuration conf;
     public EquatorMap(Configuration conf) {
         generateEquator(conf.mapHeight(),conf.mapWidth());
         generatePlants(conf.plantsStartNum());
@@ -69,19 +67,7 @@ public class EquatorMap extends AbstractWorldMap {
     public Map<Vector2d, Plant> getPlants() {
         return Map.copyOf(plants);
     }
-    public void move(Animal animal){
-        Vector2d oldposition=animal.getPosition();
-        MapDirection oldorientation=animal.getOrientation();
-        animalsMap.remove(animal.getPosition(),animal);
-        animal.move(conf.mapWidth(), conf.mapHeight());
-        animalsMap.put(animal.getPosition(),animal);
-        if(oldposition!=animal.getPosition()){
-            mapChanged("Animal rotated from: "+oldorientation+" to: "+animal.getOrientation()
-            +" and noved from : "+oldposition+" to: "+animal.getPosition());
-        }else{
-            mapChanged("Animal bounced new orientation: "+animal.getOrientation());
-        }
-    }
+
     private Animal findStrongest(List<Animal> animals){
         List<Animal> candidates = new ArrayList<>();
         Animal strongestAnimal = null;

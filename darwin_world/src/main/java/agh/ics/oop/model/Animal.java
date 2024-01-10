@@ -83,6 +83,7 @@ public class Animal implements WorldElement {
         }
     }
 
+
     public Animal makeChild(Animal animal, int reproduceCost) {//w założeniu wywyołujemy tą metodę jeśli wiemy że this jest silniejszy
         Animal father = this;
         Animal mother = animal;

@@ -9,9 +9,10 @@ import com.google.common.collect.Multimap;
 
 public abstract class AbstractWorldMap implements WorldMap {
     private final UUID id = UUID.randomUUID();
-    protected Multimap<Vector2d, Animal> animalsMap= ArrayListMultimap.create();
+    protected Map<Vector2d, Set<Animal>> animals= new HashMap<>();
     protected Map<Vector2d,Plant> plants=new HashMap<>();
     private List<MapChangeListener> observers = new ArrayList<>();
+    protected Configuration conf;
 
     public void addObserver(MapChangeListener observer) {
         observers.add(observer);
@@ -26,43 +27,37 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
     public void place(Animal animal) {
-        animalsMap.put(animal.getPosition(), animal);
+        animals.get(animal.getPosition()).add(animal);
         mapChanged("Animal was placed on: " + animal.getPosition().toString());
     }
 
-    public synchronized void move(Animal animal) {
-        if (this.animalsAt(animal.getPosition()).contains(animal)) {
-            Vector2d oldPosition = animal.getPosition();
-            MapDirection oldOrientation = animal.getOrientation();
-
-            animalsMap.remove(animal.getPosition(), animal);
-            animal.move(100 , 100);
-            animalsMap.put(animal.getPosition(), animal);
-
-            if (!oldPosition.equals(animal.getPosition())) {
-                mapChanged("Animal was moved from " + oldPosition + " to " + animal.getPosition().toString());
-            } else if (oldOrientation != animal.getOrientation()) {
-                mapChanged("Animal " + animal.getPosition() + " rotated from " + oldOrientation + " to " + animal.getOrientation());
-            }
+    public void move(Animal animal){
+        animals.get(animal.getPosition()).remove(animal);
+        if(animals.get(animal.getPosition()).isEmpty()){
+            animals.remove(animal.getPosition());
         }
+        animal.move(conf.mapWidth(), conf.mapHeight());
+        if (!animals.containsKey(animal.getPosition())){
+            animals.put(animal.getPosition(),new HashSet<>());
+        }
+        animals.get(animal.getPosition()).add(animal);
+        mapChanged("Animal was moved");
+
     }
 
     public boolean isanimal(Vector2d position) {
 
-        return animalsMap.containsKey(position);
+        return animals.containsKey(position);
     }
 
     public Collection<Animal> animalsAt(Vector2d position) {
-        return animalsMap.get(position);
+        return animals.get(position);
     }
 
 
     @Override
     public Map<Vector2d, WorldElement> getElements() {
-        Map<Vector2d, WorldElement> worldElementMap = new HashMap<>();
-        for (Animal animal : animalsMap.values()) {
-            worldElementMap.put(animal.getPosition(), animal);
-        }
+        Map<Vector2d, WorldElement> worldElementMap = new HashMap<>();//todo
         return worldElementMap;
     }
 }
