@@ -7,7 +7,7 @@ import agh.ics.oop.model.util.RandomPositionGenerator;
 import java.util.*;
 
 public class EquatorMap extends AbstractWorldMap {
-    private Map<Vector2d, Plant> Plants = new HashMap<>();
+    private Map<Vector2d, Plant> plants = new HashMap<>();
     private List<Vector2d> equator = new ArrayList<>();
     private List<Vector2d> wasteland =new ArrayList<>();
     private int equatorStart;
@@ -19,22 +19,21 @@ public class EquatorMap extends AbstractWorldMap {
     }
 
     private void generatePlants(int n) {//jak będziemy zjadać planta to będziemy go dodawać do equatora albo wasteland
-        RandomNumGenerator equatororwasteland = new RandomNumGenerator(1,10);
+        Collections.shuffle(equator);
+        Collections.shuffle(wasteland);
         for(int i=0;i<n;i++){
             int m = equator.size();
-            int k=wasteland.size();
+            int k = wasteland.size();
             if(m==0&&k==0){
                 return;
             }
-            if(m>0 && equatororwasteland.generateRandomInt()<=8){
-                Collections.shuffle(equator);
+            if(m>0 && RandomNumGenerator.generateRandomInt(1,10)<=8){;
                 Vector2d vector2d=equator.get(m-1);
-                Plants.put(vector2d,new Plant(vector2d));
+                plants.put(vector2d,new Plant(vector2d));
                 equator.remove(m-1);
             }else{
-                Collections.shuffle(wasteland);
                 Vector2d vector2d=wasteland.get(k-1);
-                Plants.put(vector2d,new Plant(vector2d));
+                plants.put(vector2d,new Plant(vector2d));
                 wasteland.remove(k-1);
             }
 
@@ -67,50 +66,52 @@ public class EquatorMap extends AbstractWorldMap {
         }
 
     }
-
-
-
-
-    public Map<Vector2d, Plant> getGrasses() {
-        return Map.copyOf(grasses);
+    public Map<Vector2d, Plant> getPlants() {
+        return Map.copyOf(plants);
     }
-    @Override
-    public boolean isOccupied(Vector2d position) {
-        return super.isOccupied(position)||grasses.get(position)!=null;
-    }
-
-
-    @Override
-    public WorldElement objectAt(Vector2d position) {
-        WorldElement worldElement =super.objectAt(position);
-        return worldElement!=null
-                ?worldElement
-                :grasses.get(position);
-
-    }
-
-
-    @Override
-    public Boundary getCurrentBounds() {
-        Vector2d minVector=new Vector2d(Integer.MAX_VALUE,Integer.MAX_VALUE);
-        Vector2d maxVector=new Vector2d(Integer.MIN_VALUE,Integer.MIN_VALUE);
-        Map<Vector2d,WorldElement> worldElementMap=getElements();
-        for(WorldElement worldElement:worldElementMap.values()){
-            minVector=minVector.lowerLeft(worldElement.getPosition());
-            maxVector=maxVector.upperRight(worldElement.getPosition());
+    public void move(Animal animal){
+        Vector2d oldposition=animal.getPosition();
+        MapDirection oldorientation=animal.getOrientation();
+        animalsMap.remove(animal.getPosition(),animal);
+        animal.move(conf.mapWidth(), conf.mapHeight());
+        animalsMap.put(animal.getPosition(),animal);
+        if(oldposition!=animal.getPosition()){
+            mapChanged("Animal rotated from: "+oldorientation+" to: "+animal.getOrientation()
+            +" and noved from : "+oldposition+" to: "+animal.getPosition());
+        }else{
+            mapChanged("Animal bounced new orientation: "+animal.getOrientation());
         }
-        return new Boundary(minVector,maxVector);
     }
-
-    @Override
-    public Map<Vector2d, WorldElement> getElements() {
-        Map<Vector2d,WorldElement> worldElementMap=super.getElements();
-        for (Plant grass: grasses.values()){
-            if(!worldElementMap.containsKey(grass.getPosition())) {
-                worldElementMap.put(grass.getPosition(), grass);
+    private Animal findStrongest(List<Animal> animals){
+        List<Animal> candidates = new ArrayList<>();
+        Animal strongestAnimal = null;
+        for(Animal animal:animals){
+            if(candidates.size()==0){
+                strongestAnimal=animal;
+                candidates.add(animal);
+            }else if(strongestAnimal.getEnergy()<animal.getEnergy()){
+                candidates.clear();
+                strongestAnimal=animal;
+                candidates.add(animal);
+            } else if (strongestAnimal.getEnergy()==animal.getEnergy()) {
+                candidates.add(animal);
             }
         }
-        return worldElementMap;
+        if (candidates.size()==1){
+            return candidates.get(0);
+        }
+        return candidates.get(0);//todo
     }
-
+    public void feedAnimals(){
+       for (Vector2d key: plants.keySet()) {
+           if (isanimal(key)){
+               List<Animal> animals= new ArrayList<>(animalsAt(key));
+               if(animals.size()==1){
+                   animals.get(0).eat(conf.plantsEnergyValue());
+                   }
+               }else {
+                    //Animal animal = findStrongest(animals);//todo
+           }
+       }
+    }
 }

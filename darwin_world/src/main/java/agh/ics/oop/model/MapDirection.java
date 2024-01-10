@@ -67,13 +67,13 @@ public enum MapDirection {
     }
 
     public MapDirection opposite() {
-        return this.rotate(4);
+        return rotate(4);
     }
 
     public MapDirection rotate(int value) {
-        int newValue = (this.toInteger() + value) % 8;
+        int newValue = (toInteger() + value) % 8;
         try {
-            return this.intToMapDirection(newValue);
+            return intToMapDirection(newValue);
         } catch (IllegalArgumentException e) {
             throw new RuntimeException(e);
         }

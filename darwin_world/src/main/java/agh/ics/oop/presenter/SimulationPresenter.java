@@ -29,7 +29,7 @@ public class SimulationPresenter implements MapChangeListener {
 
     public void drawMap(WorldMap worldMap) {
         clearGrid();
-        Boundary boundary = worldMap.getCurrentBounds();
+        Boundary boundary = new Boundary(new Vector2d(0, 0), new Vector2d(1, 1));
         setGrid(boundary);
         drawWorldElements(worldMap, boundary);
     }

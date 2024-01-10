@@ -42,7 +42,6 @@ public interface WorldMap {
 
     Collection<Animal> animalsAt(Vector2d position);
 
-    Boundary getCurrentBounds();
 
     Map<Vector2d, WorldElement> getElements();
 }
