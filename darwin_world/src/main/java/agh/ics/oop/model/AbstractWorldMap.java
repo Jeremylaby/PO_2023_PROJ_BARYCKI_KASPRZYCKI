@@ -3,6 +3,9 @@ package agh.ics.oop.model;
 import agh.ics.oop.model.util.Boundary;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -17,7 +20,9 @@ public abstract class AbstractWorldMap implements WorldMap {
     public void addObserver(MapChangeListener observer) {
         observers.add(observer);
     }
-
+    protected void removePlant(Vector2d position){
+        plants.remove(position);
+    }
     public void removeObserver(MapChangeListener observer) {
         observers.remove(observer);
     }
@@ -27,8 +32,10 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
     public void place(Animal animal) {
+        if(!isanimal(animal.getPosition())){
+            animals.put(animal.getPosition(),new HashSet<>());
+        }
         animals.get(animal.getPosition()).add(animal);
-        mapChanged("Animal was placed on: " + animal.getPosition().toString());
     }
 
     public void move(Animal animal){
@@ -37,27 +44,25 @@ public abstract class AbstractWorldMap implements WorldMap {
             animals.remove(animal.getPosition());
         }
         animal.move(conf.mapWidth(), conf.mapHeight());
-        if (!animals.containsKey(animal.getPosition())){
-            animals.put(animal.getPosition(),new HashSet<>());
-        }
+        place(animal);
         animals.get(animal.getPosition()).add(animal);
         mapChanged("Animal was moved");
 
     }
 
     public boolean isanimal(Vector2d position) {
-
         return animals.containsKey(position);
     }
 
-    public Collection<Animal> animalsAt(Vector2d position) {
+    public Set<Animal> animalsAt(Vector2d position) {
         return animals.get(position);
     }
 
 
     @Override
     public Map<Vector2d, WorldElement> getElements() {
-        Map<Vector2d, WorldElement> worldElementMap = new HashMap<>();//todo
-        return worldElementMap;
+        Stream<Plant> stream=plants.values().stream().filter(plant -> !isanimal(plant.getPosition()));
+        return Stream.concat(stream,animals.values().iterator().next().stream())
+                .collect(Collectors.toMap(WorldElement::getPosition,worldElement -> worldElement));
     }
 }

@@ -117,7 +117,7 @@ public class Animal implements WorldElement {
         return orientation;
     }
 
-    @Override
+
     public Vector2d getPosition() {
         return position;
     }
@@ -130,8 +130,13 @@ public class Animal implements WorldElement {
         return energy;
     }
 
+    public int getAge() {
+        return age;
+    }
+
     @Override
     public String toString() {
         return orientation.toString();
     }
+
 }
