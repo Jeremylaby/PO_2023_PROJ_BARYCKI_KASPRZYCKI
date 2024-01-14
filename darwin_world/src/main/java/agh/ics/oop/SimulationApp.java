@@ -1,5 +1,6 @@
 package agh.ics.oop;
 
+import agh.ics.oop.presenter.StartPresenter;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -11,8 +12,12 @@ public class SimulationApp extends Application {
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getClassLoader().getResource("startWindow.fxml"));
+
         BorderPane viewRoot = loader.load();
+        StartPresenter startPresenter = loader.getController();
+
         configureStage(primaryStage, viewRoot);
+        primaryStage.setOnCloseRequest((event) -> startPresenter.shutdown());
         primaryStage.show();
     }
 

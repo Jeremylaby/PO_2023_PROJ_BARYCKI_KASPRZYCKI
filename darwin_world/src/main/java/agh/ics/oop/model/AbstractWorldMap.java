@@ -13,10 +13,12 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected Map<Vector2d,Plant> plants=new HashMap<>();
     private List<MapChangeListener> observers = new ArrayList<>();
 
+    @Override
     public void addObserver(MapChangeListener observer) {
         observers.add(observer);
     }
 
+    @Override
     public void removeObserver(MapChangeListener observer) {
         observers.remove(observer);
     }
@@ -64,5 +66,15 @@ public abstract class AbstractWorldMap implements WorldMap {
             worldElementMap.put(animal.getPosition(), animal);
         }
         return worldElementMap;
+    }
+
+    @Override
+    public int getWidth() {
+        return 10;
+    }
+
+    @Override
+    public int getHeight() {
+        return 10;
     }
 }

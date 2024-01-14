@@ -1,44 +1,18 @@
 package agh.ics.oop;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class SimulationEngine {
-    private List<Simulation> simulations = new ArrayList<>();
-    private List<Thread> threads = new ArrayList<>();
-    private ExecutorService executorService = Executors.newFixedThreadPool(4);
+    private final ExecutorService executorService = Executors.newFixedThreadPool(4);
 
-    public SimulationEngine(List<Simulation> simulations) {
-
-        this.simulations = simulations;
-        simulations.forEach(simulation -> threads.add(new Thread(simulation)));
+    public void runSimulation(Simulation simulation) {
+        executorService.submit(simulation);
     }
 
-    public void runSync() {
-        simulations.forEach(simulation -> simulation.run());
-    }
-
-    public void runAsync() {
-        threads.forEach(thread -> thread.start());
-    }
-
-    private void awaitSimulationsEnd() throws InterruptedException {
-        threads.forEach(thread -> {
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        });
+    public void shutdown() throws InterruptedException {
         executorService.shutdown();
-        executorService.awaitTermination(10, TimeUnit.SECONDS);
-
+        executorService.awaitTermination(1, TimeUnit.SECONDS);
     }
-        public void runAsyncInThreadPool() throws InterruptedException{
-            threads.forEach(thread -> executorService.submit(thread));
-            awaitSimulationsEnd();
-        }
 }

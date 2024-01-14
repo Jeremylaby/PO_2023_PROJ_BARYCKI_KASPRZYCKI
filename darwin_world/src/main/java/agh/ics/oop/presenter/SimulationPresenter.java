@@ -25,12 +25,13 @@ public class SimulationPresenter implements MapChangeListener {
 
     public void setWorldMap(WorldMap map) {
         this.map = map;
+        map.addObserver(this);
     }
 
     public void drawMap(WorldMap worldMap) {
         clearGrid();
-        Boundary boundary = new Boundary(new Vector2d(0, 0), new Vector2d(1, 1));
-        setGrid(boundary);
+        Boundary boundary = new Boundary(new Vector2d(0, 0), new Vector2d(map.getHeight(), map.getWidth()));
+        createGrid(boundary);
         drawWorldElements(worldMap, boundary);
     }
 
@@ -40,7 +41,7 @@ public class SimulationPresenter implements MapChangeListener {
         mapGrid.getRowConstraints().clear();
     }
 
-    private void setGrid(Boundary boundary) {
+    private void createGrid(Boundary boundary) {
         Vector2d lhvector = boundary.rightUpper().subtract(boundary.leftLower());
         int x = boundary.leftLower().getX();
         int y = boundary.rightUpper().getY();
@@ -76,11 +77,6 @@ public class SimulationPresenter implements MapChangeListener {
         Map<Vector2d, WorldElement> elements = worldMap.getElements();
         elements.forEach((key, value) -> {
             if (value instanceof Animal) {
-//                Image image = new Image("/images/pig.png");
-//                ImageView imageView = new ImageView(image);
-//                imageView.setPreserveRatio(true);
-//                imageView.setFitWidth(CELL_WIDTH);
-//                imageView.setFitHeight(CELL_HEIGHT);
                 Label label = new Label(value.toString());
                 label.setPrefWidth(CELL_WIDTH);
                 label.setPrefHeight(CELL_HEIGHT);
@@ -90,11 +86,6 @@ public class SimulationPresenter implements MapChangeListener {
                 label.setAlignment(Pos.CENTER);
                 mapGrid.add(stackPane, key.getX() - x + 1, height - (key.getY() - y) + 1);
             } else {
-//                Image image = new Image("/images/grass.png");
-//                ImageView imageView = new ImageView(image);
-//                imageView.setPreserveRatio(true);
-//                imageView.setFitWidth(CELL_WIDTH);
-//                imageView.setFitHeight(CELL_HEIGHT);
                 Label label = new Label(value.toString());
                 label.setPrefWidth(CELL_WIDTH);
                 label.setPrefHeight(CELL_HEIGHT);
@@ -110,6 +101,5 @@ public class SimulationPresenter implements MapChangeListener {
             drawMap(worldMap);
             infoLabel.setText(message);
         });
-
     }
 }
