@@ -15,8 +15,8 @@ public class RandomPositionGenerator implements Iterable<Vector2d> {
 
     private static List<Vector2d> getPositions(int maxWidth, int maxHeight) {
         final List<Vector2d> positions = new ArrayList<>((maxWidth+1) * (maxHeight+1));
-        for (int i = 0; i < maxWidth + 1; i++) {
-            for (int j = 0; j < maxHeight + 1; j++) {
+        for (int i = 0; i < maxWidth; i++) {
+            for (int j = 0; j < maxHeight; j++) {
                 positions.add(new Vector2d(i, j));
             }
         }

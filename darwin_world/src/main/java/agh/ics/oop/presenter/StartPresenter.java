@@ -1,11 +1,8 @@
 package agh.ics.oop.presenter;
 
-import agh.ics.oop.Simulation;
-import agh.ics.oop.SimulationEngine;
+import agh.ics.oop.simulation.Simulation;
+import agh.ics.oop.simulation.SimulationEngine;
 import agh.ics.oop.model.Configuration;
-import agh.ics.oop.model.GrassField;
-import agh.ics.oop.model.Vector2d;
-import agh.ics.oop.model.WorldMap;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -13,7 +10,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.List;
 
 public class StartPresenter {
     private SimulationEngine engine;
@@ -40,7 +36,7 @@ public class StartPresenter {
                 10,
                 2,
                 false,
-                5,
+                1,
                 10,
                 20,
                 10,
@@ -54,6 +50,7 @@ public class StartPresenter {
     private void startSimulation(Simulation simulation) throws Exception {
         SimulationPresenter presenter = createSimulationWindow(simulation);
         presenter.setWorldMap(simulation.getWorldMap());
+        simulation.addListener(presenter);
         engine.runSimulation(simulation);
     }
 

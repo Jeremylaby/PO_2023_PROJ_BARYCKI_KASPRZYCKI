@@ -15,7 +15,7 @@
             fx:controller="agh.ics.oop.presenter.StartPresenter"
             styleClass="border-pane">
     <stylesheets>
-        <URL value="@style.css"/>
+<!--        <URL value="@style.css"/>-->
     </stylesheets>
     <bottom>
         <VBox styleClass="bottomBar">

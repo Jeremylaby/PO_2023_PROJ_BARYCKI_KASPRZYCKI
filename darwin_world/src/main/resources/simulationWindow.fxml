@@ -10,10 +10,10 @@
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="agh.ics.oop.presenter.SimulationPresenter"
-            prefHeight="400.0" prefWidth="600.0"
+            prefHeight="600.0" prefWidth="900.0"
             styleClass="border-pane">
     <stylesheets>
-        <URL value="@style.css" />
+<!--        <URL value="@style.css" />-->
     </stylesheets>
     <center>
         <HBox alignment="CENTER">
