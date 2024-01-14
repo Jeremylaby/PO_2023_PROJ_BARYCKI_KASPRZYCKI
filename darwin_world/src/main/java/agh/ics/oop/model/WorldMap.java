@@ -2,9 +2,7 @@ package agh.ics.oop.model;
 
 import agh.ics.oop.model.util.Boundary;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * The interface responsible for interacting with the map of the world.
@@ -39,4 +37,8 @@ public interface WorldMap {
     int getWidth();
 
     int getHeight();
+    void feedAnimals();
+    boolean isanimal(Vector2d position);
+    void reproduceAnimals();
+    void removeDeadAnimals();
 }
