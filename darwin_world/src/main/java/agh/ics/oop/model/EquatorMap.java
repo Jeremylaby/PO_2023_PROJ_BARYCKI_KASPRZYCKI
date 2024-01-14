@@ -62,14 +62,7 @@ public class EquatorMap extends AbstractWorldMap {
         }
 
     }
-
-    public Map<Vector2d, Plant> getPlants() {
-        return Map.copyOf(plants);
-    }
-
-    private Optional<Animal> findStrongest(Set<Animal> animals) {
-        return animals.stream().max(Comparator.comparingInt(Animal::getEnergy).thenComparing(Animal::getAge).thenComparing(Animal::getKidsNumber));
-    }
+    
 
     @Override
     protected void removePlant(Vector2d position) {
@@ -81,18 +74,4 @@ public class EquatorMap extends AbstractWorldMap {
         super.removePlant(position);
     }
 
-    public void feedAnimals() {
-        for (Vector2d key : animals.keySet()) {
-            if (plants.containsKey(key)) {
-                if (animalsAt(key).size() == 1) {
-                    animalsAt(key).iterator().next().eat(conf.plantsEnergyValue());
-                } else {
-                    findStrongest(animalsAt(key))
-                            .ifPresent(animal -> animal.eat(conf.plantsEnergyValue()));
-
-                }
-                removePlant(key);
-            }
-        }
-    }
 }
