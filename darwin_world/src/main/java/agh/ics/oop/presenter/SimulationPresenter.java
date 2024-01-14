@@ -9,8 +9,8 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 
 public class SimulationPresenter implements MapChangeListener {
-    private final static double CELL_WIDTH = 40;
-    private final static double CELL_HEIGHT = 40;
+    private final static double GRID_WIDTH = 500;
+    private final static double GRID_HEIGHT = 500;
 
     @FXML
     private Label infoLabel;
@@ -77,10 +77,10 @@ public class SimulationPresenter implements MapChangeListener {
         this.map = map;
 
         for (int i = 0; i < map.getWidth() + 1; i++) {
-            mapGrid.getColumnConstraints().add(new ColumnConstraints(CELL_WIDTH));
+            mapGrid.getColumnConstraints().add(new ColumnConstraints(GRID_WIDTH / (map.getWidth() + 1)));
         }
         for (int i = 0; i < map.getHeight() + 1; i++) {
-            mapGrid.getRowConstraints().add(new RowConstraints(CELL_HEIGHT));
+            mapGrid.getRowConstraints().add(new RowConstraints(GRID_HEIGHT / (map.getHeight() + 1)));
         }
     }
 }

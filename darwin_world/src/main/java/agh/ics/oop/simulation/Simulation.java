@@ -27,7 +27,7 @@ public class Simulation implements Runnable {
 //            case true: new PoisonousMap(configuration);
 //            case false: new EquatorMap(configuration);
 //        };
-        worldMap = new GrassField(10);
+        worldMap = new GrassField(configuration);
         animals = new ArrayList<>(configuration.animalsStartNum());
 
         generateAnimals(configuration);
@@ -51,6 +51,7 @@ public class Simulation implements Runnable {
 //                todo
 //                animals.forEach(worldMap::cleanIfDead);
                 animals.forEach(worldMap::move);
+                animals.forEach(animal -> System.out.println(animal.getEnergy()));
 //                animals.forEach(worldMap::feedAnimal);
 //                worldMap.procreateAllAnimals();
 //                worldMap.growPlants();

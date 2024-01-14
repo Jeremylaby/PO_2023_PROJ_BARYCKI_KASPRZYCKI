@@ -7,15 +7,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GrassField extends AbstractWorldMap {
+    private final int width;
+    private final int height;
     private final Map<Vector2d, Plant> grasses = new HashMap<>();
-    public GrassField( int grassCount) {
-        generateGrass(grassCount);
+    public GrassField(Configuration config) {
+        width = config.mapWidth();
+        height = config.mapHeight();
+        generateGrass(config.plantsStartNum());
     }
 
     private void generateGrass(int grassCount) {
-        int maxWidth= (int) Math.sqrt(grassCount *10);
-        int maxHeight=maxWidth;
-        RandomPositionGenerator randomPositionGenerator = new RandomPositionGenerator(maxWidth, maxHeight, grassCount);
+        RandomPositionGenerator randomPositionGenerator = new RandomPositionGenerator(width, height, grassCount);
         for(Vector2d grassPosition : randomPositionGenerator) {
             grasses.put(grassPosition, new Plant(grassPosition, false));
         }
@@ -63,4 +65,13 @@ public class GrassField extends AbstractWorldMap {
         return worldElementMap;
     }
 
+    @Override
+    public int getWidth() {
+        return width;
+    }
+
+    @Override
+    public int getHeight() {
+        return height;
+    }
 }

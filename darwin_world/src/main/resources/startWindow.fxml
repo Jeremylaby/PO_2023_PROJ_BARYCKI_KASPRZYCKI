@@ -9,16 +9,82 @@
 <?import javafx.scene.layout.VBox?>
 
 <?import java.net.URL?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.control.*?>
+
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            minHeight="550.0" minWidth="850.0"
+            minHeight="600.0" minWidth="850.0"
             fx:controller="agh.ics.oop.presenter.StartPresenter"
             styleClass="border-pane">
     <stylesheets>
 <!--        <URL value="@style.css"/>-->
     </stylesheets>
+    <top>
+        <VBox alignment="CENTER" minHeight="80">
+            <Label text="Aplikacja prostej symulacji ewolucji" />
+        </VBox>
+    </top>
+    <center>
+        <VBox alignment="CENTER">
+            <BorderPane maxWidth="500">
+                <left>
+                    <VBox>
+                        <Label text="Szerokość mapy" minHeight="30" />
+                        <Label text="Wysokość mapy" minHeight="30" />
+                        <Label text="Początkowa liczba roślin" minHeight="30" />
+                        <Label text="Wartość energii pojedynczej rośliny" minHeight="30" />
+                        <Label text="Liczba roślin rosnących każdego dnia" minHeight="30" />
+                        <Label text="Wariant wzrostu roślin" minHeight="30" />
+                        <Label text="Początkowa liczba zwierząt" minHeight="30" />
+                        <Label text="Początkowa energia zwierząt" minHeight="30" />
+                        <Label text="Energia zwierzęcia wymagana do reprodukcji" minHeight="30" />
+                        <Label text="Koszt reprodukcji zwierzęcia" minHeight="30" />
+                        <Label text="Minimalna liczba mutujących genów" minHeight="30" />
+                        <Label text="Maksymalna liczba mutujących genów" minHeight="30" />
+                        <Label text="Długość genomu zwierzęcia" minHeight="30" />
+                        <Label text="Wariant sekwencjonowania genów" minHeight="30" />
+                    </VBox>
+                </left>
+                <right>
+                    <VBox alignment="CENTER">
+                        <Spinner fx:id="mapWidth" min="2" max="20" editable="true" initialValue="10" minHeight="30" />
+                        <Spinner fx:id="mapHeight" min="2" max="20" editable="true" minHeight="30" />
+                        <Spinner fx:id="plantsStartNum" min="0" max="20" editable="true" initialValue="5" minHeight="30" />
+                        <Spinner fx:id="plantsEnergyValue" min="0" max="100" editable="true" initialValue="10" minHeight="30" />
+                        <Spinner fx:id="plantsNumPerDay" min="0" max="100" editable="true" initialValue="10" minHeight="30" />
+
+                        <HBox minHeight="30" alignment="CENTER">
+                            <fx:define>
+                                <ToggleGroup fx:id="plantsGrowthVariant"/>
+                            </fx:define>
+                            <RadioButton text="zalesione równiki" toggleGroup="$plantsGrowthVariant" minWidth="130" selected="true" />
+                            <RadioButton fx:id="plantsGrowthVariantPoison" text="zatrute owoce" toggleGroup="$plantsGrowthVariant" />
+                        </HBox>
+
+                        <Spinner fx:id="animalsStartNum" min="0" max="100" editable="true" initialValue="10" minHeight="30" />
+                        <Spinner fx:id="animalsStartEnergy" min="0" max="100" editable="true" initialValue="10" minHeight="30" />
+                        <Spinner fx:id="animalsEnergyToReproduce" min="0" max="100" editable="true" initialValue="10" minHeight="30" />
+                        <Spinner fx:id="animalsEnergyReproduceCost" min="0" max="100" editable="true" initialValue="10" minHeight="30" />
+                        <Spinner fx:id="mutationsMinNum" min="0" max="100" editable="true" initialValue="10" minHeight="30" />
+                        <Spinner fx:id="mutationsMaxNum" min="0" max="100" editable="true" initialValue="10" minHeight="30" />
+                        <Spinner fx:id="genomeSize" min="0" max="100" editable="true" initialValue="10" minHeight="30" />
+
+                        <HBox minHeight="30" alignment="CENTER">
+                            <fx:define>
+                                <ToggleGroup fx:id="genomeSequenceVariant"/>
+                            </fx:define>
+                            <RadioButton text="pełna predestynacja" toggleGroup="$genomeSequenceVariant" minWidth="140" selected="true" />
+                            <RadioButton fx:id="genomeSequenceVariantBackAndForth" text="tam i z powrotem" toggleGroup="$genomeSequenceVariant" />
+                        </HBox>
+                    </VBox>
+                </right>
+            </BorderPane>
+        </VBox>
+    </center>
     <bottom>
-        <VBox styleClass="bottomBar">
+        <VBox styleClass="bottomBar" alignment="CENTER" minHeight="80">
             <Label text="Rozpocznij symulację:"/>
             <Button text="Start" onAction="#onSimulationStartClicked"/>
         </VBox>

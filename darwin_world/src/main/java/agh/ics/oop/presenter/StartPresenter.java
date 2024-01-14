@@ -5,18 +5,75 @@ import agh.ics.oop.simulation.SimulationEngine;
 import agh.ics.oop.model.Configuration;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import javafx.util.converter.IntegerStringConverter;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+import java.util.stream.Stream;
 
-public class StartPresenter {
+public class StartPresenter implements Initializable {
+    @FXML
+    private RadioButton plantsGrowthVariantPoison;
+    @FXML
+    private RadioButton genomeSequenceVariantBackAndForth;
+    @FXML
+    private Spinner<Integer> mapWidth;
+    @FXML
+    private Spinner<Integer> mapHeight;
+    @FXML
+    private Spinner<Integer> plantsStartNum;
+    @FXML
+    private Spinner<Integer> plantsEnergyValue;
+    @FXML
+    private Spinner<Integer> plantsNumPerDay;
+    @FXML
+    private Spinner<Integer> animalsStartNum;
+    @FXML
+    private Spinner<Integer> animalsStartEnergy;
+    @FXML
+    private Spinner<Integer> animalsEnergyToReproduce;
+    @FXML
+    private Spinner<Integer> animalsEnergyReproduceCost;
+    @FXML
+    private Spinner<Integer> mutationsMinNum;
+    @FXML
+    private Spinner<Integer> mutationsMaxNum;
+    @FXML
+    private Spinner<Integer> genomeSize;
+
     private SimulationEngine engine;
 
-    @FXML
-    private void initialize() {
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
         engine = new SimulationEngine();
+        attachTextFormatters();
+    }
+
+    private void attachTextFormatters() {
+        IntegerStringConverter converter = new IntegerStringConverter();
+
+        Stream.of(
+                mapWidth,
+                mapHeight,
+                plantsStartNum,
+                plantsEnergyValue,
+                plantsNumPerDay,
+                animalsStartNum,
+                animalsStartEnergy,
+                animalsEnergyToReproduce,
+                animalsEnergyReproduceCost,
+                mutationsMinNum,
+                mutationsMaxNum,
+                genomeSize
+        ).forEach(spinner -> spinner.getEditor().setTextFormatter(new TextFormatter<>(converter, 10)));
     }
 
     public void onSimulationStartClicked() {
@@ -30,20 +87,20 @@ public class StartPresenter {
 
     private Configuration getConfiguration() {
         return new Configuration(
-                10,
-                10,
-                5,
-                10,
-                2,
-                false,
-                1,
-                10,
-                20,
-                10,
-                0,
-                0,
-                10,
-                false
+                mapWidth.getValue(),
+                mapHeight.getValue(),
+                plantsStartNum.getValue(),
+                plantsEnergyValue.getValue(),
+                plantsNumPerDay.getValue(),
+                plantsGrowthVariantPoison.isSelected(),
+                animalsStartNum.getValue(),
+                animalsStartEnergy.getValue(),
+                animalsEnergyToReproduce.getValue(),
+                animalsEnergyReproduceCost.getValue(),
+                mutationsMinNum.getValue(),
+                mutationsMaxNum.getValue(),
+                genomeSize.getValue(),
+                genomeSequenceVariantBackAndForth.isSelected()
         );
     }
 
