@@ -5,14 +5,15 @@ import agh.ics.oop.model.util.RandomNumGenerator;
 import java.util.*;
 
 public class EquatorMap extends AbstractWorldMap {
-    private List<Vector2d> equator = new ArrayList<>();
-    private List<Vector2d> wasteland = new ArrayList<>();
+    private final List<Vector2d> equator = new ArrayList<>();
+    private final List<Vector2d> wasteland = new ArrayList<>();
     private int equatorStart;
     private int equatorEnd;
 
-    public EquatorMap(Configuration conf) {
-        generateEquator(conf.mapHeight(), conf.mapWidth());
-        generatePlants(conf.plantsStartNum());
+    public EquatorMap(Configuration config) {
+        super(config);
+        generateEquator(config.mapHeight(), config.mapWidth());
+        generatePlants(config.plantsStartNum());
     }
 
     private void generatePlants(int n) {//jak będziemy zjadać planta to będziemy go dodawać do equatora albo wasteland

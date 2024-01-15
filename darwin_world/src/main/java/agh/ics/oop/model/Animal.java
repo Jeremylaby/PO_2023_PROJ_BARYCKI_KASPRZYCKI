@@ -62,6 +62,7 @@ public class Animal implements WorldElement {
     }
 
     public void move(int width, int height) {
+        if (getEnergy() <= 0) return;
         age += 1;
         updateEnergy(-1);
         rotate(genome.getCurrentGene());

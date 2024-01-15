@@ -7,17 +7,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GrassField extends AbstractWorldMap {
-    private final int width;
-    private final int height;
     private final Map<Vector2d, Plant> grasses = new HashMap<>();
     public GrassField(Configuration config) {
-        width = config.mapWidth();
-        height = config.mapHeight();
+        super(config);
         generateGrass(config.plantsStartNum());
     }
 
     private void generateGrass(int grassCount) {
-        RandomPositionGenerator randomPositionGenerator = new RandomPositionGenerator(width, height, grassCount);
+        RandomPositionGenerator randomPositionGenerator = new RandomPositionGenerator(config.mapWidth(), config.mapHeight(), grassCount);
         for(Vector2d grassPosition : randomPositionGenerator) {
             grasses.put(grassPosition, new Plant(grassPosition, false));
         }
@@ -43,35 +40,25 @@ public class GrassField extends AbstractWorldMap {
 //    }
 
 
-    public Boundary getCurrentBounds() {
-        Vector2d minVector=new Vector2d(Integer.MAX_VALUE,Integer.MAX_VALUE);
-        Vector2d maxVector=new Vector2d(Integer.MIN_VALUE,Integer.MIN_VALUE);
-        Map<Vector2d,WorldElement> worldElementMap=getElements();
-        for(WorldElement worldElement:worldElementMap.values()){
-            minVector=minVector.lowerLeft(worldElement.getPosition());
-            maxVector=maxVector.upperRight(worldElement.getPosition());
-        }
-        return new Boundary(minVector,maxVector);
-    }
+//    public Boundary getCurrentBounds() {
+//        Vector2d minVector=new Vector2d(Integer.MAX_VALUE,Integer.MAX_VALUE);
+//        Vector2d maxVector=new Vector2d(Integer.MIN_VALUE,Integer.MIN_VALUE);
+//        Map<Vector2d,WorldElement> worldElementMap=getElements();
+//        for(WorldElement worldElement:worldElementMap.values()){
+//            minVector=minVector.lowerLeft(worldElement.getPosition());
+//            maxVector=maxVector.upperRight(worldElement.getPosition());
+//        }
+//        return new Boundary(minVector,maxVector);
+//    }
 
-    @Override
-    public Map<Vector2d, WorldElement> getElements() {
-        Map<Vector2d,WorldElement> worldElementMap=super.getElements();
-        for (Plant grass: grasses.values()){
-            if(!worldElementMap.containsKey(grass.getPosition())) {
-                worldElementMap.put(grass.getPosition(), grass);
-            }
-        }
-        return worldElementMap;
-    }
-
-    @Override
-    public int getWidth() {
-        return width;
-    }
-
-    @Override
-    public int getHeight() {
-        return height;
-    }
+//    @Override
+//    public Map<Vector2d, WorldElement> getElements() {
+//        Map<Vector2d,WorldElement> worldElementMap=super.getElements();
+//        for (Plant grass: grasses.values()){
+//            if(!worldElementMap.containsKey(grass.getPosition())) {
+//                worldElementMap.put(grass.getPosition(), grass);
+//            }
+//        }
+//        return worldElementMap;
+//    }
 }
