@@ -62,8 +62,6 @@ public class EquatorMap extends AbstractWorldMap {
         }
 
     }
-    
-
     @Override
     protected void removePlant(Vector2d position) {
         if (position.getY() >= equatorStart && position.getY() <= equatorEnd) {

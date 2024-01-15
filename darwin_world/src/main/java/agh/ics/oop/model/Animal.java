@@ -48,8 +48,8 @@ public class Animal implements WorldElement {
         father.kidsNumber += 1;//potomkowie to dzieci+ inni potomkowie więc musze dodać jeszcz dzieci
     }
 
-    public void rotate() {
-        orientation = orientation.rotate(genome.getCurrentGene());
+    private void rotate(int n) {
+        orientation = orientation.rotate(n);
     }
 
     public void eat(int foodEnergy) {
@@ -64,7 +64,11 @@ public class Animal implements WorldElement {
     public void move(int width, int height) {
         age += 1;
         updateEnergy(-1);
-        rotate();
+        rotate(genome.getCurrentGene());
+        updatePosition(width, height, position.add(orientation.toUnitVector()));
+    }
+    public void dodge(int width,int height,int n){
+        rotate(n);
         updatePosition(width, height, position.add(orientation.toUnitVector()));
     }
 

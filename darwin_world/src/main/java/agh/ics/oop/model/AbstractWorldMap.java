@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import agh.ics.oop.simulation.Simulation;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -16,6 +17,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected Map<Vector2d, Plant> plants = new HashMap<>();
     private List<MapChangeListener> observers = new ArrayList<>();
     protected Configuration conf;
+    public int simulationDay=0;
 
     @Override
     public void addObserver(MapChangeListener observer) {
@@ -46,13 +48,16 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
     public void move(Animal animal) {
+        removeAnimal(animal);
+        animal.move(conf.mapWidth(), conf.mapHeight());
+        place(animal);
+    }
+
+    protected void removeAnimal(Animal animal) {
         animals.get(animal.getPosition()).remove(animal);
         if (animals.get(animal.getPosition()).isEmpty()) {
             animals.remove(animal.getPosition());
         }
-        animal.move(conf.mapWidth(), conf.mapHeight());
-        place(animal);
-        animals.get(animal.getPosition()).add(animal);
     }
 
     public void feedAnimals() {
@@ -70,7 +75,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         }
     }
 
-    private void feedAnimal(Animal animal) {//będę nadpisywał w poisoned land
+    protected void feedAnimal(Animal animal) {//będę nadpisywał w poisoned land
         animal.eat(conf.plantsEnergyValue());
     }
 
@@ -124,14 +129,13 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
     @Override
-    public void removeDeadAnimals() {
+    public void removeDeadAnimals() {//ewentualnie do zmiany
+        simulationDay+=1;
         for (Vector2d key : animals.keySet()) {
             for (Animal animal : animalsAt(key)) {
                 if (animal.getEnergy() <= 0) {
-                    animalsAt(key).remove(animal);
-                    if (animalsAt(key).isEmpty()) {
-                        animals.remove(key);
-                    }
+                    removeAnimal(animal);
+                    animal.die(simulationDay);
                 }
             }
         }
