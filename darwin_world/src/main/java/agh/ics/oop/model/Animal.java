@@ -65,7 +65,7 @@ public class Animal implements WorldElement {
         if (getEnergy() <= 0) return;
         age += 1;
         updateEnergy(-1);
-        rotate(genome.getCurrentGene());
+        rotate(genome.sequenceCurrentGene());
         updatePosition(width, height, position.add(orientation.toUnitVector()));
     }
     public void dodge(int width,int height,int n){
@@ -93,11 +93,14 @@ public class Animal implements WorldElement {
         Animal father = this;
         Animal mother = animal;
 
-        father.updateEnergy(-reproduceCost);
-        mother.updateEnergy(-reproduceCost);
+        if (mother.getEnergy() > father.getEnergy()) {
+            mother = this;
+            father = animal;
+        }
 
         int k = Math.round(genome.size() * ((float) father.getEnergy() / (father.getEnergy() + mother.getEnergy())));
         int l = genome.size() - k;
+
         List<Integer> childGenes;
 
         if (RandomNumGenerator.generateRandomInt(0, 1) == 0) {
@@ -111,6 +114,10 @@ public class Animal implements WorldElement {
         Genome childGenome = new Genome(genome.isBackAndForth(), genome.getMinMutations(), genome.getMaxMutations(), childGenes);
         Animal child = new Animal(position, childGenome, 2 * reproduceCost, father, mother);//todo
         child.updateFamilyTree();
+
+        father.updateEnergy(-reproduceCost);
+        mother.updateEnergy(-reproduceCost);
+
         return child;
     }
 
@@ -141,7 +148,7 @@ public class Animal implements WorldElement {
 
     @Override
     public String toString() {
-        return orientation.toString();
+        return "%s %d".formatted(orientation, getEnergy());
     }
 
 }

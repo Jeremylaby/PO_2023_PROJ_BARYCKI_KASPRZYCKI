@@ -19,9 +19,9 @@ public interface WorldMap {
 
     void feedAnimals();
 
-    boolean isanimal(Vector2d position);
+    boolean isAnimal(Vector2d position);
 
-    void reproduceAnimals();
+    List<Animal> reproduceAnimals();
 
     Map<Vector2d, Set<Animal>> getAnimals();
 }

@@ -55,11 +55,11 @@ public class Simulation implements Runnable {
                 dayOfSimulation++;
 
                 removeDeadAnimals();
-                animals.forEach(worldMap::move);
-//                worldMap.feedAnimals();
-//                worldMap.reproduceAnimals();
-//                animals.forEach(worldMap::feedAnimal);
+                moveAnimals();
+                feedAnimals();
+                reproduceAnimals();
 //                worldMap.growPlants();
+
                 mapChanged();
             }
 
@@ -81,6 +81,18 @@ public class Simulation implements Runnable {
             worldMap.removeAnimal(animal);
             animals.remove(animal);
         });;
+    }
+
+    private void moveAnimals() {
+        animals.forEach(worldMap::move);
+    }
+
+    private void reproduceAnimals() {
+        animals.addAll(worldMap.reproduceAnimals());
+    }
+
+    private void feedAnimals() {
+        worldMap.feedAnimals();
     }
 
     private void mapChanged() {

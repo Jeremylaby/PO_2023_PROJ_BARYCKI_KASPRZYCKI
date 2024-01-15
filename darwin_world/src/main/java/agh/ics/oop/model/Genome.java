@@ -12,7 +12,7 @@ public class Genome {
     private final boolean isBackAndForth;
     private final int minMutations;
     private final int maxMutations;
-    private int currentGeneIndex = 0;
+    private int currentGeneIndex;
     private boolean sequencingDirection;
 
     public Genome(boolean isBackAndForth, int minMutations, int maxMutations, int size) {
@@ -37,7 +37,7 @@ public class Genome {
     private void mutate() {
         if (minMutations >= 0 && maxMutations >= minMutations) {
             int k = RandomNumGenerator.generateRandomInt(minMutations, maxMutations);
-            List<Integer> genesToMutate = RandomNumGenerator.generateRandomUniqueIndexes(k, genes.size());
+            List<Integer> genesToMutate = RandomNumGenerator.generateRandomUniqueIndexes(k, genes.size()-1);
 
             genesToMutate.forEach((gene) -> {
                 genes.set(gene, RandomNumGenerator.generateRandomIntWithoutK(MIN_GENE, MAX_GENE, genes.get(gene)));
@@ -47,7 +47,7 @@ public class Genome {
         }
     }
 
-    public int getCurrentGene() {
+    public int sequenceCurrentGene() {
         int gene = genes.get(this.currentGeneIndex);
         sequenceGenes();
         return gene;

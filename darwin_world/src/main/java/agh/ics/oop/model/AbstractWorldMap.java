@@ -18,12 +18,16 @@ public abstract class AbstractWorldMap implements WorldMap {
         plants.remove(position);
     }
 
-    protected Optional<Animal> findStrongest(Set<Animal> animals) {
-        return animals.stream().max(Comparator.comparingInt(Animal::getEnergy).thenComparing(Animal::getAge).thenComparing(Animal::getKidsNumber));
+    private Optional<Animal> findStrongest(Set<Animal> animals) {
+        return animals.stream()
+                .max(Comparator
+                        .comparingInt(Animal::getEnergy)
+                        .thenComparing(Animal::getAge)
+                        .thenComparing(Animal::getKidsNumber));
     }
 
     public void place(Animal animal) {
-        if (!isanimal(animal.getPosition())) {
+        if (!isAnimal(animal.getPosition())) {
             animals.put(animal.getPosition(), new HashSet<>());
         }
         animals.get(animal.getPosition()).add(animal);
@@ -50,16 +54,10 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
     public void feedAnimals() {
-        for (Vector2d key : animals.keySet()) {
-            if (plants.containsKey(key)) {
-                if (animalsAt(key).size() == 1) {
-                    feedAnimal(animalsAt(key).iterator().next());
-                } else {
-                    findStrongest(animalsAt(key))
-                            .ifPresent(this::feedAnimal);
-
-                }
-                removePlant(key);
+        for (Vector2d position : animals.keySet()) {
+            if (plants.containsKey(position)) {
+                findStrongest(animalsAt(position)).ifPresent(this::feedAnimal);
+                removePlant(position);
             }
         }
     }
@@ -68,7 +66,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         animal.eat(config.plantsEnergyValue());
     }
 
-    public boolean isanimal(Vector2d position) {
+    public boolean isAnimal(Vector2d position) {
         return animals.containsKey(position);
     }
 
@@ -78,9 +76,10 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     @Override
     public List<WorldElement> getElements() {
-        Stream<Plant> stream = plants.values().stream().filter(plant -> !isanimal(plant.getPosition()));
-        return Stream.concat(stream, animals.values().stream().flatMap(Collection::stream))
-                .toList();
+        return Stream.concat(
+                    plants.values().stream(),
+                    animals.values().stream().flatMap(Collection::stream)
+                ).toList();
     }
 
     public Map<Vector2d, Plant> getPlants() {
@@ -88,23 +87,30 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
     @Override
-    public void reproduceAnimals() {
-        for (Vector2d key : animals.keySet()) {
-            if (animalsAt(key).size() >= 2) {
-                Optional<Animal> father = findStrongest(animalsAt(key));
-                if (father.isPresent()
-                        && father.get().getEnergy() >= config.animalsEnergyToReproduce()) {
-                    animalsAt(key).remove(father.get());
-                    Optional<Animal> mother = findStrongest(animalsAt(key));
-                    animalsAt(key).add(father.get());
-                    if (mother.isPresent() &&
-                            mother.get().getEnergy() >= config.animalsEnergyToReproduce()) {
-                        Animal child = father.get().makeChild(mother.get(), config.animalsEnergyReproduceCost());
-                        animalsAt(key).add(child);
-                    }//nie wiem czy tego nie można jakoś lepiej napisać
-                }
-            }
+    public List<Animal> reproduceAnimals() {
+        List<Animal> newborns = new ArrayList<>();
+
+        for (Set<Animal> animalSet: animals.values()) {
+            findStrongest(animalSet).ifPresent(father -> {
+                Set<Animal> restOfAnimals = animalSet.stream()
+                        .filter(animal -> animal != father)
+                        .collect(Collectors.toSet());
+
+                findStrongest(restOfAnimals).ifPresent(mother -> {
+                    if (canAnimalReproduce(father) && canAnimalReproduce(mother)) {
+                        Animal child = father.makeChild(mother, config.animalsEnergyReproduceCost());
+                        place(child);
+                        newborns.add(child);
+                    }
+                });
+            });
         }
+
+        return newborns;
+    }
+
+    private boolean canAnimalReproduce(Animal animal) {
+        return animal.getEnergy() >= config.animalsEnergyToReproduce();
     }
 
     @Override
