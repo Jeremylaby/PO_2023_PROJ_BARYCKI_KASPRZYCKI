@@ -1,43 +1,25 @@
 package agh.ics.oop.model;
 
-import agh.ics.oop.model.util.Boundary;
-
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import agh.ics.oop.simulation.Simulation;
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 
 public abstract class AbstractWorldMap implements WorldMap {
-    private final UUID id = UUID.randomUUID();
     protected Map<Vector2d, Set<Animal>> animals = new HashMap<>();
     protected Map<Vector2d, Plant> plants = new HashMap<>();
-    private List<MapChangeListener> observers = new ArrayList<>();
-    protected Configuration conf;
-    public int simulationDay=0;
+    protected Configuration config;
 
-    @Override
-    public void addObserver(MapChangeListener observer) {
-        observers.add(observer);
+    public AbstractWorldMap(Configuration configuration) {
+        config = configuration;
     }
 
     protected void removePlant(Vector2d position) {
         plants.remove(position);
     }
 
-    public void removeObserver(MapChangeListener observer) {
-        observers.remove(observer);
-    }
-
     protected Optional<Animal> findStrongest(Set<Animal> animals) {
         return animals.stream().max(Comparator.comparingInt(Animal::getEnergy).thenComparing(Animal::getAge).thenComparing(Animal::getKidsNumber));
-    }
-
-    protected void mapChanged(String message) {
-        observers.forEach(observer -> observer.mapChanged(this, message));
     }
 
     public void place(Animal animal) {
@@ -47,13 +29,20 @@ public abstract class AbstractWorldMap implements WorldMap {
         animals.get(animal.getPosition()).add(animal);
     }
 
+    @Override
     public void move(Animal animal) {
-        removeAnimal(animal);
-        animal.move(conf.mapWidth(), conf.mapHeight());
-        place(animal);
+        if (animalsAt(animal.getPosition()) != null && animalsAt(animal.getPosition()).contains(animal)) {
+            removeAnimal(animal);
+            animal.move(config.mapWidth(), config.mapHeight());
+            place(animal);
+        }
     }
 
-    protected void removeAnimal(Animal animal) {
+    @Override
+    public void removeAnimal(Animal animal) {
+        if (animals.get(animal.getPosition()) == null) {
+            return;
+        }
         animals.get(animal.getPosition()).remove(animal);
         if (animals.get(animal.getPosition()).isEmpty()) {
             animals.remove(animal.getPosition());
@@ -76,7 +65,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
     protected void feedAnimal(Animal animal) {//będę nadpisywał w poisoned land
-        animal.eat(conf.plantsEnergyValue());
+        animal.eat(config.plantsEnergyValue());
     }
 
     public boolean isanimal(Vector2d position) {
@@ -87,13 +76,13 @@ public abstract class AbstractWorldMap implements WorldMap {
         return animals.get(position);
     }
 
-
     @Override
-    public Map<Vector2d, WorldElement> getElements() {
+    public List<WorldElement> getElements() {
         Stream<Plant> stream = plants.values().stream().filter(plant -> !isanimal(plant.getPosition()));
-        return Stream.concat(stream, animals.values().iterator().next().stream())
-                .collect(Collectors.toMap(WorldElement::getPosition, worldElement -> worldElement));
+        return Stream.concat(stream, animals.values().stream().flatMap(Collection::stream))
+                .toList();
     }
+
     public Map<Vector2d, Plant> getPlants() {
         return Map.copyOf(plants);
     }
@@ -104,13 +93,13 @@ public abstract class AbstractWorldMap implements WorldMap {
             if (animalsAt(key).size() >= 2) {
                 Optional<Animal> father = findStrongest(animalsAt(key));
                 if (father.isPresent()
-                        && father.get().getEnergy() >= conf.animalsEnergyToReproduce()) {
+                        && father.get().getEnergy() >= config.animalsEnergyToReproduce()) {
                     animalsAt(key).remove(father.get());
                     Optional<Animal> mother = findStrongest(animalsAt(key));
                     animalsAt(key).add(father.get());
                     if (mother.isPresent() &&
-                            mother.get().getEnergy() >= conf.animalsEnergyToReproduce()) {
-                        Animal child = father.get().makeChild(mother.get(), conf.animalsEnergyReproduceCost());
+                            mother.get().getEnergy() >= config.animalsEnergyToReproduce()) {
+                        Animal child = father.get().makeChild(mother.get(), config.animalsEnergyReproduceCost());
                         animalsAt(key).add(child);
                     }//nie wiem czy tego nie można jakoś lepiej napisać
                 }
@@ -120,24 +109,15 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     @Override
     public int getWidth() {
-        return 10;
+        return config.mapWidth();
     }
 
     @Override
     public int getHeight() {
-        return 10;
+        return config.mapHeight();
     }
 
-    @Override
-    public void removeDeadAnimals() {//ewentualnie do zmiany
-        simulationDay+=1;
-        for (Vector2d key : animals.keySet()) {
-            for (Animal animal : animalsAt(key)) {
-                if (animal.getEnergy() <= 0) {
-                    removeAnimal(animal);
-                    animal.die(simulationDay);
-                }
-            }
-        }
+    public Map<Vector2d, Set<Animal>> getAnimals() {
+        return animals;
     }
 }

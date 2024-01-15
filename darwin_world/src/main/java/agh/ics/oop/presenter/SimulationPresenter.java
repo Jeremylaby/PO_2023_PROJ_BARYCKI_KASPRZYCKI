@@ -64,11 +64,11 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     private void drawWorldElements() {
-        map.getElements().forEach((position, element) -> {
+        map.getElements().forEach((element) -> {
             mapGrid.add(
                     createGridCell(element),
-                    position.getX() + 1,
-                    map.getHeight() - position.getY() - 1
+                    element.getPosition().getX() + 1,
+                    map.getHeight() - element.getPosition().getY() - 1
             );
         });
     }

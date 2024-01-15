@@ -4,15 +4,19 @@ import agh.ics.oop.model.*;
 import agh.ics.oop.model.util.RandomPositionGenerator;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Stream;
 
 public class Simulation implements Runnable {
-    public static final int SIMULATION_INTERVAL = 500;
+    public static final int SIMULATION_INTERVAL = 1000;
     private final List<MapChangeListener> listeners = new ArrayList<>();
-    private final List<Animal> animals;
+    private final Set<Animal> animals;
     private final WorldMap worldMap;
     private boolean paused = false;
     private boolean stopped = false;
+    private int dayOfSimulation = 0;
 
     public void addListener(MapChangeListener listener) {
         listeners.add(listener);
@@ -27,8 +31,8 @@ public class Simulation implements Runnable {
 //            case true: new PoisonousMap(configuration);
 //            case false: new EquatorMap(configuration);
 //        };
-        worldMap = new GrassField(configuration);
-        animals = new ArrayList<>(configuration.animalsStartNum());
+        worldMap = new EquatorMap(configuration);
+        animals = new HashSet<>(configuration.animalsStartNum());
 
         generateAnimals(configuration);
     }
@@ -48,12 +52,13 @@ public class Simulation implements Runnable {
             if (stopped) return;
 
             if (!paused) {
-//                todo
-//                animals.forEach(worldMap::cleanIfDead);
+                dayOfSimulation++;
+
+                removeDeadAnimals();
                 animals.forEach(worldMap::move);
-                animals.forEach(animal -> System.out.println(animal.getEnergy()));
+//                worldMap.feedAnimals();
+//                worldMap.reproduceAnimals();
 //                animals.forEach(worldMap::feedAnimal);
-//                worldMap.procreateAllAnimals();
 //                worldMap.growPlants();
                 mapChanged();
             }
@@ -64,6 +69,18 @@ public class Simulation implements Runnable {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void removeDeadAnimals() {
+        List<Animal> deadAnimals = animals.stream()
+                .filter(animal -> animal.getEnergy() <= 0)
+                .toList();
+
+        deadAnimals.forEach(animal -> {
+            animal.die(dayOfSimulation);
+            worldMap.removeAnimal(animal);
+            animals.remove(animal);
+        });;
     }
 
     private void mapChanged() {

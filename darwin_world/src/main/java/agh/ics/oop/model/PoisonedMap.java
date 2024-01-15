@@ -12,6 +12,7 @@ public class PoisonedMap extends AbstractWorldMap {
     private List<Vector2d> availablePositions = new ArrayList<>(    );
 
     public PoisonedMap(Configuration conf) {
+        super(conf);
         generatePoisonedArea(conf.mapWidth(), conf.mapHeight());
         generatePlants(conf.plantsStartNum());
     }
@@ -49,9 +50,9 @@ public class PoisonedMap extends AbstractWorldMap {
             skillCheck(animal);
             if(plants.containsKey(animal.getPosition())){
                 if(plants.get(animal.getPosition()).isPoisonous()){
-                    animal.eat(-conf.plantsEnergyValue());
+                    animal.eat(-config.plantsEnergyValue());
                 }else{
-                    animal.eat(conf.plantsEnergyValue());
+                    animal.eat(config.plantsEnergyValue());
                 }
                 removePlant(animal.getPosition());
             }
