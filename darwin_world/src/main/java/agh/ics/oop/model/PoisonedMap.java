@@ -9,7 +9,7 @@ import java.util.List;
 
 public class PoisonedMap extends AbstractWorldMap {
     private Boundary poisonedArea;
-    private List<Vector2d> availablePositions = new ArrayList<>();
+    private List<Vector2d> availablePositions = new ArrayList<>(    );
 
     public PoisonedMap(Configuration conf) {
         generatePoisonedArea(conf.mapWidth(), conf.mapHeight());
@@ -22,8 +22,8 @@ public class PoisonedMap extends AbstractWorldMap {
             if(availablePositions.isEmpty()){
                 return;
             }
-            Vector2d plant=availablePositions.get(0);
-            availablePositions.remove(0);
+            Vector2d plant=availablePositions.get(availablePositions.size()-1);
+            availablePositions.remove(availablePositions.size()-1);
             if (plant.precedes(poisonedArea.rightUpper()) && plant.follows(poisonedArea.leftLower())) {
                 plants.put(plant, new Plant(plant, true));
             } else {
