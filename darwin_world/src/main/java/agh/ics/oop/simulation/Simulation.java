@@ -7,10 +7,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Stream;
 
 public class Simulation implements Runnable {
-    public static final int SIMULATION_INTERVAL = 1000;
+    public static final int SIMULATION_INTERVAL = 500;
     private final List<MapChangeListener> listeners = new ArrayList<>();
     private final Set<Animal> animals;
     private final WorldMap worldMap;
@@ -27,7 +26,7 @@ public class Simulation implements Runnable {
     }
 
     public Simulation(Configuration configuration) {
-//        worldMap = switch (configuration.customPlants()) {
+//        worldMap = switch (configuration.plantsGrowthVariantPoison()) {
 //            case true: new PoisonousMap(configuration);
 //            case false: new EquatorMap(configuration);
 //        };
@@ -40,7 +39,7 @@ public class Simulation implements Runnable {
     private void generateAnimals(Configuration c) {
         RandomPositionGenerator positionGenerator = new RandomPositionGenerator(c.mapWidth(), c.mapHeight(), c.animalsStartNum());
         for (Vector2d position : positionGenerator) {
-            Genome genome = new Genome(c.customNextGene(), c.genomeMin(), c.genomeMax(), c.genomeLength());
+            Genome genome = new Genome(c.genomeSequenceVariantBackAndForth(), c.mutationsMinNum(), c.mutationsMaxNum(), c.genomeSize());
             Animal animal = new Animal(position, genome, c.animalsStartEnergy());
             animals.add(animal);
             worldMap.place(animal);
@@ -78,7 +77,7 @@ public class Simulation implements Runnable {
 
         deadAnimals.forEach(animal -> {
             animal.die(dayOfSimulation);
-            worldMap.removeAnimal(animal);
+            worldMap.remove(animal);
             animals.remove(animal);
         });;
     }

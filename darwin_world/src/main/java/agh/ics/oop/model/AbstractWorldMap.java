@@ -4,7 +4,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-
 public abstract class AbstractWorldMap implements WorldMap {
     protected Map<Vector2d, Set<Animal>> animals = new HashMap<>();
     protected Map<Vector2d, Plant> plants = new HashMap<>();
@@ -35,31 +34,34 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     @Override
     public void move(Animal animal) {
-        if (animalsAt(animal.getPosition()) != null && animalsAt(animal.getPosition()).contains(animal)) {
-            removeAnimal(animal);
-            animal.move(config.mapWidth(), config.mapHeight());
-            place(animal);
-        }
+        animalsAt(animal.getPosition())
+                .ifPresent(animalsAtPosition -> {
+                    if (animalsAtPosition.contains(animal)) {
+                        remove(animal);
+                        animal.move(config.mapWidth(), config.mapHeight());
+                        place(animal);
+                    }
+                });
     }
 
     @Override
-    public void removeAnimal(Animal animal) {
-        if (animals.get(animal.getPosition()) == null) {
-            return;
-        }
-        animals.get(animal.getPosition()).remove(animal);
-        if (animals.get(animal.getPosition()).isEmpty()) {
-            animals.remove(animal.getPosition());
-        }
+    public void remove(Animal animal) {
+        animalsAt(animal.getPosition())
+                .ifPresent(animalsAtPosition -> {
+                    animalsAtPosition.remove(animal);
+                    if (animalsAtPosition.isEmpty()) {
+                        animals.remove(animal.getPosition());
+                    }
+                });
     }
 
     public void feedAnimals() {
-        for (Vector2d position : animals.keySet()) {
+        animals.forEach((position, animalsAtPosition) -> {
             if (plants.containsKey(position)) {
-                findStrongest(animalsAt(position)).ifPresent(this::feedAnimal);
+                findStrongest(animalsAtPosition).ifPresent(this::feedAnimal);
                 removePlant(position);
             }
-        }
+        });
     }
 
     protected void feedAnimal(Animal animal) {//będę nadpisywał w poisoned land
@@ -70,8 +72,9 @@ public abstract class AbstractWorldMap implements WorldMap {
         return animals.containsKey(position);
     }
 
-    public Set<Animal> animalsAt(Vector2d position) {
-        return animals.get(position);
+    @Override
+    public Optional<Set<Animal>> animalsAt(Vector2d position) {
+        return Optional.ofNullable(animals.get(position));
     }
 
     @Override

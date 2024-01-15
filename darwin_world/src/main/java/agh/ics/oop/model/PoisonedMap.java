@@ -64,7 +64,7 @@ public class PoisonedMap extends AbstractWorldMap {
 
     private void skillCheck(Animal animal) {
         if(RandomNumGenerator.generateRandomInt(1,10)<=2){
-            removeAnimal(animal);
+            remove(animal);
             animal.dodge(getWidth()-1,getHeight()-1,RandomNumGenerator.generateRandomInt(0,7));
             place(animal);
         }

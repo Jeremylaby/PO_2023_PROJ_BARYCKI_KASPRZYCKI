@@ -5,13 +5,13 @@ public record Configuration(int mapWidth,
                             int plantsStartNum,
                             int plantsEnergyValue,
                             int plantsNumPerDay,
-                            boolean customPlants,
+                            boolean plantsGrowthVariantPoison,
                             int animalsStartNum,
                             int animalsStartEnergy,
                             int animalsEnergyToReproduce,
                             int animalsEnergyReproduceCost,
-                            int genomeMin,
-                            int genomeMax,
-                            int genomeLength,
-                            boolean customNextGene) {
+                            int mutationsMinNum,
+                            int mutationsMaxNum,
+                            int genomeSize,
+                            boolean genomeSequenceVariantBackAndForth) {
 }

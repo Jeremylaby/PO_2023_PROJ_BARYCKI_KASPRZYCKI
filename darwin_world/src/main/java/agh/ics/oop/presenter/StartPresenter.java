@@ -60,20 +60,22 @@ public class StartPresenter implements Initializable {
     private void attachTextFormatters() {
         IntegerStringConverter converter = new IntegerStringConverter();
 
-        Stream.of(
-                mapWidth,
-                mapHeight,
-                plantsStartNum,
-                plantsEnergyValue,
-                plantsNumPerDay,
-                animalsStartNum,
-                animalsStartEnergy,
-                animalsEnergyToReproduce,
-                animalsEnergyReproduceCost,
-                mutationsMinNum,
-                mutationsMaxNum,
-                genomeSize
-        ).forEach(spinner -> spinner.getEditor().setTextFormatter(new TextFormatter<>(converter, 10)));
+        attachTextFormatter(mapWidth, converter, 10);
+        attachTextFormatter(mapHeight, converter, 10);
+        attachTextFormatter(plantsStartNum, converter, 10);
+        attachTextFormatter(plantsEnergyValue, converter, 10);
+        attachTextFormatter(plantsNumPerDay, converter, 5);
+        attachTextFormatter(animalsStartNum, converter, 5);
+        attachTextFormatter(animalsStartEnergy, converter, 30);
+        attachTextFormatter(animalsEnergyToReproduce, converter, 50);
+        attachTextFormatter(animalsEnergyReproduceCost, converter, 10);
+        attachTextFormatter(mutationsMinNum, converter, 0);
+        attachTextFormatter(mutationsMaxNum, converter, 5);
+        attachTextFormatter(genomeSize, converter, 15);
+    }
+
+    private void attachTextFormatter(Spinner<Integer> spinner, IntegerStringConverter converter, int defaultValue) {
+        spinner.getEditor().setTextFormatter(new TextFormatter<>(converter, defaultValue));
     }
 
     public void onSimulationStartClicked() {

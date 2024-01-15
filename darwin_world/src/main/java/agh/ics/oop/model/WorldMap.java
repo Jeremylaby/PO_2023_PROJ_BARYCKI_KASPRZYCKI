@@ -5,11 +5,11 @@ import java.util.*;
 public interface WorldMap {
     void place(Animal animal);
 
-    void removeAnimal(Animal animal);
+    void remove(Animal animal);
 
     void move(Animal animal);
 
-    Collection<Animal> animalsAt(Vector2d position);
+    Optional<Set<Animal>> animalsAt(Vector2d position);
 
     List<WorldElement> getElements();
 
