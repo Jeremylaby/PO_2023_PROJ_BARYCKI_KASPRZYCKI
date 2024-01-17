@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 public class Simulation implements Runnable {
-    public static final int SIMULATION_INTERVAL = 500;
+    public static final int SIMULATION_INTERVAL = 100;
     private final List<MapChangeListener> listeners = new ArrayList<>();
     private final Set<Animal> animals;
     private final WorldMap worldMap;
@@ -98,12 +98,9 @@ public class Simulation implements Runnable {
         listeners.forEach(listener -> listener.mapChanged(worldMap, ""));
     }
 
-    public void pause() {
-        paused = true;
-    }
-
-    public void resume() {
-        paused = false;
+    public boolean toggle() {
+        paused = !paused;
+        return paused;
     }
 
     public void stop() {

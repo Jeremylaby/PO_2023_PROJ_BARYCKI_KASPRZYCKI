@@ -60,12 +60,12 @@ public class StartPresenter implements Initializable {
     private void attachTextFormatters() {
         IntegerStringConverter converter = new IntegerStringConverter();
 
-        attachTextFormatter(mapWidth, converter, 10);
-        attachTextFormatter(mapHeight, converter, 10);
-        attachTextFormatter(plantsStartNum, converter, 10);
+        attachTextFormatter(mapWidth, converter, 20);
+        attachTextFormatter(mapHeight, converter, 20);
+        attachTextFormatter(plantsStartNum, converter, 50);
         attachTextFormatter(plantsEnergyValue, converter, 10);
         attachTextFormatter(plantsNumPerDay, converter, 5);
-        attachTextFormatter(animalsStartNum, converter, 5);
+        attachTextFormatter(animalsStartNum, converter, 15);
         attachTextFormatter(animalsStartEnergy, converter, 30);
         attachTextFormatter(animalsEnergyToReproduce, converter, 50);
         attachTextFormatter(animalsEnergyReproduceCost, converter, 10);
@@ -76,6 +76,7 @@ public class StartPresenter implements Initializable {
 
     private void attachTextFormatter(Spinner<Integer> spinner, IntegerStringConverter converter, int defaultValue) {
         spinner.getEditor().setTextFormatter(new TextFormatter<>(converter, defaultValue));
+        spinner.getValueFactory().setValue(defaultValue);
     }
 
     public void onSimulationStartClicked() {
@@ -108,7 +109,7 @@ public class StartPresenter implements Initializable {
 
     private void startSimulation(Simulation simulation) throws Exception {
         SimulationPresenter presenter = createSimulationWindow(simulation);
-        presenter.setWorldMap(simulation.getWorldMap());
+        presenter.setSimulation(simulation);
         simulation.addListener(presenter);
         engine.runSimulation(simulation);
     }

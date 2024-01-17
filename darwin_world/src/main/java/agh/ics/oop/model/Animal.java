@@ -153,6 +153,7 @@ public class Animal implements WorldElement {
 
     @Override
     public String getTexturePath() {
+        // TODO stworzyć system poziomów energii
         if (getEnergy() < 10) {
             return "images/animal1_low_energy.png";
         }

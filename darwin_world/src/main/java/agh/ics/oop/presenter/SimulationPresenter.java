@@ -1,68 +1,45 @@
 package agh.ics.oop.presenter;
 
 import agh.ics.oop.model.*;
+import agh.ics.oop.simulation.Simulation;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.geometry.HPos;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
+import javafx.scene.control.Button;
 import javafx.scene.layout.*;
 
 public class SimulationPresenter implements MapChangeListener {
-    private final static double GRID_WIDTH = 600;
-    private final static double GRID_HEIGHT = 600;
+    private final static double GRID_SIZE = 600;
 
     @FXML
-    private Label infoLabel;
-
+    private Button pauseResumeButton;
     @FXML
     private GridPane mapGrid;
 
+    private Simulation simulation;
     private WorldMap map;
-
-    private static Label createLabel(String text) {
-        Label label = new Label(text);
-        GridPane.setHalignment(label, HPos.CENTER);
-        return label;
-    }
-
-    private Node createGridCell(WorldElement element) {
-        double elementWidth = GRID_WIDTH / (map.getWidth() + 1);
-        double elementHeight = GRID_WIDTH / (map.getHeight() + 1);
-        WorldElementBox elementBox = new WorldElementBox(element, elementWidth, elementHeight);
-        return elementBox.getFxElement();
-    }
+    private double cellSize = 0;
 
     @Override
     public void mapChanged(WorldMap worldMap, String message) {
-        Platform.runLater(() -> {
-            drawMap();
-            infoLabel.setText(message);
-        });
+        Platform.runLater(this::drawMap);
+    }
+
+    public void onSimulationPauseClicked() {
+        if (simulation.toggle()) {
+            pauseResumeButton.setText("resume");
+        } else {
+            pauseResumeButton.setText("pause");
+        }
     }
 
     public void drawMap() {
         clearGrid();
-        createGrid();
         drawWorldElements();
     }
 
     private void clearGrid() {
         mapGrid.getChildren().retainAll(mapGrid.getChildren().get(0)); // hack to retain visible grid lines
-    }
-
-    private void createGrid() {
-        int height = map.getHeight();
-
-        mapGrid.add(createLabel("y/x"), 0, height);
-
-        for (int x = 0; x < map.getWidth(); x++) {
-            mapGrid.add(createLabel("%d".formatted(x)), x + 1, height);
-        }
-
-        for (int y = 0; y < map.getHeight(); y++) {
-            mapGrid.add(createLabel("%d".formatted(y)), 0, height - y - 1);
-        }
     }
 
     private void drawWorldElements() {
@@ -75,14 +52,26 @@ public class SimulationPresenter implements MapChangeListener {
         });
     }
 
-    public void setWorldMap(WorldMap map) {
-        this.map = map;
+    private Node createGridCell(WorldElement element) {
+        WorldElementBox elementBox = new WorldElementBox(element, cellSize, cellSize);
+        return elementBox.getFxElement();
+    }
+
+    public void setSimulation(Simulation simulation) {
+        this.simulation = simulation;
+        this.map = simulation.getWorldMap();
+        createGrid();
+    }
+
+    private void createGrid() {
+        cellSize = GRID_SIZE / Math.max(map.getHeight(), map.getWidth());
 
         for (int i = 0; i < map.getWidth() + 1; i++) {
-            mapGrid.getColumnConstraints().add(new ColumnConstraints(GRID_WIDTH / (map.getWidth() + 1)));
+            mapGrid.getColumnConstraints().add(new ColumnConstraints(cellSize));
         }
+
         for (int i = 0; i < map.getHeight() + 1; i++) {
-            mapGrid.getRowConstraints().add(new RowConstraints(GRID_HEIGHT / (map.getHeight() + 1)));
+            mapGrid.getRowConstraints().add(new RowConstraints(cellSize));
         }
     }
 }
