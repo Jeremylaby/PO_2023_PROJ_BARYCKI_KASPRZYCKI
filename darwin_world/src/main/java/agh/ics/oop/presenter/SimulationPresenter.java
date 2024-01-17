@@ -9,8 +9,8 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 
 public class SimulationPresenter implements MapChangeListener {
-    private final static double GRID_WIDTH = 500;
-    private final static double GRID_HEIGHT = 500;
+    private final static double GRID_WIDTH = 600;
+    private final static double GRID_HEIGHT = 600;
 
     @FXML
     private Label infoLabel;
@@ -26,9 +26,11 @@ public class SimulationPresenter implements MapChangeListener {
         return label;
     }
 
-    private static Node createGridCell(WorldElement element) {
-        Label label = createLabel(element.toString());
-        return label;
+    private Node createGridCell(WorldElement element) {
+        double elementWidth = GRID_WIDTH / (map.getWidth() + 1);
+        double elementHeight = GRID_WIDTH / (map.getHeight() + 1);
+        WorldElementBox elementBox = new WorldElementBox(element, elementWidth, elementHeight);
+        return elementBox.getFxElement();
     }
 
     @Override
@@ -67,8 +69,8 @@ public class SimulationPresenter implements MapChangeListener {
         map.getElements().forEach((element) -> {
             mapGrid.add(
                     createGridCell(element),
-                    element.getPosition().getX() + 1,
-                    map.getHeight() - element.getPosition().getY() - 1
+                    element.getPosition().x() + 1,
+                    map.getHeight() - element.getPosition().y() - 1
             );
         });
     }

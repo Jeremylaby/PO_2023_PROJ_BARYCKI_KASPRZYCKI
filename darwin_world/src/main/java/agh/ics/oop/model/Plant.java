@@ -8,13 +8,14 @@ public class Plant implements WorldElement {
         this.isPoisonous = isPoisonous;
     }
 
+    public Plant(Vector2d position){
+        this(position,false);
+    }
+
     public boolean isPoisonous() {
         return isPoisonous;
     }
 
-    public Plant(Vector2d position){
-        this(position,false);
-    }
     @Override
     public Vector2d getPosition() {
         return position;
@@ -23,5 +24,10 @@ public class Plant implements WorldElement {
     @Override
     public String toString() {
         return "*";
+    }
+
+    @Override
+    public String getTexturePath() {
+        return "images/grass.png";
     }
 }

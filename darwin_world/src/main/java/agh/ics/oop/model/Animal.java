@@ -74,11 +74,11 @@ public class Animal implements WorldElement {
     }
 
     private void updatePosition(int width, int height, Vector2d newPosition) {
-        if (newPosition.getY() >= 0 && newPosition.getY() <= height - 1) {
-            if (newPosition.getX() < 0) {
-                position = new Vector2d(width - 1, newPosition.getY());
-            } else if (newPosition.getX() > width - 1) {
-                position = new Vector2d(0, newPosition.getY());
+        if (newPosition.y() >= 0 && newPosition.y() <= height - 1) {
+            if (newPosition.x() < 0) {
+                position = new Vector2d(width - 1, newPosition.y());
+            } else if (newPosition.x() > width - 1) {
+                position = new Vector2d(0, newPosition.y());
 
             } else {
                 position = newPosition;
@@ -151,4 +151,14 @@ public class Animal implements WorldElement {
         return "%s %d".formatted(orientation, getEnergy());
     }
 
+    @Override
+    public String getTexturePath() {
+        if (getEnergy() < 10) {
+            return "images/animal1_low_energy.png";
+        }
+        if (getEnergy() >= 10 && getEnergy() < 50) {
+            return "images/animal1_mid_energy.png";
+        }
+        return "images/animal1_high_energy.png";
+    }
 }

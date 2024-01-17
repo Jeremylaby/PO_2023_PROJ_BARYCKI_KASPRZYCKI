@@ -23,7 +23,7 @@
     </stylesheets>
     <top>
         <VBox alignment="CENTER" minHeight="80">
-            <Label text="Aplikacja prostej symulacji ewolucji" />
+            <Label text="Darwin World" />
         </VBox>
     </top>
     <center>
