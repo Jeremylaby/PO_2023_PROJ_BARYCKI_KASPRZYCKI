@@ -17,7 +17,6 @@ import javafx.util.converter.IntegerStringConverter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.stream.Stream;
 
 public class StartPresenter implements Initializable {
     @FXML
@@ -58,25 +57,24 @@ public class StartPresenter implements Initializable {
     }
 
     private void attachTextFormatters() {
-        IntegerStringConverter converter = new IntegerStringConverter();
-
-        attachTextFormatter(mapWidth, converter, 20);
-        attachTextFormatter(mapHeight, converter, 20);
-        attachTextFormatter(plantsStartNum, converter, 50);
-        attachTextFormatter(plantsEnergyValue, converter, 10);
-        attachTextFormatter(plantsNumPerDay, converter, 5);
-        attachTextFormatter(animalsStartNum, converter, 15);
-        attachTextFormatter(animalsStartEnergy, converter, 30);
-        attachTextFormatter(animalsEnergyToReproduce, converter, 50);
-        attachTextFormatter(animalsEnergyReproduceCost, converter, 10);
-        attachTextFormatter(mutationsMinNum, converter, 0);
-        attachTextFormatter(mutationsMaxNum, converter, 5);
-        attachTextFormatter(genomeSize, converter, 15);
+        attachFormatter(mapWidth);
+        attachFormatter(mapHeight);
+        attachFormatter(plantsStartNum);
+        attachFormatter(plantsEnergyValue);
+        attachFormatter(plantsNumPerDay);
+        attachFormatter(animalsStartNum);
+        attachFormatter(animalsStartEnergy);
+        attachFormatter(animalsEnergyToReproduce);
+        attachFormatter(animalsEnergyReproduceCost);
+        attachFormatter(mutationsMinNum);
+        attachFormatter(mutationsMaxNum);
+        attachFormatter(genomeSize);
     }
 
-    private void attachTextFormatter(Spinner<Integer> spinner, IntegerStringConverter converter, int defaultValue) {
-        spinner.getEditor().setTextFormatter(new TextFormatter<>(converter, defaultValue));
-        spinner.getValueFactory().setValue(defaultValue);
+    private void attachFormatter(Spinner<Integer> spinner) {
+        IntegerStringConverter converter = new IntegerStringConverter();
+        TextFormatter<Integer> formatter = new TextFormatter<>(converter, spinner.getValue());
+        spinner.getEditor().setTextFormatter(formatter);
     }
 
     public void onSimulationStartClicked() {

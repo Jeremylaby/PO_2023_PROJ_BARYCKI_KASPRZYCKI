@@ -49,11 +49,11 @@
                 </left>
                 <right>
                     <VBox alignment="CENTER">
-                        <Spinner fx:id="mapWidth" min="2" max="100" editable="true" minHeight="30" />
-                        <Spinner fx:id="mapHeight" min="2" max="100" editable="true" minHeight="30" />
-                        <Spinner fx:id="plantsStartNum" min="0" max="100" editable="true" minHeight="30" />
-                        <Spinner fx:id="plantsEnergyValue" min="0" max="100" editable="true" minHeight="30" />
-                        <Spinner fx:id="plantsNumPerDay" min="0" max="100" editable="true" minHeight="30" />
+                        <Spinner fx:id="mapWidth" min="2" max="100" initialValue="20" editable="true" minHeight="30" />
+                        <Spinner fx:id="mapHeight" min="2" max="100" initialValue="20" editable="true" minHeight="30" />
+                        <Spinner fx:id="plantsStartNum" min="0" max="100" initialValue="50" editable="true" minHeight="30" />
+                        <Spinner fx:id="plantsEnergyValue" min="0" max="100" initialValue="10" editable="true" minHeight="30" />
+                        <Spinner fx:id="plantsNumPerDay" min="0" max="100" initialValue="5" editable="true" minHeight="30" />
 
                         <HBox minHeight="30" alignment="CENTER">
                             <fx:define>
@@ -63,13 +63,13 @@
                             <RadioButton fx:id="plantsGrowthVariantPoison" text="zatrute owoce" toggleGroup="$plantsGrowthVariant" />
                         </HBox>
 
-                        <Spinner fx:id="animalsStartNum" min="0" max="100" editable="true" minHeight="30" />
-                        <Spinner fx:id="animalsStartEnergy" min="0" max="100" editable="true" minHeight="30" />
-                        <Spinner fx:id="animalsEnergyToReproduce" min="0" max="100" editable="true" minHeight="30" />
-                        <Spinner fx:id="animalsEnergyReproduceCost" min="0" max="100" editable="true" minHeight="30" />
-                        <Spinner fx:id="mutationsMinNum" min="0" max="100" editable="true" minHeight="30" />
-                        <Spinner fx:id="mutationsMaxNum" min="0" max="100" editable="true" minHeight="30" />
-                        <Spinner fx:id="genomeSize" min="0" max="100" editable="true" minHeight="30" />
+                        <Spinner fx:id="animalsStartNum" min="0" max="100" initialValue="15" editable="true" minHeight="30" />
+                        <Spinner fx:id="animalsStartEnergy" min="0" max="100" initialValue="30" editable="true" minHeight="30" />
+                        <Spinner fx:id="animalsEnergyToReproduce" min="0" max="100" initialValue="50" editable="true" minHeight="30" />
+                        <Spinner fx:id="animalsEnergyReproduceCost" min="0" max="100" initialValue="10" editable="true" minHeight="30" />
+                        <Spinner fx:id="mutationsMinNum" min="0" max="100" initialValue="0" editable="true" minHeight="30" />
+                        <Spinner fx:id="mutationsMaxNum" min="0" max="100" initialValue="5" editable="true" minHeight="30" />
+                        <Spinner fx:id="genomeSize" min="0" max="100" initialValue="20" editable="true" minHeight="30" />
 
                         <HBox minHeight="30" alignment="CENTER">
                             <fx:define>

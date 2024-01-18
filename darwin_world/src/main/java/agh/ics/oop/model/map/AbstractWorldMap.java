@@ -1,4 +1,10 @@
-package agh.ics.oop.model;
+package agh.ics.oop.model.map;
+
+import agh.ics.oop.model.Configuration;
+import agh.ics.oop.model.Vector2d;
+import agh.ics.oop.model.elements.Animal;
+import agh.ics.oop.model.elements.Plant;
+import agh.ics.oop.model.elements.WorldElement;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -81,7 +87,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     public List<WorldElement> getElements() {
         return Stream.concat(
                     plants.values().stream(),
-                    animals.values().stream().flatMap(Collection::stream)
+                    animals.values().stream().map(this::findStrongest).map(Optional::get)
                 ).toList();
     }
 

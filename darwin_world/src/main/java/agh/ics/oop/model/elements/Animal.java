@@ -1,5 +1,7 @@
-package agh.ics.oop.model;
+package agh.ics.oop.model.elements;
 
+import agh.ics.oop.model.MapDirection;
+import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.model.util.RandomNumGenerator;
 
 import java.util.*;
@@ -23,7 +25,7 @@ public class Animal implements WorldElement {
         this.energy = energy;
         this.father = father;
         this.mother = mother;
-        this.orientation = MapDirection.NORTH.rotate(RandomNumGenerator.generateRandomInt(0, 7));
+        this.orientation = MapDirection.NORTH.rotate(RandomNumGenerator.randomInt(0, 7));
     }
 
     public Animal(Vector2d position, Genome genome, int energy) {
@@ -103,7 +105,7 @@ public class Animal implements WorldElement {
 
         List<Integer> childGenes;
 
-        if (RandomNumGenerator.generateRandomInt(0, 1) == 0) {
+        if (RandomNumGenerator.randomInt(0, 1) == 0) {
             childGenes = new ArrayList<>(father.genome.getLeftGenesSlice(k));
             childGenes.addAll(mother.genome.getRightGenesSlice(l));
         } else {
@@ -148,7 +150,7 @@ public class Animal implements WorldElement {
 
     @Override
     public String toString() {
-        return "%s %d".formatted(orientation, getEnergy());
+        return "%d".formatted(getEnergy());
     }
 
     @Override

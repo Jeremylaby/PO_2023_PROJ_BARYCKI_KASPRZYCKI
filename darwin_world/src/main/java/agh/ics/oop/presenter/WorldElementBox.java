@@ -1,15 +1,12 @@
 package agh.ics.oop.presenter;
 
-import agh.ics.oop.model.WorldElement;
+import agh.ics.oop.model.elements.WorldElement;
 import javafx.geometry.Pos;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
 public class WorldElementBox {
-    public static final int BOX_WIDTH = 20;
-    public static final int BOX_HEIGHT = 20;
     private VBox fxElement;
 
     public WorldElementBox(WorldElement element, double width, double height) {

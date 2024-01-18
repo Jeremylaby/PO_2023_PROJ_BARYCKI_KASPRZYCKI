@@ -1,6 +1,10 @@
 package agh.ics.oop.simulation;
 
 import agh.ics.oop.model.*;
+import agh.ics.oop.model.elements.Animal;
+import agh.ics.oop.model.elements.Genome;
+import agh.ics.oop.model.map.EquatorMap;
+import agh.ics.oop.model.map.WorldMap;
 import agh.ics.oop.model.util.RandomPositionGenerator;
 
 import java.util.ArrayList;
@@ -9,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 public class Simulation implements Runnable {
-    public static final int SIMULATION_INTERVAL = 100;
+    public static final int SIMULATION_INTERVAL = 50;
     private final List<MapChangeListener> listeners = new ArrayList<>();
     private final Set<Animal> animals;
     private final WorldMap worldMap;
@@ -57,7 +61,7 @@ public class Simulation implements Runnable {
                 moveAnimals();
                 feedAnimals();
                 reproduceAnimals();
-//                worldMap.growPlants();
+                growPlants();
 
                 mapChanged();
             }
@@ -86,12 +90,16 @@ public class Simulation implements Runnable {
         animals.forEach(worldMap::move);
     }
 
+    private void feedAnimals() {
+        worldMap.feedAnimals();
+    }
+
     private void reproduceAnimals() {
         animals.addAll(worldMap.reproduceAnimals());
     }
 
-    private void feedAnimals() {
-        worldMap.feedAnimals();
+    private void growPlants() {
+        worldMap.growPlants();
     }
 
     private void mapChanged() {

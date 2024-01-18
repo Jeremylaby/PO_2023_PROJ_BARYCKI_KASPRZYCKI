@@ -1,4 +1,4 @@
-package agh.ics.oop.model;
+package agh.ics.oop.model.elements;
 
 import agh.ics.oop.model.util.RandomNumGenerator;
 
@@ -20,8 +20,8 @@ public class Genome {
         this.sequencingDirection = isBackAndForth;
         this.minMutations = minMutations;
         this.maxMutations = maxMutations;
-        this.genes = RandomNumGenerator.generateRandomIntList(MIN_GENE, MAX_GENE, size);
-        currentGeneIndex = RandomNumGenerator.generateRandomInt(0, size-1);
+        this.genes = RandomNumGenerator.randomIntList(MIN_GENE, MAX_GENE, size);
+        currentGeneIndex = RandomNumGenerator.randomInt(0, size-1);
     }
 
     public Genome(boolean isBackAndForth, int minMutations, int maxMutations, List<Integer> genes) {
@@ -30,17 +30,17 @@ public class Genome {
         this.minMutations = minMutations;
         this.maxMutations = maxMutations;
         this.genes = genes;
-        currentGeneIndex = RandomNumGenerator.generateRandomInt(0, genes.size()-1);
+        currentGeneIndex = RandomNumGenerator.randomInt(0, genes.size()-1);
         mutate();
     }
 
     private void mutate() {
         if (minMutations >= 0 && maxMutations >= minMutations) {
-            int k = RandomNumGenerator.generateRandomInt(minMutations, maxMutations);
-            List<Integer> genesToMutate = RandomNumGenerator.generateRandomUniqueIndexes(k, genes.size()-1);
+            int k = RandomNumGenerator.randomInt(minMutations, maxMutations);
+            List<Integer> genesToMutate = RandomNumGenerator.randomUniqueIndexes(k, genes.size()-1);
 
             genesToMutate.forEach((gene) -> {
-                genes.set(gene, RandomNumGenerator.generateRandomIntWithoutK(MIN_GENE, MAX_GENE, genes.get(gene)));
+                genes.set(gene, RandomNumGenerator.randomIntWithoutK(MIN_GENE, MAX_GENE, genes.get(gene)));
             });
         } else {
             throw new IllegalArgumentException();

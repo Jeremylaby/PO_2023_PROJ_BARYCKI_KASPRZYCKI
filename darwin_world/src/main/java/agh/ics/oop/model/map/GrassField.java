@@ -1,6 +1,8 @@
-package agh.ics.oop.model;
+package agh.ics.oop.model.map;
 
-import agh.ics.oop.model.util.Boundary;
+import agh.ics.oop.model.Configuration;
+import agh.ics.oop.model.Vector2d;
+import agh.ics.oop.model.elements.Plant;
 import agh.ics.oop.model.util.RandomPositionGenerator;
 
 import java.util.HashMap;
@@ -24,6 +26,12 @@ public class GrassField extends AbstractWorldMap {
     public Map<Vector2d, Plant> getGrasses() {
         return Map.copyOf(grasses);
     }
+
+    @Override
+    public void growPlants() {
+
+    }
+
 //    @Override
 //    public boolean isOccupied(Vector2d position) {
 //        return super.isOccupied(position)||grasses.get(position)!=null;

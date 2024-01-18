@@ -1,4 +1,8 @@
-package agh.ics.oop.model;
+package agh.ics.oop.model.map;
+
+import agh.ics.oop.model.Vector2d;
+import agh.ics.oop.model.elements.Animal;
+import agh.ics.oop.model.elements.WorldElement;
 
 import java.util.*;
 
@@ -22,6 +26,8 @@ public interface WorldMap {
     boolean isAnimal(Vector2d position);
 
     List<Animal> reproduceAnimals();
+
+    void growPlants();
 
     Map<Vector2d, Set<Animal>> getAnimals();
 }

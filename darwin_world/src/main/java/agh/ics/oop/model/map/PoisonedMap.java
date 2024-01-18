@@ -1,6 +1,10 @@
-package agh.ics.oop.model;
+package agh.ics.oop.model.map;
 
-import agh.ics.oop.model.util.Boundary;
+import agh.ics.oop.model.Configuration;
+import agh.ics.oop.model.Vector2d;
+import agh.ics.oop.model.elements.Animal;
+import agh.ics.oop.model.elements.Plant;
+import agh.ics.oop.model.Boundary;
 import agh.ics.oop.model.util.RandomNumGenerator;
 
 import java.util.ArrayList;
@@ -35,8 +39,8 @@ public class PoisonedMap extends AbstractWorldMap {
 
     private void generatePoisonedArea(int width, int height) {
         int a = (int) Math.max(Math.min(Math.round(Math.sqrt(width * height * 0.2)), Math.min(width, height)), 1);
-        int x = RandomNumGenerator.generateRandomInt(0, width - a);
-        int y = RandomNumGenerator.generateRandomInt(0, height - a);
+        int x = RandomNumGenerator.randomInt(0, width - a);
+        int y = RandomNumGenerator.randomInt(0, height - a);
         poisonedArea = new Boundary(new Vector2d(x, y), new Vector2d(x + a - 1, y + a - 1));
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
@@ -63,9 +67,9 @@ public class PoisonedMap extends AbstractWorldMap {
     }
 
     private void skillCheck(Animal animal) {
-        if(RandomNumGenerator.generateRandomInt(1,10)<=2){
+        if(RandomNumGenerator.randomInt(1,10)<=2){
             remove(animal);
-            animal.dodge(getWidth()-1,getHeight()-1,RandomNumGenerator.generateRandomInt(0,7));
+            animal.dodge(getWidth()-1,getHeight()-1,RandomNumGenerator.randomInt(0,7));
             place(animal);
         }
     }
@@ -75,5 +79,9 @@ public class PoisonedMap extends AbstractWorldMap {
         availablePositions.add(position);
         super.removePlant(position);
     }
-    
+
+    @Override
+    public void growPlants() {
+
+    }
 }
