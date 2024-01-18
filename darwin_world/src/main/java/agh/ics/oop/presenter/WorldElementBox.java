@@ -2,27 +2,41 @@ package agh.ics.oop.presenter;
 
 import agh.ics.oop.model.elements.WorldElement;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+
+import java.util.Optional;
 
 public class WorldElementBox {
     private VBox fxElement;
 
-    public WorldElementBox(WorldElement element, double width, double height) {
-        ImageView imageView = getImageView(element, width, height);
-        createFxElement(imageView);
+    public WorldElementBox(WorldElement element, double size) {
+        createFxElement(getLabel(element.getColor(), size));
     }
 
-    private static ImageView getImageView(WorldElement element, double width, double height) {
-        Image image = new Image(element.getTexturePath());
+    private static ImageView getImageView(String texturePath, double size) {
+        Image image = new Image(texturePath);
         ImageView imageView = new ImageView(image);
-        imageView.setFitWidth(width);
-        imageView.setFitHeight(height);
+        imageView.setFitWidth(size);
+        imageView.setFitHeight(size);
         return imageView;
     }
 
-    private void createFxElement(ImageView imageView) {
+    private static Label getLabel(Color color, double size) {
+        Label label = new Label();
+        String colorRgb = "rgb(%s,%s,%s)"
+                .formatted(255*color.getRed(), 255*color.getGreen(), 255*color.getBlue());
+        label.setStyle("-fx-background-color: %s".formatted(colorRgb));
+        label.setMinHeight(size);
+        label.setPrefWidth(size);
+        return label;
+    }
+
+    private void createFxElement(Node imageView) {
         fxElement = new VBox();
         fxElement.getChildren().add(imageView);
         fxElement.setAlignment(Pos.CENTER);

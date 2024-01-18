@@ -3,6 +3,7 @@ package agh.ics.oop.model.elements;
 import agh.ics.oop.model.MapDirection;
 import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.model.util.RandomNumGenerator;
+import javafx.scene.paint.Color;
 
 import java.util.*;
 
@@ -163,5 +164,10 @@ public class Animal implements WorldElement {
             return "images/animal1_mid_energy.png";
         }
         return "images/animal1_high_energy.png";
+    }
+
+    @Override
+    public Color getColor() {
+        return Color.hsb(30, Math.min(0.8, (double) energy / 100) + 0.2, 0.7);
     }
 }

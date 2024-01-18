@@ -1,6 +1,7 @@
 package agh.ics.oop.model.elements;
 
 import agh.ics.oop.model.Vector2d;
+import javafx.scene.paint.Color;
 
 public class Plant implements WorldElement {
     private final Vector2d position;
@@ -31,5 +32,10 @@ public class Plant implements WorldElement {
     @Override
     public String getTexturePath() {
         return "images/grass.png";
+    }
+
+    @Override
+    public Color getColor() {
+        return Color.hsb(110, 0.6, 0.8);
     }
 }

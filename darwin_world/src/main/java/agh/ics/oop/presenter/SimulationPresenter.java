@@ -8,7 +8,6 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 
 public class SimulationPresenter implements MapChangeListener {
@@ -42,7 +41,7 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     private void clearGrid() {
-        mapGrid.getChildren().retainAll(mapGrid.getChildren().get(0)); // hack to retain visible grid lines
+        mapGrid.getChildren().clear();
     }
 
     private void drawWorldElements() {
@@ -56,8 +55,7 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     private Node createGridCell(WorldElement element) {
-//        return new WorldElementBox(element, cellSize, cellSize).getFxElement();
-        return new Label(element.toString());
+        return new WorldElementBox(element, cellSize).getFxElement();
     }
 
     public void setSimulation(Simulation simulation) {

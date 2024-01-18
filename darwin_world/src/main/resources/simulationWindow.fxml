@@ -23,7 +23,7 @@
     <center>
         <HBox alignment="CENTER">
             <VBox styleClass="centerBar">
-                <GridPane styleClass="grid-pane" fx:id="mapGrid" gridLinesVisible="true" />
+                <GridPane styleClass="grid-pane" fx:id="mapGrid" style="-fx-background-color: rgb(217,193,193)" />
             </VBox>
         </HBox>
     </center>
