@@ -121,7 +121,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
     public void removeDeadAnimal(Animal animal, int dayOfSimulation){
         animal.die(dayOfSimulation);
-        sumOfSurvivedDays+=animal.getDayOfDeath();
+        sumOfSurvivedDays+=animal.getAge();
         sumOfDeadAnimals+=1;
         this.remove(animal);
     }
