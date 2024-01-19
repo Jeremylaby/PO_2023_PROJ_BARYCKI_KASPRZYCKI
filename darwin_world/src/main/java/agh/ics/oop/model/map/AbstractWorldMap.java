@@ -7,16 +7,19 @@ import agh.ics.oop.model.elements.Plant;
 import agh.ics.oop.model.elements.WorldElement;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public abstract class AbstractWorldMap implements WorldMap {
-    protected Map<Vector2d, Set<Animal>> animals = new HashMap<>();
-    protected Map<Vector2d, Plant> plants = new HashMap<>();
-    protected Configuration config;
+    protected final Map<Vector2d, Set<Animal>> animals;
+    protected final Map<Vector2d, Plant> plants;
+    protected final Configuration config;
 
     public AbstractWorldMap(Configuration configuration) {
         config = configuration;
+        animals = new ConcurrentHashMap<>(config.mapWidth()*config.mapHeight());
+        plants = new ConcurrentHashMap<>(config.mapWidth()*config.mapHeight());
     }
 
     protected void removePlant(Vector2d position) {
@@ -83,14 +86,6 @@ public abstract class AbstractWorldMap implements WorldMap {
         return Optional.ofNullable(animals.get(position));
     }
 
-    @Override
-    public List<WorldElement> getElements() {
-        return Stream.concat(
-                    plants.values().stream(),
-                    animals.values().stream().map(this::findStrongest).map(Optional::get)
-                ).toList();
-    }
-
     public Map<Vector2d, Plant> getPlants() {
         return Map.copyOf(plants);
     }
@@ -120,6 +115,14 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     private boolean canAnimalReproduce(Animal animal) {
         return animal.getEnergy() >= config.animalsEnergyToReproduce();
+    }
+
+    @Override
+    public synchronized List<WorldElement> getElements() {
+        return Stream.concat(
+                plants.values().stream().filter(plant -> !animals.containsKey(plant.getPosition())),
+                animals.values().stream().map(this::findStrongest).map(Optional::get)
+        ).toList();
     }
 
     @Override

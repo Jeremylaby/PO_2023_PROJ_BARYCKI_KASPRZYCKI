@@ -9,8 +9,8 @@ import java.util.*;
 
 public class EquatorMap extends AbstractWorldMap {
     public static final double PLANT_ON_EQUATOR_PROBABILITY = 0.8;
-    private final List<Vector2d> freeEquatorPositions = new ArrayList<>();
-    private final List<Vector2d> freeWastelandPositions = new ArrayList<>();
+    private List<Vector2d> freeEquatorPositions;
+    private List<Vector2d> freeWastelandPositions;
     private int equatorStart;
     private int equatorEnd;
 
@@ -52,6 +52,9 @@ public class EquatorMap extends AbstractWorldMap {
         int numOfRows = Math.max(Math.round((float) 0.2 * height), 1);
         equatorStart = Math.round((float) (height - numOfRows) / 2);
         equatorEnd = equatorStart + numOfRows - 1;
+
+        freeEquatorPositions = new ArrayList<>(numOfRows * width);
+        freeWastelandPositions = new ArrayList<>((height - numOfRows) * width);
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {

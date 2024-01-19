@@ -1,6 +1,7 @@
 package agh.ics.oop.model.elements;
 
 import agh.ics.oop.model.util.RandomNumGenerator;
+import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,15 +16,6 @@ public class Genome {
     private int currentGeneIndex;
     private boolean sequencingDirection;
 
-    public Genome(boolean isBackAndForth, int minMutations, int maxMutations, int size) {
-        this.isBackAndForth = isBackAndForth;
-        this.sequencingDirection = isBackAndForth;
-        this.minMutations = minMutations;
-        this.maxMutations = maxMutations;
-        this.genes = RandomNumGenerator.randomIntList(MIN_GENE, MAX_GENE, size);
-        currentGeneIndex = RandomNumGenerator.randomInt(0, size-1);
-    }
-
     public Genome(boolean isBackAndForth, int minMutations, int maxMutations, List<Integer> genes) {
         this.isBackAndForth = isBackAndForth;
         this.sequencingDirection = isBackAndForth;
@@ -31,10 +23,18 @@ public class Genome {
         this.maxMutations = maxMutations;
         this.genes = genes;
         currentGeneIndex = RandomNumGenerator.randomInt(0, genes.size()-1);
-        mutate();
     }
 
-    private void mutate() {
+    public Genome(boolean isBackAndForth, int minMutations, int maxMutations, int size) {
+        this(
+                isBackAndForth,
+                minMutations,
+                maxMutations,
+                RandomNumGenerator.randomIntList(MIN_GENE, MAX_GENE, size)
+        );
+    }
+
+    public void mutate() {
         if (minMutations >= 0 && maxMutations >= minMutations) {
             int k = RandomNumGenerator.randomInt(minMutations, maxMutations);
             List<Integer> genesToMutate = RandomNumGenerator.randomUniqueIndexes(k, genes.size()-1);
@@ -51,14 +51,6 @@ public class Genome {
         int gene = genes.get(this.currentGeneIndex);
         sequenceGenes();
         return gene;
-    }
-
-    public List<Integer> getRightGenesSlice(int n) {
-        return new ArrayList<>(genes.subList(genes.size() - n, genes.size()));
-    }
-
-    public List<Integer> getLeftGenesSlice(int n) {
-        return new ArrayList<>(genes.subList(0, n));
     }
 
     private void sequenceGenes() {
@@ -93,6 +85,14 @@ public class Genome {
 
     public int size() {
         return genes.size();
+    }
+
+    public List<Integer> getRightGenesSlice(int n) {
+        return new ArrayList<>(genes.subList(genes.size() - n, genes.size()));
+    }
+
+    public List<Integer> getLeftGenesSlice(int n) {
+        return new ArrayList<>(genes.subList(0, n));
     }
 
     public List<Integer> getGenes() {

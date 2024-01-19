@@ -9,8 +9,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
-import java.util.Optional;
-
 public class WorldElementBox {
     private VBox fxElement;
 
@@ -36,9 +34,9 @@ public class WorldElementBox {
         return label;
     }
 
-    private void createFxElement(Node imageView) {
+    private void createFxElement(Node node) {
         fxElement = new VBox();
-        fxElement.getChildren().add(imageView);
+        fxElement.getChildren().add(node);
         fxElement.setAlignment(Pos.CENTER);
     }
 

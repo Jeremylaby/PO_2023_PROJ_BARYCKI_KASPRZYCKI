@@ -6,6 +6,7 @@ import javafx.scene.paint.Color;
 public class Plant implements WorldElement {
     private final Vector2d position;
     private final boolean isPoisonous;
+
     public Plant(Vector2d position, boolean isPoisonous) {
         this.position = position;
         this.isPoisonous = isPoisonous;

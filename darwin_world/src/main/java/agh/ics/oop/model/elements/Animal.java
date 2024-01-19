@@ -115,6 +115,7 @@ public class Animal implements WorldElement {
         }
 
         Genome childGenome = new Genome(genome.isBackAndForth(), genome.getMinMutations(), genome.getMaxMutations(), childGenes);
+        childGenome.mutate();
         Animal child = new Animal(position, childGenome, 2 * reproduceCost, father, mother);//todo
         child.updateFamilyTree();
 
