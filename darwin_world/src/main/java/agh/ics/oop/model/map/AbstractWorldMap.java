@@ -22,6 +22,8 @@ public abstract class AbstractWorldMap implements WorldMap {
         plants = new ConcurrentHashMap<>(config.mapWidth()*config.mapHeight());
     }
 
+    protected abstract void generatePlants(int numOfPlants);
+
     protected void removePlant(Vector2d position) {
         plants.remove(position);
     }
@@ -111,6 +113,11 @@ public abstract class AbstractWorldMap implements WorldMap {
         }
 
         return newborns;
+    }
+
+    @Override
+    public void growPlants() {
+        generatePlants(config.plantsNumPerDay());
     }
 
     private boolean canAnimalReproduce(Animal animal) {

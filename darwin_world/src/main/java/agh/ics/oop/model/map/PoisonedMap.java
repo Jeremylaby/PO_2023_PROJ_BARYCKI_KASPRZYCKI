@@ -12,64 +12,88 @@ import java.util.Collections;
 import java.util.List;
 
 public class PoisonedMap extends AbstractWorldMap {
-    private Boundary poisonedArea;
-    private List<Vector2d> availablePositions = new ArrayList<>(    );
+    private final Boundary poisonedArea;
+    private final List<Vector2d> availablePositions;
 
-    public PoisonedMap(Configuration conf) {
-        super(conf);
-        generatePoisonedArea(conf.mapWidth(), conf.mapHeight());
-        generatePlants(conf.plantsStartNum());
+    public PoisonedMap(Configuration config) {
+        super(config);
+        poisonedArea = createPoisonedArea(config.mapWidth(), config.mapHeight());
+        availablePositions = new ArrayList<>(config.mapWidth()*config.mapHeight());
+        generatePositions(config.mapWidth(), config.mapHeight());
+        generatePlants(config.plantsStartNum());
     }
 
-    private void generatePlants(int n) {
-        Collections.shuffle(availablePositions);
-        for (int i=0;i<n;i++) {
-            if(availablePositions.isEmpty()){
-                return;
-            }
-            Vector2d plant=availablePositions.get(availablePositions.size()-1);
-            availablePositions.remove(availablePositions.size()-1);
-            if (plant.precedes(poisonedArea.rightUpper()) && plant.follows(poisonedArea.leftLower())) {
-                plants.put(plant, new Plant(plant, true));
-            } else {
-                plants.put(plant, new Plant(plant));
-            }
-        }
-    }
-
-    private void generatePoisonedArea(int width, int height) {
+    private Boundary createPoisonedArea(int width, int height) {
         int a = (int) Math.max(Math.min(Math.round(Math.sqrt(width * height * 0.2)), Math.min(width, height)), 1);
-        int x = RandomNumGenerator.randomInt(0, width - a);
-        int y = RandomNumGenerator.randomInt(0, height - a);
-        poisonedArea = new Boundary(new Vector2d(x, y), new Vector2d(x + a - 1, y + a - 1));
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                availablePositions.add(new Vector2d(i, j));
+
+        Vector2d lowerLeft = new Vector2d(
+                RandomNumGenerator.randomInt(0, width - a),
+                RandomNumGenerator.randomInt(0, height - a)
+        );
+
+        Vector2d upperRight = new Vector2d(
+                lowerLeft.x() + a - 1,
+                lowerLeft.y() + a - 1
+        );
+
+        return new Boundary(lowerLeft, upperRight);
+    }
+
+    private void generatePositions(int width, int height) {
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                availablePositions.add(new Vector2d(x, y));
             }
         }
     }
+
     @Override
-    protected void feedAnimal(Animal animal){
-        if(plants.get(animal.getPosition()).isPoisonous()){
+    protected void generatePlants(int numOfPlants) {
+        if (availablePositions.isEmpty()) return;
+
+        for (int i = 0; i < numOfPlants; i++) {
+            addPlant();
+        }
+    }
+
+    private void addPlant() {
+        int lastIndex = availablePositions.size() - 1;
+        int index = RandomNumGenerator.randomInt(0, lastIndex);
+
+        Collections.swap(availablePositions, index, lastIndex);
+
+        Vector2d position = availablePositions.get(lastIndex);
+        availablePositions.remove(lastIndex);
+
+        if (position.precedes(poisonedArea.rightUpper()) && position.follows(poisonedArea.leftLower())) {
+            plants.put(position, new Plant(position, true));
+        } else {
+            plants.put(position, new Plant(position));
+        }
+    }
+
+    @Override
+    protected void feedAnimal(Animal animal) {
+        if (plants.get(animal.getPosition()).isPoisonous()) {
             skillCheck(animal);
-            if(plants.containsKey(animal.getPosition())){
-                if(plants.get(animal.getPosition()).isPoisonous()){
+            if (plants.containsKey(animal.getPosition())) {
+                if (plants.get(animal.getPosition()).isPoisonous()) {
                     animal.eat(-config.plantsEnergyValue());
-                }else{
+                } else {
                     animal.eat(config.plantsEnergyValue());
                 }
                 removePlant(animal.getPosition());
             }
-        }else{
+        } else {
             super.feedAnimal(animal);
             removePlant(animal.getPosition());
         }
     }
 
     private void skillCheck(Animal animal) {
-        if(RandomNumGenerator.randomInt(1,10)<=2){
+        if (RandomNumGenerator.randomInt(1, 10) <= 2) {
             remove(animal);
-            animal.dodge(getWidth()-1,getHeight()-1,RandomNumGenerator.randomInt(0,7));
+            animal.dodge(getWidth() - 1, getHeight() - 1, RandomNumGenerator.randomInt(0, 7));
             place(animal);
         }
     }
@@ -78,10 +102,5 @@ public class PoisonedMap extends AbstractWorldMap {
     protected void removePlant(Vector2d position) {
         availablePositions.add(position);
         super.removePlant(position);
-    }
-
-    @Override
-    public void growPlants() {
-
     }
 }

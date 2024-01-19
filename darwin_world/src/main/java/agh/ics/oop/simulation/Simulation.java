@@ -4,6 +4,7 @@ import agh.ics.oop.model.*;
 import agh.ics.oop.model.elements.Animal;
 import agh.ics.oop.model.elements.Genome;
 import agh.ics.oop.model.map.EquatorMap;
+import agh.ics.oop.model.map.PoisonedMap;
 import agh.ics.oop.model.map.WorldMap;
 import agh.ics.oop.model.util.RandomPositionGenerator;
 
@@ -21,33 +22,35 @@ public class Simulation implements Runnable {
     private boolean stopped = false;
     private int dayOfSimulation = 0;
 
+    public Simulation(Configuration config) {
+        worldMap = config.plantsGrowthVariantPoison() ? new PoisonedMap(config) : new EquatorMap(config);
+        animals = new HashSet<>(config.animalsStartNum());
+        generateAnimals(config);
+    }
+
+    private void generateAnimals(Configuration c) {
+        RandomPositionGenerator positionGenerator = new RandomPositionGenerator(c.mapWidth(), c.mapHeight(), c.animalsStartNum());
+
+        System.out.println(c.genomeSequenceVariantBackAndForth());
+        for (Vector2d position : positionGenerator) {
+            Genome genome = new Genome(
+                    false,
+                    c.mutationsMinNum(),
+                    c.mutationsMaxNum(),
+                    c.genomeSize()
+            );
+            Animal animal = new Animal(position, genome, c.animalsStartEnergy());
+            animals.add(animal);
+            worldMap.place(animal);
+        }
+    }
+
     public void addListener(MapChangeListener listener) {
         listeners.add(listener);
     }
 
     public void removeListener(MapChangeListener listener) {
         listeners.remove(listener);
-    }
-
-    public Simulation(Configuration configuration) {
-//        worldMap = switch (configuration.plantsGrowthVariantPoison()) {
-//            case true: new PoisonousMap(configuration);
-//            case false: new EquatorMap(configuration);
-//        };
-        worldMap = new EquatorMap(configuration);
-        animals = new HashSet<>(configuration.animalsStartNum());
-
-        generateAnimals(configuration);
-    }
-
-    private void generateAnimals(Configuration c) {
-        RandomPositionGenerator positionGenerator = new RandomPositionGenerator(c.mapWidth(), c.mapHeight(), c.animalsStartNum());
-        for (Vector2d position : positionGenerator) {
-            Genome genome = new Genome(c.genomeSequenceVariantBackAndForth(), c.mutationsMinNum(), c.mutationsMaxNum(), c.genomeSize());
-            Animal animal = new Animal(position, genome, c.animalsStartEnergy());
-            animals.add(animal);
-            worldMap.place(animal);
-        }
     }
 
     public void run() {
