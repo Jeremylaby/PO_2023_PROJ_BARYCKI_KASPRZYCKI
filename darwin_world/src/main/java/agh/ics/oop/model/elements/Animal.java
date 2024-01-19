@@ -148,9 +148,17 @@ public class Animal implements WorldElement {
         return age;
     }
 
+    public int getDayOfDeath() {
+        return dayOfDeath;
+    }
+
     @Override
     public String toString() {
         return "%d".formatted(getEnergy());
+    }
+
+    public Genome getGenome() {
+        return genome;
     }
 
     @Override

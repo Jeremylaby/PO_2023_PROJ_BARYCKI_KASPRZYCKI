@@ -80,8 +80,7 @@ public class Simulation implements Runnable {
                 .toList();
 
         deadAnimals.forEach(animal -> {
-            animal.die(dayOfSimulation);
-            worldMap.remove(animal);
+            worldMap.removeDeadAnimal(animal,dayOfSimulation);
             animals.remove(animal);
         });;
     }

@@ -14,6 +14,8 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected Map<Vector2d, Set<Animal>> animals = new HashMap<>();
     protected Map<Vector2d, Plant> plants = new HashMap<>();
     protected Configuration config;
+    protected int sumOfSurvivedDays=0;
+    protected int sumOfDeadAnimals=0;
 
     public AbstractWorldMap(Configuration configuration) {
         config = configuration;
@@ -117,7 +119,12 @@ public abstract class AbstractWorldMap implements WorldMap {
 
         return newborns;
     }
-
+    public void removeDeadAnimal(Animal animal, int dayOfSimulation){
+        animal.die(dayOfSimulation);
+        sumOfSurvivedDays+=animal.getDayOfDeath();
+        sumOfDeadAnimals+=1;
+        this.remove(animal);
+    }
     private boolean canAnimalReproduce(Animal animal) {
         return animal.getEnergy() >= config.animalsEnergyToReproduce();
     }
@@ -134,5 +141,13 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     public Map<Vector2d, Set<Animal>> getAnimals() {
         return animals;
+    }
+
+    public int getSumOfSurvivedDays() {
+        return sumOfSurvivedDays;
+    }
+
+    public int getSumOfDeadAnimals() {
+        return sumOfDeadAnimals;
     }
 }
