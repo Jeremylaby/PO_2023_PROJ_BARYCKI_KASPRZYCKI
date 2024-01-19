@@ -3,6 +3,7 @@ package agh.ics.oop.model.elements;
 import agh.ics.oop.model.util.RandomNumGenerator;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Genome {
@@ -61,17 +62,12 @@ public class Genome {
     }
 
     private void nextGeneBackAndForth() {
-        if (sequencingDirection) {
-            currentGeneIndex += 1;
-            if (currentGeneIndex == genes.size() - 1) {
-                sequencingDirection = false;
-            }
-        } else {
-            currentGeneIndex -= 1;
-            if (currentGeneIndex == 0) {
-                sequencingDirection = true;
-            }
+        if (sequencingDirection && currentGeneIndex == genes.size() - 1) {
+            sequencingDirection = false;
+        } else if (!sequencingDirection && currentGeneIndex == 0) {
+            sequencingDirection = true;
         }
+        currentGeneIndex += sequencingDirection ? 1 : -1;
     }
 
     private void nextGene() {
@@ -95,7 +91,7 @@ public class Genome {
     }
 
     public List<Integer> getGenes() {
-        return genes;
+        return Collections.unmodifiableList(genes);
     }
 
     public int getCurrentGeneIndex() {

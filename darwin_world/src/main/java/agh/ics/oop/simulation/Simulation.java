@@ -31,10 +31,9 @@ public class Simulation implements Runnable {
     private void generateAnimals(Configuration c) {
         RandomPositionGenerator positionGenerator = new RandomPositionGenerator(c.mapWidth(), c.mapHeight(), c.animalsStartNum());
 
-        System.out.println(c.genomeSequenceVariantBackAndForth());
         for (Vector2d position : positionGenerator) {
             Genome genome = new Genome(
-                    false,
+                    c.genomeSequenceVariantBackAndForth(),
                     c.mutationsMinNum(),
                     c.mutationsMaxNum(),
                     c.genomeSize()
