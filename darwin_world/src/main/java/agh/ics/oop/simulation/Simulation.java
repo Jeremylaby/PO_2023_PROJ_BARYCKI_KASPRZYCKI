@@ -21,6 +21,7 @@ public class Simulation implements Runnable {
     private boolean paused = false;
     private boolean stopped = false;
     private int dayOfSimulation = 0;
+    private Statistics statistics;
 
     public Simulation(Configuration config) {
         worldMap = config.plantsGrowthVariantPoison() ? new PoisonedMap(config) : new EquatorMap(config);
@@ -64,7 +65,7 @@ public class Simulation implements Runnable {
                 feedAnimals();
                 reproduceAnimals();
                 growPlants();
-
+                setStatistics();
                 mapChanged();
             }
 
@@ -82,8 +83,7 @@ public class Simulation implements Runnable {
                 .toList();
 
         deadAnimals.forEach(animal -> {
-            animal.die(dayOfSimulation);
-            worldMap.remove(animal);
+            worldMap.removeDeadAnimal(animal,dayOfSimulation);
             animals.remove(animal);
         });;
     }
@@ -119,5 +119,13 @@ public class Simulation implements Runnable {
 
     public WorldMap getWorldMap() {
         return worldMap;
+    }
+
+    public Statistics getStatistics() {
+        return statistics;
+    }
+
+    private void setStatistics() {
+        this.statistics = new Statistics(worldMap);
     }
 }

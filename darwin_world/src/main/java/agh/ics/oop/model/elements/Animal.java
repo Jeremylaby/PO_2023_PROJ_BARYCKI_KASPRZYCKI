@@ -153,6 +153,10 @@ public class Animal implements WorldElement {
         return age;
     }
 
+    public int getDayOfDeath() {
+        return dayOfDeath;
+    }
+
     public List<Integer> getGenes() {
         return genome.getGenes();
     }
@@ -160,6 +164,10 @@ public class Animal implements WorldElement {
     @Override
     public String toString() {
         return "%d".formatted(getEnergy());
+    }
+
+    public Genome getGenome() {
+        return genome;
     }
 
     @Override
