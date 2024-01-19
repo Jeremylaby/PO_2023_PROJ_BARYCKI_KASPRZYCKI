@@ -10,12 +10,12 @@ import java.util.*;
 public class Animal implements WorldElement {
     private MapDirection orientation;
     private Vector2d position;
-    private int kidsNumber = 0;
-    private int descendantsNumber = 0;
     private final Genome genome;
     private int energy;
     private final Animal father;
     private final Animal mother;
+    private int kidsNumber = 0;
+    private int descendantsNumber = 0;
     private int age = 0;
     private int dayOfDeath = 0;
     private int plantsEaten = 0;
@@ -33,22 +33,35 @@ public class Animal implements WorldElement {
         this(position, genome, energy, null, null);
     }
 
-    private void dfs(Animal animal, Set<Animal> visited) {
+    private void familyTreeDFS(Animal animal, Set<Animal> visited) {
         if (animal == null || visited.contains(animal)) {
             return;
         }
         animal.descendantsNumber += 1;
         visited.add(animal);
-        dfs(animal.mother, visited);
-        dfs(animal.father, visited);
+        familyTreeDFS(animal.mother, visited);
+        familyTreeDFS(animal.father, visited);
     }
 
-    private void updateFamilyTree() {//todo
+    private void updateFamilyTree() {
         Set<Animal> visited = new HashSet<>();
-        dfs(this, visited);
-        descendantsNumber = 0;
         mother.kidsNumber += 1;
-        father.kidsNumber += 1;//potomkowie to dzieci+ inni potomkowie więc musze dodać jeszcz dzieci
+        father.kidsNumber += 1;
+        familyTreeDFS(mother, visited);
+        familyTreeDFS(father, visited);
+    }
+
+    public void move(int width, int height) {
+        if (energy <= 0) return;
+        age += 1;
+        updateEnergy(-1);
+        rotate(genome.sequenceCurrentGene());
+        updatePosition(width, height, position.add(orientation.toUnitVector()));
+    }
+
+    public void dodge(int width, int height, int n){
+        rotate(n);
+        updatePosition(width, height, position.add(orientation.toUnitVector()));
     }
 
     private void rotate(int n) {
@@ -64,33 +77,20 @@ public class Animal implements WorldElement {
         energy += value;
     }
 
-    public void move(int width, int height) {
-        if (getEnergy() <= 0) return;
-        age += 1;
-        updateEnergy(-1);
-        rotate(genome.sequenceCurrentGene());
-        updatePosition(width, height, position.add(orientation.toUnitVector()));
-    }
-    public void dodge(int width,int height,int n){
-        rotate(n);
-        updatePosition(width, height, position.add(orientation.toUnitVector()));
-    }
-
     private void updatePosition(int width, int height, Vector2d newPosition) {
         if (newPosition.y() >= 0 && newPosition.y() <= height - 1) {
             if (newPosition.x() < 0) {
                 position = new Vector2d(width - 1, newPosition.y());
             } else if (newPosition.x() > width - 1) {
                 position = new Vector2d(0, newPosition.y());
-
             } else {
                 position = newPosition;
             }
         } else {
             orientation = orientation.opposite();
+            updatePosition(width, height, position.add(orientation.toUnitVector()));
         }
     }
-
 
     public Animal makeChild(Animal animal, int reproduceCost) {//w założeniu wywyołujemy tą metodę jeśli wiemy że this jest silniejszy
         Animal father = this;
@@ -133,7 +133,6 @@ public class Animal implements WorldElement {
         return orientation;
     }
 
-
     public Vector2d getPosition() {
         return position;
     }
@@ -142,12 +141,20 @@ public class Animal implements WorldElement {
         return kidsNumber;
     }
 
+    public int getsDescendantNumber() {
+        return descendantsNumber;
+    }
+
     public int getEnergy() {
         return energy;
     }
 
     public int getAge() {
         return age;
+    }
+
+    public List<Integer> getGenes() {
+        return genome.getGenes();
     }
 
     @Override

@@ -82,11 +82,9 @@ public class PoisonedMap extends AbstractWorldMap {
                 } else {
                     animal.eat(config.plantsEnergyValue());
                 }
-                removePlant(animal.getPosition());
             }
         } else {
-            super.feedAnimal(animal);
-            removePlant(animal.getPosition());
+            animal.eat(config.plantsEnergyValue());
         }
     }
 
