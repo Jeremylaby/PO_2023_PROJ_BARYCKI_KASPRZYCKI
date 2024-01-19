@@ -4,10 +4,7 @@ import agh.ics.oop.model.elements.Animal;
 import agh.ics.oop.model.elements.Genome;
 import agh.ics.oop.model.map.WorldMap;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -16,7 +13,7 @@ public class Statistics {
     private final int numOfAnimals;
     private final int numOfPlants;
     private final int numOfEmptyPos;
-    private final Map<List<Integer>,Integer> mostPopularGenes;
+    private final List<ListQuantity> mostPopularGenes;
     private final double avgEnergy;
     private final double avgDaySurvived;
     private final int avgKidsNumber;
@@ -46,12 +43,14 @@ public class Statistics {
                 .orElse(0.0);
     }
 
-    private Map<List<Integer>, Integer> generatePopularGenes(WorldMap worldMap) {
+    private List<ListQuantity> generatePopularGenes(WorldMap worldMap) {
         Map<List<Integer>,Integer> numGenes = new HashMap<>();
+        List<ListQuantity> listQuantities=new ArrayList<>();
         getAnimalStream(worldMap)
                 .map(animal -> animal.getGenome().getGenes()).toList()
                 .forEach(gene->{numGenes.put(gene, numGenes.getOrDefault(gene,0)+1);});
-        return numGenes;
+        numGenes.forEach((key,value)->listQuantities.add(new ListQuantity(key,value)));
+        return listQuantities.stream().sorted(Comparator.comparingInt(ListQuantity::quantity).reversed()).toList();
     }
 
     private static Stream<Animal> getAnimalStream(WorldMap worldMap) {
