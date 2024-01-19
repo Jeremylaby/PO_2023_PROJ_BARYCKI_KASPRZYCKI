@@ -16,9 +16,10 @@
 <!--        <URL value="@style.css" />-->
     </stylesheets>
     <left>
-        <HBox>
+        <VBox>
+            <Label fx:id="statistics"/>
             <Button fx:id="pauseResumeButton" text="pause" onAction="#onSimulationPauseClicked" />
-        </HBox>
+        </VBox>
     </left>
     <center>
         <HBox alignment="CENTER">

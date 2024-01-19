@@ -18,6 +18,8 @@ public class SimulationPresenter implements MapChangeListener {
     private Button pauseResumeButton;
     @FXML
     private GridPane mapGrid;
+    @FXML
+    private Label statistics;
 
     private Simulation simulation;
     private WorldMap map;
@@ -38,6 +40,7 @@ public class SimulationPresenter implements MapChangeListener {
 
     public void drawMap() {
         clearGrid();
+        statistics.setText(simulation.getStatistics().toString());
         drawWorldElements();
     }
 

@@ -50,7 +50,7 @@ public class Statistics {
                 .map(animal -> animal.getGenome().getGenes()).toList()
                 .forEach(gene->{numGenes.put(gene, numGenes.getOrDefault(gene,0)+1);});
         numGenes.forEach((key,value)->listQuantities.add(new ListQuantity(key,value)));
-        return listQuantities.stream().sorted(Comparator.comparingInt(ListQuantity::quantity).reversed()).toList();
+        return listQuantities.stream().sorted(Comparator.comparingInt(ListQuantity::quantity).reversed()).limit(5).toList();
     }
 
     private static Stream<Animal> getAnimalStream(WorldMap worldMap) {
@@ -65,14 +65,13 @@ public class Statistics {
 
     @Override
     public String toString() {
-        return "Statistics{" +
-                "numOfAnimals=" + numOfAnimals +'\n'+
-                ", numOfPlants=" + numOfPlants +'\n'+
-                ", numOfEmptyPos=" + numOfEmptyPos +'\n'+
-                ", mostPopularGenes=\n" + mostPopularGenes +'\n'+
-                ", avgEnergy=" + avgEnergy +
-                ", avgDaySurvived=" + avgDaySurvived +'\n'+
-                ", avgKidsNumber=" + avgKidsNumber +
-                '}'+'\n';
+        return "Statistics:" +'\n'+
+                "\tnumOfAnimals=" + numOfAnimals +'\n'+
+                "\tnumOfPlants=" + numOfPlants +'\n'+
+                "\tnumOfEmptyPos=" + numOfEmptyPos +'\n'+
+                "\tmostPopularGenes=\n" + mostPopularGenes +'\n'+
+                "\tavgEnergy=" + avgEnergy +'\n'+
+                "\tavgDaySurvived=" + avgDaySurvived +'\n'+
+                "\tavgKidsNumber=" + avgKidsNumber+'\n';
     }
 }

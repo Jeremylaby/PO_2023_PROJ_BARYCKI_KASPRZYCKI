@@ -64,7 +64,6 @@ public class Simulation implements Runnable {
                 reproduceAnimals();
                 growPlants();
                 setStatistics();
-                System.out.println(statistics.toString());
                 mapChanged();
             }
 
@@ -118,6 +117,10 @@ public class Simulation implements Runnable {
 
     public WorldMap getWorldMap() {
         return worldMap;
+    }
+
+    public Statistics getStatistics() {
+        return statistics;
     }
 
     private void setStatistics() {
