@@ -55,11 +55,24 @@ public class Statistics {
 
     private static Stream<Animal> getAnimalStream(WorldMap worldMap) {
         return worldMap.getAnimals().values().stream()
-                .flatMap(Set::stream);
+                .flatMap(Set::stream).filter(animal -> animal.getEnergy()>0);
     }
 
     private int calculateEmptyPos(WorldMap worldMap) {
         return worldMap.getWidth()*worldMap.getHeight()-
                 Stream.concat(worldMap.getAnimals().keySet().stream(),worldMap.getPlants().keySet().stream()).distinct().toList().size();
+    }
+
+    @Override
+    public String toString() {
+        return "Statistics{" +
+                "numOfAnimals=" + numOfAnimals +'\n'+
+                ", numOfPlants=" + numOfPlants +'\n'+
+                ", numOfEmptyPos=" + numOfEmptyPos +'\n'+
+                ", mostPopularGenes=\n" + mostPopularGenes +'\n'+
+                ", avgEnergy=" + avgEnergy +
+                ", avgDaySurvived=" + avgDaySurvived +'\n'+
+                ", avgKidsNumber=" + avgKidsNumber +
+                '}'+'\n';
     }
 }

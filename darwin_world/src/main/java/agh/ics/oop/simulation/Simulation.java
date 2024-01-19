@@ -20,6 +20,7 @@ public class Simulation implements Runnable {
     private boolean paused = false;
     private boolean stopped = false;
     private int dayOfSimulation = 0;
+    private Statistics statistics;
 
     public void addListener(MapChangeListener listener) {
         listeners.add(listener);
@@ -62,7 +63,8 @@ public class Simulation implements Runnable {
                 feedAnimals();
                 reproduceAnimals();
                 growPlants();
-
+                setStatistics();
+                System.out.println(statistics.toString());
                 mapChanged();
             }
 
@@ -116,5 +118,9 @@ public class Simulation implements Runnable {
 
     public WorldMap getWorldMap() {
         return worldMap;
+    }
+
+    private void setStatistics() {
+        this.statistics = new Statistics(worldMap);
     }
 }
