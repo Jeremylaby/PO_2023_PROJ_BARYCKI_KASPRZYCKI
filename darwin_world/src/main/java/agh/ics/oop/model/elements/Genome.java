@@ -1,7 +1,6 @@
 package agh.ics.oop.model.elements;
 
 import agh.ics.oop.model.util.RandomNumGenerator;
-import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 import java.util.List;
