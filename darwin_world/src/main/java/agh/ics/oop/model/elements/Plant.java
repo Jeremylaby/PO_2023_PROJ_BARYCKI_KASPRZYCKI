@@ -33,12 +33,12 @@ public class Plant implements WorldElement {
     }
 
     @Override
-    public String getTexturePath() {
-        return "images/grass.png";
+    public Color getColor() {
+        return isPoisonous ? POISONED_PLANT_COLOR : STANDARD_PLANT_COLOR;
     }
 
     @Override
-    public Color getColor() {
-        return isPoisonous ? POISONED_PLANT_COLOR : STANDARD_PLANT_COLOR;
+    public boolean isSelectable() {
+        return false;
     }
 }

@@ -24,6 +24,7 @@ public class SimulationPresenter implements MapChangeListener {
     private Simulation simulation;
     private WorldMap map;
     private double cellSize = 0;
+    private WorldElement selectedElement;
 
     @Override
     public void mapChanged(WorldMap worldMap, String message) {
@@ -59,7 +60,16 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     private Node createGridCell(WorldElement element) {
-        return new WorldElementBox(element, cellSize).getFxElement();
+        VBox elementBox = new WorldElementBox(element, cellSize, element.equals(selectedElement)).getFxElement();
+
+        if (element.isSelectable()) {
+            elementBox.setOnMouseClicked(event -> {
+                selectedElement = element.equals(selectedElement) ? null : element;
+                mapChanged(map, "");
+            });
+        }
+
+        return elementBox;
     }
 
     public void setSimulation(Simulation simulation) {

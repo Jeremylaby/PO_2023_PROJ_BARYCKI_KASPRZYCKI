@@ -4,40 +4,49 @@ import agh.ics.oop.model.elements.WorldElement;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 public class WorldElementBox {
-    private VBox fxElement;
+    private final VBox fxElement;
 
-    public WorldElementBox(WorldElement element, double size) {
-        createFxElement(getLabel(element.getColor(), size));
+    public WorldElementBox(WorldElement element, double size, boolean isSelected) {
+        fxElement = createFxElement(getLabel(element.getColor(), size, isSelected));
+        if (element.isSelectable()) {
+            fxElement.setUserData(element.getPosition());
+        }
     }
 
-    private static ImageView getImageView(String texturePath, double size) {
-        Image image = new Image(texturePath);
-        ImageView imageView = new ImageView(image);
-        imageView.setFitWidth(size);
-        imageView.setFitHeight(size);
-        return imageView;
-    }
-
-    private static Label getLabel(Color color, double size) {
+    private static Label getLabel(Color color, double size, boolean isSelected) {
         Label label = new Label();
-        String colorRgb = "rgb(%s,%s,%s)"
-                .formatted(255*color.getRed(), 255*color.getGreen(), 255*color.getBlue());
-        label.setStyle("-fx-background-color: %s".formatted(colorRgb));
+
+        StringBuilder styles = new StringBuilder();
+
+        String colorRgb = "rgb(%s,%s,%s)".formatted(
+                255 * color.getRed(),
+                255 * color.getGreen(),
+                255 * color.getBlue()
+        );
+        styles.append("-fx-background-color: %s;".formatted(colorRgb));
+
+        if (isSelected) {
+            styles.append("-fx-border-width: 5;");
+            styles.append("-fx-border-color: rgb(255, 255, 0);");
+        }
+
+        label.setStyle(styles.toString());
+
         label.setMinHeight(size);
         label.setPrefWidth(size);
+
         return label;
     }
 
-    private void createFxElement(Node node) {
-        fxElement = new VBox();
-        fxElement.getChildren().add(node);
-        fxElement.setAlignment(Pos.CENTER);
+    private VBox createFxElement(Node node) {
+        VBox vBox = new VBox();
+        vBox.getChildren().add(node);
+        vBox.setAlignment(Pos.CENTER);
+        return vBox;
     }
 
     public VBox getFxElement() {

@@ -65,7 +65,7 @@ public class Simulation implements Runnable {
                 growPlants();
 
                 generateStatistics();
-                statistics.saveToFile(id, dayOfSimulation);
+//                statistics.saveToFile(id, dayOfSimulation);
 
                 mapChanged();
             }
