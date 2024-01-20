@@ -3,19 +3,23 @@ package agh.ics.oop.presenter;
 import agh.ics.oop.simulation.Simulation;
 import agh.ics.oop.simulation.SimulationEngine;
 import agh.ics.oop.model.Configuration;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.TextFormatter;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.util.converter.IntegerStringConverter;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class StartPresenter implements Initializable {
@@ -47,7 +51,9 @@ public class StartPresenter implements Initializable {
     private Spinner<Integer> mutationsMaxNum;
     @FXML
     private Spinner<Integer> genomeSize;
-
+    @FXML
+    private TextField configurationName;
+    private static final String PATH_TO_CONFIG_FILE ="src/main/resources/configurations/configurations.json";
     private SimulationEngine engine;
 
     @Override
@@ -137,5 +143,44 @@ public class StartPresenter implements Initializable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+    private static Map<String, Configuration> loadConfigurationsFromFile(String fileName) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            File file = new File(fileName);
+            if (file.exists()) {
+                return objectMapper.readValue(file, new HashMap<String, Configuration>().getClass());
+            } else {
+                return new HashMap<>();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new HashMap<>();
+        }
+    }
+    public void onSimlationSaveToFile() {
+        String fileName=PATH_TO_CONFIG_FILE;
+        Map<String, Configuration> configurations = loadConfigurationsFromFile(fileName);
+        String configName = configurationName.getText();
+        if(configurations.containsKey(configName)){
+            showAlert("INVALID NAME","Konfiguracja o takiej nazwie już istnieje");
+        }else{
+            configurations.put(configName,getConfiguration());
+            try {
+                ObjectMapper objectMapper = new ObjectMapper();
+                objectMapper.writeValue(new File(fileName), configurations);
+
+                System.out.println("Konfiguracje zapisane do pliku JSON ");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }
