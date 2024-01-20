@@ -54,11 +54,11 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     private void displayDayOfSimulation() {
-        dayOfSimulation.setText("DAY: "+String.valueOf(simulation.getDayOfSimulation()));
+        dayOfSimulation.setText("DAY: " + String.valueOf(simulation.getDayOfSimulation()));
     }
 
     private void drawFollowedElement() {
-        if(selectedElement != null){
+        if (selectedElement != null) {
             animalLabel.setText(selectedElement.toString());
         }
     }
@@ -84,9 +84,9 @@ public class SimulationPresenter implements MapChangeListener {
             elementBox.setOnMouseClicked(event -> {
                 selectedElement = element.equals(selectedElement) ? null : element;
 
-                if(selectedElement==null){
+                if (selectedElement == null) {
                     changeVisible(false);
-                }else{
+                } else {
                     changeVisible(true);
                 }
                 mapChanged(map, "");
@@ -115,7 +115,7 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     public void stopFollow() {
-        selectedElement=null;
+        selectedElement = null;
         changeVisible(false);
 
     }
@@ -123,7 +123,7 @@ public class SimulationPresenter implements MapChangeListener {
     private void changeVisible(boolean flag) {
         animalLabel.setVisible(flag);
         animalButton.setVisible(flag);
-        if(flag==false){
+        if (!flag) {
             animalLabel.setText("");
         }
     }
