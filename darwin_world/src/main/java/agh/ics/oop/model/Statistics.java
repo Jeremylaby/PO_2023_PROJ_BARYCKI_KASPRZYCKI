@@ -1,15 +1,21 @@
 package agh.ics.oop.model;
 
 import agh.ics.oop.model.elements.Animal;
-import agh.ics.oop.model.elements.Genome;
 import agh.ics.oop.model.map.WorldMap;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class Statistics {
+    public static final int TOP_GENES_SHOW_NUMBER = 5;
     private final int numOfAnimals;
     private final int numOfPlants;
     private final int numOfEmptyPos;
@@ -19,68 +25,114 @@ public class Statistics {
     private final int avgKidsNumber;
 
     public Statistics(WorldMap worldMap) {
-        this.numOfAnimals = worldMap.getAnimals().size();
-        this.numOfPlants = worldMap.getPlants().size();
-        this.numOfEmptyPos = calculateEmptyPos(worldMap);
-        this.mostPopularGenes = generatePopularGenes(worldMap);
-        this.avgEnergy = calculateavgEnergy(worldMap);
-        this.avgDaySurvived = calculateavgDaySurvived(worldMap);
-        this.avgKidsNumber = calculateavgKidsNumber(worldMap);
+        numOfAnimals = worldMap.getAnimals().size();
+        numOfPlants = worldMap.getPlants().size();
+        numOfEmptyPos = calculateEmptyPos(worldMap);
+        mostPopularGenes = calculatePopularGenes(worldMap);
+        avgEnergy = calculateAvgEnergy(worldMap);
+        avgDaySurvived = calculateAvgDaySurvived(worldMap);
+        avgKidsNumber = calculateAvgKidsNumber(worldMap);
     }
 
-    private int calculateavgKidsNumber(WorldMap worldMap) {
-        return Math.toIntExact(Math.round(getAnimalStream(worldMap).mapToDouble(Animal::getKidsNumber).average().orElse(0.0)));
+    private int calculateAvgKidsNumber(WorldMap worldMap) {
+        return Math.toIntExact(Math.round(
+                getAnimalsStream(worldMap)
+                .mapToInt(Animal::getKidsNumber)
+                .average()
+                .orElse(0.0)
+        ));
     }
 
-    private double calculateavgDaySurvived(WorldMap worldMap) {
-        return worldMap.getSumOfDeadAnimals()==0
+    private double calculateAvgDaySurvived(WorldMap worldMap) {
+        return worldMap.getSumOfDeadAnimals() == 0
                 ? Double.NaN
-                :(double) worldMap.getSumOfSurvivedDays() /worldMap.getSumOfDeadAnimals();
+                :(double) worldMap.getSumOfSurvivedDays() / worldMap.getSumOfDeadAnimals();
     }
 
-    private double calculateavgEnergy(WorldMap worldMap) {
-        return getAnimalStream(worldMap).mapToDouble(Animal::getEnergy).average()
+    private double calculateAvgEnergy(WorldMap worldMap) {
+        return getAnimalsStream(worldMap)
+                .mapToDouble(Animal::getEnergy)
+                .average()
                 .orElse(0.0);
     }
 
-    private List<ListQuantity> generatePopularGenes(WorldMap worldMap) {
-        Map<List<Integer>,Integer> numGenes = new HashMap<>();
-        List<ListQuantity> listQuantities=new ArrayList<>();
-        getAnimalStream(worldMap)
-                .map(animal -> animal.getGenome().getGenes()).toList()
-                .forEach(gene->{numGenes.put(gene, numGenes.getOrDefault(gene,0)+1);});
-        numGenes.forEach((key,value)->listQuantities.add(new ListQuantity(key,value)));
-        return listQuantities.stream().sorted(Comparator.comparingInt(ListQuantity::quantity).reversed()).limit(5).toList();
+    private List<ListQuantity> calculatePopularGenes(WorldMap worldMap) {
+        return getAnimalsStream(worldMap)
+                .map(Animal::getGenes)
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                .entrySet().stream()
+                .map(entry -> new ListQuantity(entry.getKey(), Math.toIntExact(entry.getValue())))
+                .sorted(Comparator.comparingInt(ListQuantity::quantity).reversed())
+                .limit(TOP_GENES_SHOW_NUMBER)
+                .toList();
     }
 
-    private static Stream<Animal> getAnimalStream(WorldMap worldMap) {
+    private static Stream<Animal> getAnimalsStream(WorldMap worldMap) {
         return worldMap.getAnimals().values().stream()
-                .flatMap(Set::stream).filter(animal -> animal.getEnergy()>0);
+                .flatMap(Set::stream)
+                .filter(animal -> animal.getEnergy() > 0);
     }
 
     private int calculateEmptyPos(WorldMap worldMap) {
-        return worldMap.getWidth()*worldMap.getHeight()-
-                Stream.concat(worldMap.getAnimals().keySet().stream(),worldMap.getPlants().keySet().stream()).distinct().toList().size();
+        int numOfAllPositions = worldMap.getWidth() * worldMap.getHeight();
+
+        int numOfOccupiedPositions = (int) Stream.concat(
+                worldMap.getAnimals().keySet().stream(),
+                worldMap.getPlants().keySet().stream()
+        ).distinct().count();
+
+        return numOfAllPositions - numOfOccupiedPositions;
     }
+
     private String formatMostPopularGenes(){
         StringBuilder genesBuilder = new StringBuilder();
         for (ListQuantity gene : mostPopularGenes) {
-            genesBuilder.append(gene.list()).append(":").append(gene.quantity()).append(";");
+            genesBuilder
+                    .append(gene.getListString())
+                    .append(":")
+                    .append(gene.quantity())
+                    .append(";");
         }
-        if (genesBuilder.length() > 0) {
+        if (!genesBuilder.isEmpty()) {
             genesBuilder.deleteCharAt(genesBuilder.length() - 1);
         }
 
         return genesBuilder.toString();
     }
-    public String toCSV(){
-        return String.format("%d;%d;%d;%d;%f;%f;%s",
-                this.numOfAnimals,
-                this.numOfPlants,
-                this.numOfEmptyPos,
-                this.avgKidsNumber,
-                this.avgEnergy,
-                this.avgDaySurvived,
+
+    public void saveToFile(UUID id, int day) {
+        String filename = id + ".csv";
+        boolean isNewFile = !Files.exists(Paths.get(filename));
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
+            if (isNewFile) {
+                String firstLine = "numOfDay;" +
+                        "numOfAnimals;" +
+                        "numOfPlants;" +
+                        "numOfEmptyPos;" +
+                        "avgKidsNumber;" +
+                        "avgEnergy;" +
+                        "avgDaySurvived;" +
+                        "mostPopularGenes Top 5";
+                writer.write(firstLine);
+                writer.newLine();
+            }
+            String line = toCSV(day);
+            writer.write(line);
+            writer.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String toCSV(int day){
+        return String.format("%d;%d;%d;%d;%d;%f;%f;%s",
+                day,
+                numOfAnimals,
+                numOfPlants,
+                numOfEmptyPos,
+                avgKidsNumber,
+                avgEnergy,
+                avgDaySurvived,
                 formatMostPopularGenes()
         );
     }
@@ -116,12 +168,18 @@ public class Statistics {
     @Override
     public String toString() {
         return "Statistics:" +'\n'+
-                "\tnumOfAnimals=" + numOfAnimals +'\n'+
-                "\tnumOfPlants=" + numOfPlants +'\n'+
-                "\tnumOfEmptyPos=" + numOfEmptyPos +'\n'+
-                "\tmostPopularGenes=\n" + mostPopularGenes +'\n'+
-                "\tavgEnergy=" + avgEnergy +'\n'+
-                "\tavgDaySurvived=" + avgDaySurvived +'\n'+
-                "\tavgKidsNumber=" + avgKidsNumber+'\n';
+                "\tnumber of animals: " + numOfAnimals +'\n'+
+                "\tnumber of plants: " + numOfPlants +'\n'+
+                "\tnumber of empty positions: " + numOfEmptyPos +'\n'+
+                "\taverage energy: %.2f".formatted(avgEnergy) +'\n'+
+                "\taverage day survived: %.2f".formatted(avgDaySurvived) +'\n'+
+                "\taverage kids number: " + avgKidsNumber+'\n' +
+                "\tmost popular genomes: \n" + getMostPopularGenesForDisplay();
+    }
+
+    private String getMostPopularGenesForDisplay() {
+        return IntStream.range(0, mostPopularGenes.size())
+                .mapToObj(i -> "%d:  %s".formatted(i+1, mostPopularGenes.get(i)))
+                .collect(Collectors.joining("\t\t", "\t\t", ""));
     }
 }
