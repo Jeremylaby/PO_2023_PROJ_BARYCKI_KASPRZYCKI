@@ -3,19 +3,22 @@ package agh.ics.oop.presenter;
 import agh.ics.oop.simulation.Simulation;
 import agh.ics.oop.simulation.SimulationEngine;
 import agh.ics.oop.model.Configuration;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.TextFormatter;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.util.converter.IntegerStringConverter;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class StartPresenter implements Initializable {
@@ -47,13 +50,18 @@ public class StartPresenter implements Initializable {
     private Spinner<Integer> mutationsMaxNum;
     @FXML
     private Spinner<Integer> genomeSize;
-
+    @FXML
+    private TextField configurationName;
+    @FXML
+    private ComboBox<String> savedConfigurations;
+    private static final String PATH_TO_CONFIG_FILE ="src/main/resources/configurations/configurations.json";
     private SimulationEngine engine;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         engine = new SimulationEngine();
         attachTextFormatters();
+        updateComboBox();
     }
 
     private void attachTextFormatters() {
@@ -78,8 +86,16 @@ public class StartPresenter implements Initializable {
     }
 
     public void onSimulationStartClicked() {
+        if(savedConfigurations.getValue() == null) {
+            startSimulationWithConfig(getConfiguration());
+        }else {
+            startSimulationWithConfig(loadConfigurationsFromFile().get(savedConfigurations.getValue()));
+        }
+    }
+
+    private void startSimulationWithConfig(Configuration configuration) {
         try {
-            Simulation simulation = new Simulation(getConfiguration());
+            Simulation simulation = new Simulation(configuration);
             startSimulation(simulation);
         } catch (Exception e) {
             e.printStackTrace();
@@ -123,6 +139,11 @@ public class StartPresenter implements Initializable {
         return presenter;
     }
 
+    private void updateComboBox() {
+        savedConfigurations.getItems().clear();
+        savedConfigurations.getItems().addAll(loadConfigurationsFromFile().keySet());
+    }
+
     private static void configureStage(BorderPane viewRoot, Stage stage) {
 //        Image icon = new Image("/images/pig2.png");
 //        newStage.getIcons().add(icon);
@@ -137,5 +158,56 @@ public class StartPresenter implements Initializable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+    private static Map<String, Configuration> loadConfigurationsFromFile() {
+        
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            File file = new File(PATH_TO_CONFIG_FILE);
+            if (file.exists()) {
+                return objectMapper.readValue(file, new TypeReference<Map<String, Configuration>>(){});
+            } else {
+                return new HashMap<>();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new HashMap<>();
+        }
+    }
+    public void onSimlationSaveToFile() {
+        String fileName=PATH_TO_CONFIG_FILE;
+        Map<String, Configuration> configurations = loadConfigurationsFromFile();
+        String configName = configurationName.getText();
+        if(configurations.containsKey(configName)){
+            showAlert(configName);
+            System.out.println("Konfiguracja o takiej nazwie istnieje");
+        }else{
+            configurations.put(configName,getConfiguration());
+            try {
+                ObjectMapper objectMapper = new ObjectMapper();
+                objectMapper.writeValue(new File(fileName), configurations);
+                showSuccesAlert(configName);
+                System.out.println("Konfiguracje zapisane do pliku JSON ");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            updateComboBox();
+        }
+
+    }
+
+    private void showSuccesAlert(String name) {
+        Alert informationAlert = new Alert(Alert.AlertType.INFORMATION);
+        informationAlert.setTitle("Informacja");
+        informationAlert.setHeaderText("OK");
+        informationAlert.setContentText("Konfiguracja o Nazwie: "+ name+"\n Zosatala pomysnie zapisana do pliku JSON.");
+        informationAlert.showAndWait();
+    }
+
+    private void showAlert(String name) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("INVALID NAME");
+        alert.setContentText("Konfiguracja o takiej nazwie:"+name+" juz istnieje");
+        alert.showAndWait();
     }
 }

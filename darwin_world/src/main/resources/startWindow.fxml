@@ -45,6 +45,8 @@
                         <Label text="Maksymalna liczba mutujących genów" minHeight="30" />
                         <Label text="Długość genomu zwierzęcia" minHeight="30" />
                         <Label text="Wariant sekwencjonowania genów" minHeight="30" />
+                        <Label text="Podaj Nazwę Konfiguracji:" minHeight="30" />
+                        <Label text="Wybierz Konfigurację:" minHeight="30" />
                     </VBox>
                 </left>
                 <right>
@@ -63,7 +65,7 @@
                             <RadioButton fx:id="plantsGrowthVariantPoison" text="zatrute owoce" toggleGroup="$plantsGrowthVariant" />
                         </HBox>
 
-                        <Spinner fx:id="animalsStartNum" min="0" max="100" initialValue="15" editable="true" minHeight="30" />
+                        <Spinner fx:id="animalsStartNum" min="0" max="100" initialValue="15" minHeight="30" />
                         <Spinner fx:id="animalsStartEnergy" min="0" max="100" initialValue="30" editable="true" minHeight="30" />
                         <Spinner fx:id="animalsEnergyToReproduce" min="0" max="100" initialValue="50" editable="true" minHeight="30" />
                         <Spinner fx:id="animalsEnergyReproduceCost" min="0" max="100" initialValue="10" editable="true" minHeight="30" />
@@ -78,6 +80,8 @@
                             <RadioButton text="pełna predestynacja" toggleGroup="$genomeSequenceVariant" minWidth="140" selected="true" />
                             <RadioButton fx:id="genomeSequenceVariantBackAndForth" text="tam i z powrotem" toggleGroup="$genomeSequenceVariant" />
                         </HBox>
+                        <TextField fx:id="configurationName" minHeight="30" maxWidth="150"/>
+                        <ComboBox fx:id="savedConfigurations" minHeight="30" prefWidth="150"/>
                     </VBox>
                 </right>
             </BorderPane>
@@ -87,6 +91,8 @@
         <VBox styleClass="bottomBar" alignment="CENTER" minHeight="80">
             <Label text="Rozpocznij symulację:"/>
             <Button text="Start" onAction="#onSimulationStartClicked"/>
+            <Label text="Zapisz Konfiguracje:"/>
+            <Button text="Save" onAction="#onSimlationSaveToFile"/>
         </VBox>
     </bottom>
 </BorderPane>
