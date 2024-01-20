@@ -5,6 +5,7 @@ import agh.ics.oop.model.elements.WorldElement;
 import agh.ics.oop.model.map.WorldMap;
 import agh.ics.oop.simulation.Simulation;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -20,7 +21,12 @@ public class SimulationPresenter implements MapChangeListener {
     private GridPane mapGrid;
     @FXML
     private Label statistics;
-
+    @FXML
+    private Label animalLabel;
+    @FXML
+    private Button animalButton;
+    @FXML
+    private Label dayOfSimulation;
     private Simulation simulation;
     private WorldMap map;
     private double cellSize = 0;
@@ -42,7 +48,19 @@ public class SimulationPresenter implements MapChangeListener {
     public void drawMap() {
         clearGrid();
         statistics.setText(simulation.getStatistics().toString());
+        drawFollowedElement();
+        displayDayOfSimulation();
         drawWorldElements();
+    }
+
+    private void displayDayOfSimulation() {
+        dayOfSimulation.setText("DAY: "+String.valueOf(simulation.getDayOfSimulation()));
+    }
+
+    private void drawFollowedElement() {
+        if(selectedElement != null){
+            animalLabel.setText(selectedElement.toString());
+        }
     }
 
     private void clearGrid() {
@@ -65,6 +83,12 @@ public class SimulationPresenter implements MapChangeListener {
         if (element.isSelectable()) {
             elementBox.setOnMouseClicked(event -> {
                 selectedElement = element.equals(selectedElement) ? null : element;
+
+                if(selectedElement==null){
+                    changeVisible(false);
+                }else{
+                    changeVisible(true);
+                }
                 mapChanged(map, "");
             });
         }
@@ -87,6 +111,20 @@ public class SimulationPresenter implements MapChangeListener {
 
         for (int i = 0; i < map.getHeight(); i++) {
             mapGrid.getRowConstraints().add(new RowConstraints(cellSize));
+        }
+    }
+
+    public void stopFollow() {
+        selectedElement=null;
+        changeVisible(false);
+
+    }
+
+    private void changeVisible(boolean flag) {
+        animalLabel.setVisible(flag);
+        animalButton.setVisible(flag);
+        if(flag==false){
+            animalLabel.setText("");
         }
     }
 }

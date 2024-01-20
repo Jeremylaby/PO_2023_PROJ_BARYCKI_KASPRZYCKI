@@ -163,7 +163,16 @@ public class Animal implements WorldElement {
 
     @Override
     public String toString() {
-        return "%d".formatted(getEnergy());
+        return "Animal:\n" +
+                "\tgenome:\n"+
+                "\t"+genome +"\n"+
+                "\tactive part of genome="+genome.getCurrentGeneIndex()+"\n"+
+                "\tenergy=" + energy +"\n"+
+                "\tkidsNumber=" + kidsNumber +"\n"+
+                "\tdescendantsNumber=" + descendantsNumber +"\n"+
+                "\tage=" + age +"\n"+
+                "\tdayOfDeath=" + dayOfDeath +"\n"+
+                "\tplantsEaten=" + plantsEaten+"\n";
     }
 
     @Override

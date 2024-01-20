@@ -16,9 +16,12 @@
 <!--        <URL value="@style.css" />-->
     </stylesheets>
     <left>
-        <VBox>
-            <Label fx:id="statistics"/>
-            <Button fx:id="pauseResumeButton" text="pause" onAction="#onSimulationPauseClicked" />
+        <VBox >
+            <Label fx:id="dayOfSimulation"/>
+            <Label fx:id="statistics" />
+            <Label fx:id="animalLabel" visible="false"/>
+            <HBox alignment="CENTER"><Button fx:id="animalButton" text="unfollow" onAction="#stopFollow" visible="false"/></HBox>
+            <HBox alignment="CENTER"><Button fx:id="pauseResumeButton" text="pause" onAction="#onSimulationPauseClicked"/></HBox>
         </VBox>
     </left>
     <center>

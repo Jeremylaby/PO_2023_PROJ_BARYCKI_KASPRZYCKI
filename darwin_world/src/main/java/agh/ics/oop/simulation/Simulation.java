@@ -131,4 +131,8 @@ public class Simulation implements Runnable {
     public Statistics getStatistics() {
         return statistics;
     }
+
+    public int getDayOfSimulation() {
+        return dayOfSimulation;
+    }
 }
