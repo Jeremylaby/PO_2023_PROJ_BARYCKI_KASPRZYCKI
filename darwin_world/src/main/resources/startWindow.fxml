@@ -65,7 +65,7 @@
                             <RadioButton fx:id="plantsGrowthVariantPoison" text="zatrute owoce" toggleGroup="$plantsGrowthVariant" />
                         </HBox>
 
-                        <Spinner fx:id="animalsStartNum" min="0" max="100" initialValue="15"  />
+                        <Spinner fx:id="animalsStartNum" min="0" max="100" initialValue="15" minHeight="30" />
                         <Spinner fx:id="animalsStartEnergy" min="0" max="100" initialValue="30" editable="true" minHeight="30" />
                         <Spinner fx:id="animalsEnergyToReproduce" min="0" max="100" initialValue="50" editable="true" minHeight="30" />
                         <Spinner fx:id="animalsEnergyReproduceCost" min="0" max="100" initialValue="10" editable="true" minHeight="30" />
