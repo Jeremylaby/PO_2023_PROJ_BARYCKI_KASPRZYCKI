@@ -62,6 +62,56 @@ public class Statistics {
         return worldMap.getWidth()*worldMap.getHeight()-
                 Stream.concat(worldMap.getAnimals().keySet().stream(),worldMap.getPlants().keySet().stream()).distinct().toList().size();
     }
+    private String formatMostPopularGenes(){
+        StringBuilder genesBuilder = new StringBuilder();
+        for (ListQuantity gene : mostPopularGenes) {
+            genesBuilder.append(gene.list()).append(":").append(gene.quantity()).append(";");
+        }
+        if (genesBuilder.length() > 0) {
+            genesBuilder.deleteCharAt(genesBuilder.length() - 1);
+        }
+
+        return genesBuilder.toString();
+    }
+    public String toCSV(){
+        return String.format("%d;%d;%d;%d;%f;%f;%s",
+                this.numOfAnimals,
+                this.numOfPlants,
+                this.numOfEmptyPos,
+                this.avgKidsNumber,
+                this.avgEnergy,
+                this.avgDaySurvived,
+                formatMostPopularGenes()
+        );
+    }
+
+    public int getNumOfAnimals() {
+        return numOfAnimals;
+    }
+
+    public int getNumOfPlants() {
+        return numOfPlants;
+    }
+
+    public int getNumOfEmptyPos() {
+        return numOfEmptyPos;
+    }
+
+    public List<ListQuantity> getMostPopularGenes() {
+        return mostPopularGenes;
+    }
+
+    public double getAvgEnergy() {
+        return avgEnergy;
+    }
+
+    public double getAvgDaySurvived() {
+        return avgDaySurvived;
+    }
+
+    public int getAvgKidsNumber() {
+        return avgKidsNumber;
+    }
 
     @Override
     public String toString() {
