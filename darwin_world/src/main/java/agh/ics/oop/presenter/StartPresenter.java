@@ -59,7 +59,7 @@ public class StartPresenter implements Initializable {
     @FXML
     private Button chooseDir;
     private static final String PATH_TO_CONFIG_FILE = "src/main/resources/configurations/configurations.json";
-    private static final String PATH_TO_STATS_FILE = "src/main/resources/statistics";
+    private static final String PATH_TO_STATS_FILE = "src/main/resources/statistics/";
     private String directoryToSave = PATH_TO_STATS_FILE;
     private SimulationEngine engine;
 
