@@ -8,15 +8,10 @@ import agh.ics.oop.model.map.PoisonedMap;
 import agh.ics.oop.model.map.WorldMap;
 import agh.ics.oop.model.util.RandomPositionGenerator;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 
 public class Simulation implements Runnable {
-    public static final int SIMULATION_INTERVAL = 50;
+    public static final int SIMULATION_INTERVAL = 100;
     private final List<MapChangeListener> listeners = new ArrayList<>();
     private final Set<Animal> animals;
     private final WorldMap worldMap;
@@ -24,7 +19,7 @@ public class Simulation implements Runnable {
     private boolean stopped = false;
     private int dayOfSimulation = 0;
     private Statistics statistics;
-    private UUID id = UUID.randomUUID();
+    private final UUID id = UUID.randomUUID();
 
     public Simulation(Configuration config) {
         worldMap = config.plantsGrowthVariantPoison() ? new PoisonedMap(config) : new EquatorMap(config);
@@ -68,11 +63,11 @@ public class Simulation implements Runnable {
                 feedAnimals();
                 reproduceAnimals();
                 growPlants();
-                setStatistics();
 
+                generateStatistics();
+//                statistics.saveToFile(id, dayOfSimulation);
 
                 mapChanged();
-                saveStatsToFile();
             }
 
             try {
@@ -81,31 +76,6 @@ public class Simulation implements Runnable {
                 e.printStackTrace();
             }
         }
-    }
-
-    private void saveStatsToFile() {
-        String filename = id + ".csv";
-        boolean isNewFile = !Files.exists(Paths.get(filename));
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
-            if (isNewFile) {
-                String firstline = String.format("%s;%s;%s;%s;%s;%s;%s",
-                        "numOfAnimals",
-                        "numOfPlants",
-                        "numOfEmptyPos",
-                        "avgKidsNumber",
-                        "avgEnergy",
-                        "avgDaySurvived",
-                        "mostPopularGenes Top 5");
-                writer.write(firstline);
-                writer.newLine();
-            }
-            String line = statistics.toCSV();
-            writer.write(line);
-            writer.newLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
     }
 
     private void removeDeadAnimals() {
@@ -117,7 +87,6 @@ public class Simulation implements Runnable {
             worldMap.removeDeadAnimal(animal, dayOfSimulation);
             animals.remove(animal);
         });
-        ;
     }
 
     private void moveAnimals() {
@@ -134,6 +103,10 @@ public class Simulation implements Runnable {
 
     private void growPlants() {
         worldMap.growPlants();
+    }
+
+    private void generateStatistics() {
+        this.statistics = new Statistics(worldMap);
     }
 
     private void mapChanged() {
@@ -155,9 +128,5 @@ public class Simulation implements Runnable {
 
     public Statistics getStatistics() {
         return statistics;
-    }
-
-    private void setStatistics() {
-        this.statistics = new Statistics(worldMap);
     }
 }

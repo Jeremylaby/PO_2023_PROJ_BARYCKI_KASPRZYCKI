@@ -6,8 +6,7 @@ import javafx.scene.paint.Color;
 public interface WorldElement {
     Vector2d getPosition();
 
-    String getTexturePath();
-
     Color getColor();
 
+    boolean isSelectable();
 }

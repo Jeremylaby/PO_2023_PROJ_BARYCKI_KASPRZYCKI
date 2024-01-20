@@ -166,24 +166,13 @@ public class Animal implements WorldElement {
         return "%d".formatted(getEnergy());
     }
 
-    public Genome getGenome() {
-        return genome;
-    }
-
-    @Override
-    public String getTexturePath() {
-        // TODO stworzyć system poziomów energii
-        if (getEnergy() < 10) {
-            return "images/animal1_low_energy.png";
-        }
-        if (getEnergy() >= 10 && getEnergy() < 50) {
-            return "images/animal1_mid_energy.png";
-        }
-        return "images/animal1_high_energy.png";
-    }
-
     @Override
     public Color getColor() {
         return Color.hsb(30, Math.min(0.8, (double) energy / 100) + 0.2, 0.7);
+    }
+
+    @Override
+    public boolean isSelectable() {
+        return true;
     }
 }

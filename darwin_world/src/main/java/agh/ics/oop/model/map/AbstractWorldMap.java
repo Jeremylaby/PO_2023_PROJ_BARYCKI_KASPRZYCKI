@@ -90,10 +90,6 @@ public abstract class AbstractWorldMap implements WorldMap {
         return Optional.ofNullable(animals.get(position));
     }
 
-    public Map<Vector2d, Plant> getPlants() {
-        return Map.copyOf(plants);
-    }
-
     @Override
     public List<Animal> reproduceAnimals() {
         List<Animal> newborns = new ArrayList<>();
@@ -124,20 +120,29 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     public void removeDeadAnimal(Animal animal, int dayOfSimulation){
         animal.die(dayOfSimulation);
-        sumOfSurvivedDays+=animal.getAge();
-        sumOfDeadAnimals+=1;
-        this.remove(animal);
+        sumOfSurvivedDays += animal.getAge();
+        sumOfDeadAnimals += 1;
+        remove(animal);
     }
+
     private boolean canAnimalReproduce(Animal animal) {
         return animal.getEnergy() >= config.animalsEnergyToReproduce();
     }
 
     @Override
-    public synchronized List<WorldElement> getElements() {
+    public Stream<WorldElement> getElements() {
         return Stream.concat(
                 plants.values().stream().filter(plant -> !animals.containsKey(plant.getPosition())),
                 animals.values().stream().map(this::findStrongest).map(Optional::get)
-        ).toList();
+        );
+    }
+
+    public Map<Vector2d, Plant> getPlants() {
+        return Collections.unmodifiableMap(plants);
+    }
+
+    public Map<Vector2d, Set<Animal>> getAnimals() {
+        return Collections.unmodifiableMap(animals);
     }
 
     @Override
@@ -148,10 +153,6 @@ public abstract class AbstractWorldMap implements WorldMap {
     @Override
     public int getHeight() {
         return config.mapHeight();
-    }
-
-    public Map<Vector2d, Set<Animal>> getAnimals() {
-        return animals;
     }
 
     public int getSumOfSurvivedDays() {
