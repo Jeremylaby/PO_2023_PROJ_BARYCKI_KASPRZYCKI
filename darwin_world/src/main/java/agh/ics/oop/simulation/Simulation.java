@@ -8,10 +8,12 @@ import agh.ics.oop.model.map.PoisonedMap;
 import agh.ics.oop.model.map.WorldMap;
 import agh.ics.oop.model.util.RandomPositionGenerator;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
 
 public class Simulation implements Runnable {
     public static final int SIMULATION_INTERVAL = 50;
@@ -22,6 +24,7 @@ public class Simulation implements Runnable {
     private boolean stopped = false;
     private int dayOfSimulation = 0;
     private Statistics statistics;
+    private UUID id = UUID.randomUUID();
 
     public Simulation(Configuration config) {
         worldMap = config.plantsGrowthVariantPoison() ? new PoisonedMap(config) : new EquatorMap(config);
@@ -66,7 +69,10 @@ public class Simulation implements Runnable {
                 reproduceAnimals();
                 growPlants();
                 setStatistics();
+
+
                 mapChanged();
+                saveStatsToFile();
             }
 
             try {
@@ -77,15 +83,41 @@ public class Simulation implements Runnable {
         }
     }
 
+    private void saveStatsToFile() {
+        String filename = id + ".csv";
+        boolean isNewFile = !Files.exists(Paths.get(filename));
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
+            if (isNewFile) {
+                String firstline = String.format("%s;%s;%s;%s;%s;%s;%s",
+                        "numOfAnimals",
+                        "numOfPlants",
+                        "numOfEmptyPos",
+                        "avgKidsNumber",
+                        "avgEnergy",
+                        "avgDaySurvived",
+                        "mostPopularGenes Top 5");
+                writer.write(firstline);
+                writer.newLine();
+            }
+            String line = statistics.toCSV();
+            writer.write(line);
+            writer.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     private void removeDeadAnimals() {
         List<Animal> deadAnimals = animals.stream()
                 .filter(animal -> animal.getEnergy() <= 0)
                 .toList();
 
         deadAnimals.forEach(animal -> {
-            worldMap.removeDeadAnimal(animal,dayOfSimulation);
+            worldMap.removeDeadAnimal(animal, dayOfSimulation);
             animals.remove(animal);
-        });;
+        });
+        ;
     }
 
     private void moveAnimals() {
