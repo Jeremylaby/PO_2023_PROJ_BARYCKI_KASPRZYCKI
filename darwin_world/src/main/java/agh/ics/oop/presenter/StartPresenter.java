@@ -5,12 +5,14 @@ import agh.ics.oop.simulation.SimulationEngine;
 import agh.ics.oop.model.Configuration;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import javafx.util.converter.IntegerStringConverter;
 
@@ -54,7 +56,11 @@ public class StartPresenter implements Initializable {
     private TextField configurationName;
     @FXML
     private ComboBox<String> savedConfigurations;
-    private static final String PATH_TO_CONFIG_FILE ="src/main/resources/configurations/configurations.json";
+    @FXML
+    private Button chooseDir;
+    private static final String PATH_TO_CONFIG_FILE = "src/main/resources/configurations/configurations.json";
+    private static final String PATH_TO_STATS_FILE = "src/main/resources/statistics";
+    private String directoryToSave = PATH_TO_STATS_FILE;
     private SimulationEngine engine;
 
     @Override
@@ -86,16 +92,16 @@ public class StartPresenter implements Initializable {
     }
 
     public void onSimulationStartClicked() {
-        if(savedConfigurations.getValue() == null) {
+        if (savedConfigurations.getValue() == null) {
             startSimulationWithConfig(getConfiguration());
-        }else {
+        } else {
             startSimulationWithConfig(loadConfigurationsFromFile().get(savedConfigurations.getValue()));
         }
     }
 
     private void startSimulationWithConfig(Configuration configuration) {
         try {
-            Simulation simulation = new Simulation(configuration);
+            Simulation simulation = new Simulation(configuration, directoryToSave);
             startSimulation(simulation);
         } catch (Exception e) {
             e.printStackTrace();
@@ -159,13 +165,15 @@ public class StartPresenter implements Initializable {
             e.printStackTrace();
         }
     }
+
     private static Map<String, Configuration> loadConfigurationsFromFile() {
-        
+
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             File file = new File(PATH_TO_CONFIG_FILE);
             if (file.exists()) {
-                return objectMapper.readValue(file, new TypeReference<Map<String, Configuration>>(){});
+                return objectMapper.readValue(file, new TypeReference<Map<String, Configuration>>() {
+                });
             } else {
                 return new HashMap<>();
             }
@@ -174,15 +182,16 @@ public class StartPresenter implements Initializable {
             return new HashMap<>();
         }
     }
+
     public void onSimlationSaveToFile() {
-        String fileName=PATH_TO_CONFIG_FILE;
+        String fileName = PATH_TO_CONFIG_FILE;
         Map<String, Configuration> configurations = loadConfigurationsFromFile();
         String configName = configurationName.getText();
-        if(configurations.containsKey(configName)){
+        if (configurations.containsKey(configName)) {
             showAlert(configName);
             System.out.println("Konfiguracja o takiej nazwie istnieje");
-        }else{
-            configurations.put(configName,getConfiguration());
+        } else {
+            configurations.put(configName, getConfiguration());
             try {
                 ObjectMapper objectMapper = new ObjectMapper();
                 objectMapper.writeValue(new File(fileName), configurations);
@@ -200,14 +209,28 @@ public class StartPresenter implements Initializable {
         Alert informationAlert = new Alert(Alert.AlertType.INFORMATION);
         informationAlert.setTitle("Informacja");
         informationAlert.setHeaderText("OK");
-        informationAlert.setContentText("Konfiguracja o Nazwie: "+ name+"\n Zosatala pomysnie zapisana do pliku JSON.");
+        informationAlert.setContentText("Konfiguracja o Nazwie: " + name + "\n Zosatala pomysnie zapisana do pliku JSON.");
         informationAlert.showAndWait();
     }
 
     private void showAlert(String name) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("INVALID NAME");
-        alert.setContentText("Konfiguracja o takiej nazwie:"+name+" juz istnieje");
+        alert.setContentText("Konfiguracja o takiej nazwie:" + name + " juz istnieje");
         alert.showAndWait();
     }
+
+    public void chooseDirectory() {
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle("Wybierz folder do zapisu pliku");
+        File selectedDirectory = directoryChooser.showDialog(new Stage());
+        if (selectedDirectory != null) {
+            directoryToSave = selectedDirectory.getAbsolutePath().replace("\\","/")+"/";
+            System.out.println("Wybrany folder: " + directoryToSave);
+        } else {
+            System.out.println("Nie wybrano żadnego folderu.");
+            directoryToSave = PATH_TO_STATS_FILE;
+        }
+    }
+
 }

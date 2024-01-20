@@ -100,8 +100,8 @@ public class Statistics {
         return genesBuilder.toString();
     }
 
-    public void saveToFile(UUID id, int day) {
-        String filename = id + ".csv";
+    public void saveToFile(UUID id, int day,String filepath) {
+        String filename =  filepath+id+ ".csv";
         boolean isNewFile = !Files.exists(Paths.get(filename));
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
             if (isNewFile) {
@@ -112,7 +112,7 @@ public class Statistics {
                         "avgKidsNumber;" +
                         "avgEnergy;" +
                         "avgDaySurvived;" +
-                        "mostPopularGenes Top 5";
+                        "mostPopularGenes Top "+TOP_GENES_SHOW_NUMBER;
                 writer.write(firstLine);
                 writer.newLine();
             }

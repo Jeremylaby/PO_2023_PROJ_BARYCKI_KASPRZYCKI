@@ -19,11 +19,13 @@ public class Simulation implements Runnable {
     private boolean stopped = false;
     private int dayOfSimulation = 0;
     private Statistics statistics;
+    private final String directoryToSaveFile;
     private final UUID id = UUID.randomUUID();
 
-    public Simulation(Configuration config) {
+    public Simulation(Configuration config,String directoryToSave) {
         worldMap = config.plantsGrowthVariantPoison() ? new PoisonedMap(config) : new EquatorMap(config);
         animals = new HashSet<>(config.animalsStartNum());
+        directoryToSaveFile=directoryToSave;
         generateAnimals(config);
     }
 
@@ -65,7 +67,7 @@ public class Simulation implements Runnable {
                 growPlants();
 
                 generateStatistics();
-//                statistics.saveToFile(id, dayOfSimulation);
+                statistics.saveToFile(id, dayOfSimulation,directoryToSaveFile);
 
                 mapChanged();
             }

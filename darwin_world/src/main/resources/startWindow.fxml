@@ -82,6 +82,7 @@
                         </HBox>
                         <TextField fx:id="configurationName" minHeight="30" maxWidth="150"/>
                         <ComboBox fx:id="savedConfigurations" minHeight="30" prefWidth="150"/>
+                        <Button fx:id="chooseDir" text="Wybierz Folder" onAction="#chooseDirectory" />
                     </VBox>
                 </right>
             </BorderPane>
