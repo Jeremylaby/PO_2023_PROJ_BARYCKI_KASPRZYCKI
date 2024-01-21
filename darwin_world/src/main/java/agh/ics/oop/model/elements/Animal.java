@@ -35,35 +35,17 @@ public class Animal implements WorldElement {
         this(position, genome, energy, null, null, energyToReproduce);
     }
 
-    private void familyTreeDFS(Animal animal, Set<Animal> visited) {
-        if (animal == null || visited.contains(animal)) {
-            return;
-        }
-        animal.descendantsNumber += 1;
-        visited.add(animal);
-        familyTreeDFS(animal.mother, visited);
-        familyTreeDFS(animal.father, visited);
-    }
-
-    void updateFamilyTree() {
-        Set<Animal> visited = new HashSet<>();
-        mother.kidsNumber += 1;
-        father.kidsNumber += 1;
-        familyTreeDFS(mother, visited);
-        familyTreeDFS(father, visited);
-    }
-
     public void move(int width, int height) {
         if (energy <= 0) return;
         age += 1;
         updateEnergy(-1);
         rotate(genome.sequenceCurrentGene());
-        updatePosition(width, height, position.add(orientation.toUnitVector()));
+        updatePosition(width, height);
     }
 
     public void dodge(int width, int height, int n){
         rotate(n);
-        updatePosition(width, height, position.add(orientation.toUnitVector()));
+        updatePosition(width, height);
     }
 
     private void rotate(int n) {
@@ -79,7 +61,9 @@ public class Animal implements WorldElement {
         energy += value;
     }
 
-    private void updatePosition(int width, int height, Vector2d newPosition) {
+    private void updatePosition(int width, int height) {
+        Vector2d newPosition = position.add(orientation.toUnitVector());
+
         if (newPosition.y() >= 0 && newPosition.y() <= height - 1) {
             if (newPosition.x() < 0) {
                 position = new Vector2d(width - 1, newPosition.y());
@@ -90,8 +74,16 @@ public class Animal implements WorldElement {
             }
         } else {
             orientation = orientation.opposite();
-            updatePosition(width, height, position.add(orientation.toUnitVector()));
+            updatePosition(width, height);
         }
+    }
+
+    void kidsNumberIncrement() {
+        kidsNumber++;
+    }
+
+    void descendantsNumberIncrement() {
+        descendantsNumber++;
     }
 
     public void die(int day) {
@@ -106,12 +98,16 @@ public class Animal implements WorldElement {
         return position;
     }
 
-    public int getKidsNumber() {
-        return kidsNumber;
+    Animal getFather() {
+        return father;
     }
 
-    public int getsDescendantNumber() {
-        return descendantsNumber;
+    Animal getMother() {
+        return mother;
+    }
+
+    public int getKidsNumber() {
+        return kidsNumber;
     }
 
     public int getEnergy() {

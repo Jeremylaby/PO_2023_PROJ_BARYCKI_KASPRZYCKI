@@ -1,24 +1,35 @@
 package agh.ics.oop.model.elements;
 
 import agh.ics.oop.model.Configuration;
+import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.model.util.RandomNumGenerator;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class AnimalFactory {
-    private final int reproduceCost;
-    private final int energyToReproduce;
-    private final boolean isGenomeSequenceBackAndForth;
-    private final int minMutations;
-    private final int maxMutations;
+    private final Configuration config;
 
     public AnimalFactory(Configuration config) {
-        this.reproduceCost = config.animalsEnergyReproduceCost();
-        this.energyToReproduce = config.animalsEnergyToReproduce();
-        this.isGenomeSequenceBackAndForth = config.genomeSequenceVariantBackAndForth();
-        this.minMutations = config.mutationsMinNum();
-        this.maxMutations = config.mapHeight();
+        this.config = config;
+    }
+
+    public Animal createInitalAnimal(Vector2d position) {
+        Genome genome = new Genome(
+                config.genomeSequenceVariantBackAndForth(),
+                config.mutationsMinNum(),
+                config.mutationsMaxNum(),
+                config.genomeSize()
+        );
+
+        return new Animal(
+                position,
+                genome,
+                config.animalsStartEnergy(),
+                config.animalsEnergyToReproduce()
+        );
     }
 
     public Animal makeChild(Animal father, Animal mother) {
@@ -28,29 +39,72 @@ public class AnimalFactory {
             father = temp;
         }
 
+        Animal child = createAnimal(father, mother, createChildGenes(father, mother));
 
-        int k = Math.round(father.getGenes().size() * ((float) father.getEnergy() / (father.getEnergy() + mother.getEnergy())));
-        int l = father.getGenes().size() - k;
+        updateFamilyTree(child);
+
+        father.updateEnergy(-config.animalsEnergyReproduceCost());
+        mother.updateEnergy(-config.animalsEnergyReproduceCost());
+
+        return child;
+    }
+
+    private static List<Integer> createChildGenes(Animal father, Animal mother) {
+        float energyRatio = (float) father.getEnergy() / (father.getEnergy() + mother.getEnergy());
+
+        int numOfFatherGenes = Math.round(father.getGenes().size() * energyRatio);
+        int numOfMotherGenes = father.getGenes().size() - numOfFatherGenes;
 
         List<Integer> childGenes;
 
         if (RandomNumGenerator.randomInt(0, 1) == 0) {
-            childGenes = new ArrayList<>(father.getLeftGenesSlice(k));
-            childGenes.addAll(mother.getRightGenesSlice(l));
+            childGenes = new ArrayList<>(father.getLeftGenesSlice(numOfFatherGenes));
+            childGenes.addAll(mother.getRightGenesSlice(numOfMotherGenes));
         } else {
-            childGenes = new ArrayList<>(mother.getLeftGenesSlice(l));
-            childGenes.addAll(father.getRightGenesSlice(k));
+            childGenes = new ArrayList<>(mother.getLeftGenesSlice(numOfMotherGenes));
+            childGenes.addAll(father.getRightGenesSlice(numOfFatherGenes));
         }
 
-        Genome childGenome = new Genome(isGenomeSequenceBackAndForth, minMutations, maxMutations, childGenes);
-        childGenome.mutate();
-        Animal child = new Animal(father.getPosition(), childGenome, 2 * reproduceCost, father, mother, energyToReproduce);
+        return childGenes;
+    }
 
-        child.updateFamilyTree();
+    private Animal createAnimal(Animal father, Animal mother, List<Integer> childGenes) {
+        Genome genome = new Genome(
+                config.genomeSequenceVariantBackAndForth(),
+                config.mutationsMinNum(),
+                config.mutationsMaxNum(),
+                childGenes
+        );
+        genome.mutate();
 
-        father.updateEnergy(-reproduceCost);
-        mother.updateEnergy(-reproduceCost);
+        return new Animal(
+                father.getPosition(),
+                genome,
+                2* config.animalsEnergyReproduceCost(),
+                father,
+                mother,
+                config.animalsEnergyToReproduce()
+        );
+    }
 
-        return child;
+    void updateFamilyTree(Animal animal) {
+        Set<Animal> visited = new HashSet<>();
+
+        animal.getMother().kidsNumberIncrement();
+        animal.getFather().kidsNumberIncrement();
+
+        familyTreeDFS(animal.getMother(), visited);
+        familyTreeDFS(animal.getFather(), visited);
+    }
+
+    private void familyTreeDFS(Animal animal, Set<Animal> visited) {
+        if (animal == null || visited.contains(animal)) {
+            return;
+        }
+        animal.descendantsNumberIncrement();
+        visited.add(animal);
+
+        familyTreeDFS(animal.getMother(), visited);
+        familyTreeDFS(animal.getFather(), visited);
     }
 }

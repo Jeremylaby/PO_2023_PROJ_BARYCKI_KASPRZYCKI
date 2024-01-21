@@ -38,18 +38,7 @@ public class Simulation implements Runnable {
         RandomPositionGenerator positionGenerator = new RandomPositionGenerator(c.mapWidth(), c.mapHeight(), c.animalsStartNum());
 
         for (Vector2d position : positionGenerator) {
-            Genome genome = new Genome(
-                    c.genomeSequenceVariantBackAndForth(),
-                    c.mutationsMinNum(),
-                    c.mutationsMaxNum(),
-                    c.genomeSize()
-            );
-            Animal animal = new Animal(
-                    position,
-                    genome,
-                    c.animalsStartEnergy(),
-                    c.animalsEnergyToReproduce()
-            );
+            Animal animal = animalFactory.createInitalAnimal(position);
             animals.add(animal);
             worldMap.place(animal);
         }

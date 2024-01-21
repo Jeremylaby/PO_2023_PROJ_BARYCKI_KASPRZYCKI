@@ -75,14 +75,6 @@ public class Genome {
         currentGeneIndex = (currentGeneIndex + 1) % genes.size();
     }
 
-    public boolean isBackAndForth() {
-        return isBackAndForth;
-    }
-
-    public int size() {
-        return genes.size();
-    }
-
     public List<Integer> getRightGenesSlice(int n) {
         return new ArrayList<>(genes.subList(genes.size() - n, genes.size()));
     }
@@ -101,14 +93,6 @@ public class Genome {
 
     public int getCurrentGene() {
         return genes.get(currentGeneIndex);
-    }
-
-    public int getMinMutations() {
-        return minMutations;
-    }
-
-    public int getMaxMutations() {
-        return maxMutations;
     }
 
     @Override
