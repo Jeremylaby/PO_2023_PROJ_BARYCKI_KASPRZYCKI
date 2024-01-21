@@ -3,23 +3,29 @@ package agh.ics.oop.model.map;
 import agh.ics.oop.model.Configuration;
 import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.model.elements.Animal;
+import agh.ics.oop.model.elements.AnimalFactory;
 import agh.ics.oop.model.elements.Plant;
 import agh.ics.oop.model.elements.WorldElement;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public abstract class AbstractWorldMap implements WorldMap {
-    protected final Map<Vector2d, Set<Animal>> animals;
+    private final Map<Vector2d, Set<Animal>> animals;
     protected final Map<Vector2d, Plant> plants;
     protected final Configuration config;
-    protected int sumOfSurvivedDays=0;
-    protected int sumOfDeadAnimals=0;
+    private final AnimalFactory animalFactory;
+    private int sumOfSurvivedDays=0;
+    private int sumOfDeadAnimals=0;
 
-    public AbstractWorldMap(Configuration configuration) {
+    public AbstractWorldMap(Configuration configuration, AnimalFactory animalFactory) {
         config = configuration;
+        this.animalFactory = animalFactory;
         animals = new ConcurrentHashMap<>(config.mapWidth()*config.mapHeight());
         plants = new ConcurrentHashMap<>(config.mapWidth()*config.mapHeight());
     }
@@ -30,12 +36,17 @@ public abstract class AbstractWorldMap implements WorldMap {
         plants.remove(position);
     }
 
-    private Optional<Animal> findStrongest(Set<Animal> animals) {
+    private Optional<Animal> findStrongestExcept(Set<Animal> animals, Animal exceptAnimal) {
         return animals.stream()
+                .filter(animal -> !Objects.equals(animal, exceptAnimal))
                 .max(Comparator
                         .comparingInt(Animal::getEnergy)
                         .thenComparing(Animal::getAge)
                         .thenComparing(Animal::getKidsNumber));
+    }
+
+    private Optional<Animal> findStrongest(Set<Animal> animals) {
+        return findStrongestExcept(animals, null);
     }
 
     public void place(Animal animal) {
@@ -96,13 +107,9 @@ public abstract class AbstractWorldMap implements WorldMap {
 
         for (Set<Animal> animalSet: animals.values()) {
             findStrongest(animalSet).ifPresent(father -> {
-                Set<Animal> restOfAnimals = animalSet.stream()
-                        .filter(animal -> animal != father)
-                        .collect(Collectors.toSet());
-
-                findStrongest(restOfAnimals).ifPresent(mother -> {
+                findStrongestExcept(animalSet, father).ifPresent(mother -> {
                     if (canAnimalReproduce(father) && canAnimalReproduce(mother)) {
-                        Animal child = father.makeChild(mother, config.animalsEnergyReproduceCost(), config.animalsEnergyToReproduce());
+                        Animal child = animalFactory.makeChild(father, mother);
                         place(child);
                         newborns.add(child);
                     }

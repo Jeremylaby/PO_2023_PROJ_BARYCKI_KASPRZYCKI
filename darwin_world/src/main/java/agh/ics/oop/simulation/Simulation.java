@@ -2,6 +2,7 @@ package agh.ics.oop.simulation;
 
 import agh.ics.oop.model.*;
 import agh.ics.oop.model.elements.Animal;
+import agh.ics.oop.model.elements.AnimalFactory;
 import agh.ics.oop.model.elements.Genome;
 import agh.ics.oop.model.map.EquatorMap;
 import agh.ics.oop.model.map.PoisonedMap;
@@ -15,6 +16,7 @@ public class Simulation implements Runnable {
     private final List<MapChangeListener> listeners = new ArrayList<>();
     private final Set<Animal> animals;
     private final WorldMap worldMap;
+    private final AnimalFactory animalFactory;
     private boolean paused = false;
     private boolean stopped = false;
     private int dayOfSimulation = 0;
@@ -22,10 +24,13 @@ public class Simulation implements Runnable {
     private final String directoryToSaveFile;
     private final UUID id = UUID.randomUUID();
 
-    public Simulation(Configuration config,String directoryToSave) {
-        worldMap = config.plantsGrowthVariantPoison() ? new PoisonedMap(config) : new EquatorMap(config);
+    public Simulation(Configuration config, String directoryToSave) {
         animals = new HashSet<>(config.animalsStartNum());
-        directoryToSaveFile=directoryToSave;
+        animalFactory = new AnimalFactory(config);
+        worldMap = config.plantsGrowthVariantPoison() ?
+                new PoisonedMap(config, animalFactory) :
+                new EquatorMap(config, animalFactory);
+        directoryToSaveFile = directoryToSave;
         generateAnimals(config);
     }
 
@@ -72,7 +77,7 @@ public class Simulation implements Runnable {
                 growPlants();
 
                 generateStatistics();
-                statistics.saveToFile(id, dayOfSimulation,directoryToSaveFile);
+//                statistics.saveToFile(id, dayOfSimulation,directoryToSaveFile);
 
                 mapChanged();
             }

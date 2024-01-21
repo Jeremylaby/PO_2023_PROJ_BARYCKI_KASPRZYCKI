@@ -45,7 +45,7 @@ public class Animal implements WorldElement {
         familyTreeDFS(animal.father, visited);
     }
 
-    private void updateFamilyTree() {
+    void updateFamilyTree() {
         Set<Animal> visited = new HashSet<>();
         mother.kidsNumber += 1;
         father.kidsNumber += 1;
@@ -75,7 +75,7 @@ public class Animal implements WorldElement {
         updateEnergy(foodEnergy);
     }
 
-    private void updateEnergy(int value) {
+    void updateEnergy(int value) {
         energy += value;
     }
 
@@ -92,39 +92,6 @@ public class Animal implements WorldElement {
             orientation = orientation.opposite();
             updatePosition(width, height, position.add(orientation.toUnitVector()));
         }
-    }
-
-    public Animal makeChild(Animal animal, int reproduceCost, int energyToReproduce) {
-        Animal father = this;
-        Animal mother = animal;
-
-        if (mother.getEnergy() > father.getEnergy()) {
-            mother = this;
-            father = animal;
-        }
-
-        int k = Math.round(genome.size() * ((float) father.getEnergy() / (father.getEnergy() + mother.getEnergy())));
-        int l = genome.size() - k;
-
-        List<Integer> childGenes;
-
-        if (RandomNumGenerator.randomInt(0, 1) == 0) {
-            childGenes = new ArrayList<>(father.genome.getLeftGenesSlice(k));
-            childGenes.addAll(mother.genome.getRightGenesSlice(l));
-        } else {
-            childGenes = new ArrayList<>(mother.genome.getLeftGenesSlice(l));
-            childGenes.addAll(father.genome.getRightGenesSlice(k));
-        }
-
-        Genome childGenome = new Genome(genome.isBackAndForth(), genome.getMinMutations(), genome.getMaxMutations(), childGenes);
-        childGenome.mutate();
-        Animal child = new Animal(position, childGenome, 2 * reproduceCost, father, mother, energyToReproduce);
-        child.updateFamilyTree();
-
-        father.updateEnergy(-reproduceCost);
-        mother.updateEnergy(-reproduceCost);
-
-        return child;
     }
 
     public void die(int day) {
@@ -157,6 +124,14 @@ public class Animal implements WorldElement {
 
     public List<Integer> getGenes() {
         return genome.getGenes();
+    }
+
+    List<Integer> getLeftGenesSlice(int numOfGenes) {
+        return genome.getLeftGenesSlice(numOfGenes);
+    }
+
+    List<Integer> getRightGenesSlice(int numOfGenes) {
+        return genome.getRightGenesSlice(numOfGenes);
     }
 
     @Override

@@ -2,6 +2,7 @@ package agh.ics.oop.model.map;
 
 import agh.ics.oop.model.Configuration;
 import agh.ics.oop.model.Vector2d;
+import agh.ics.oop.model.elements.AnimalFactory;
 import agh.ics.oop.model.elements.Plant;
 import agh.ics.oop.model.util.RandomNumGenerator;
 
@@ -14,8 +15,8 @@ public class EquatorMap extends AbstractWorldMap {
     private int equatorStart;
     private int equatorEnd;
 
-    public EquatorMap(Configuration config) {
-        super(config);
+    public EquatorMap(Configuration config, AnimalFactory animalFactory) {
+        super(config,animalFactory);
         generateEquator(config.mapHeight(), config.mapWidth());
         generatePlants(config.plantsStartNum());
     }

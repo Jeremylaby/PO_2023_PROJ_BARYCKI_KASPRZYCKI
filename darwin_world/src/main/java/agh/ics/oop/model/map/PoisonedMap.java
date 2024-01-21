@@ -3,6 +3,7 @@ package agh.ics.oop.model.map;
 import agh.ics.oop.model.Configuration;
 import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.model.elements.Animal;
+import agh.ics.oop.model.elements.AnimalFactory;
 import agh.ics.oop.model.elements.Plant;
 import agh.ics.oop.model.Boundary;
 import agh.ics.oop.model.util.RandomNumGenerator;
@@ -15,8 +16,8 @@ public class PoisonedMap extends AbstractWorldMap {
     private final Boundary poisonedArea;
     private final List<Vector2d> availablePositions;
 
-    public PoisonedMap(Configuration config) {
-        super(config);
+    public PoisonedMap(Configuration config, AnimalFactory animalFactory) {
+        super(config, animalFactory);
         poisonedArea = createPoisonedArea(config.mapWidth(), config.mapHeight());
         availablePositions = new ArrayList<>(config.mapWidth()*config.mapHeight());
         generatePositions(config.mapWidth(), config.mapHeight());
