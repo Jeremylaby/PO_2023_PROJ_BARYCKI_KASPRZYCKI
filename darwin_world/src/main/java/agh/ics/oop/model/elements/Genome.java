@@ -5,6 +5,7 @@ import agh.ics.oop.model.util.RandomNumGenerator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Genome {
     private static final int MIN_GENE = 0;
@@ -43,12 +44,12 @@ public class Genome {
                 genes.set(gene, RandomNumGenerator.randomIntWithoutK(MIN_GENE, MAX_GENE, genes.get(gene)));
             });
         } else {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("minMutations must be less than maxMutations");
         }
     }
 
     public int sequenceCurrentGene() {
-        int gene = genes.get(this.currentGeneIndex);
+        int gene = genes.get(currentGeneIndex);
         sequenceGenes();
         return gene;
     }
@@ -98,6 +99,10 @@ public class Genome {
         return currentGeneIndex;
     }
 
+    public int getCurrentGene() {
+        return genes.get(currentGeneIndex);
+    }
+
     public int getMinMutations() {
         return minMutations;
     }
@@ -108,6 +113,8 @@ public class Genome {
 
     @Override
     public String toString() {
-        return genes.toString();
+        return genes.stream()
+                .map(Object::toString)
+                .collect(Collectors.joining("", "[", "]"));
     }
 }

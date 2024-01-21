@@ -39,7 +39,12 @@ public class Simulation implements Runnable {
                     c.mutationsMaxNum(),
                     c.genomeSize()
             );
-            Animal animal = new Animal(position, genome, c.animalsStartEnergy());
+            Animal animal = new Animal(
+                    position,
+                    genome,
+                    c.animalsStartEnergy(),
+                    c.animalsEnergyToReproduce()
+            );
             animals.add(animal);
             worldMap.place(animal);
         }

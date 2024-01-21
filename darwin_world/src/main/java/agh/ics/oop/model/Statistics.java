@@ -137,34 +137,6 @@ public class Statistics {
         );
     }
 
-    public int getNumOfAnimals() {
-        return numOfAnimals;
-    }
-
-    public int getNumOfPlants() {
-        return numOfPlants;
-    }
-
-    public int getNumOfEmptyPos() {
-        return numOfEmptyPos;
-    }
-
-    public List<ListQuantity> getMostPopularGenes() {
-        return mostPopularGenes;
-    }
-
-    public double getAvgEnergy() {
-        return avgEnergy;
-    }
-
-    public double getAvgDaySurvived() {
-        return avgDaySurvived;
-    }
-
-    public int getAvgKidsNumber() {
-        return avgKidsNumber;
-    }
-
     @Override
     public String toString() {
         return "Statistics:" +'\n'+

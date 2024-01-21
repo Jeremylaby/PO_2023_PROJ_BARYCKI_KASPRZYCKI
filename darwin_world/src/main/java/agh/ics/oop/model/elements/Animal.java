@@ -14,23 +14,25 @@ public class Animal implements WorldElement {
     private int energy;
     private final Animal father;
     private final Animal mother;
+    private final AnimalColor color;
     private int kidsNumber = 0;
     private int descendantsNumber = 0;
     private int age = 0;
     private int dayOfDeath = 0;
     private int plantsEaten = 0;
 
-    public Animal(Vector2d position, Genome genome, int energy, Animal father, Animal mother) {
+    public Animal(Vector2d position, Genome genome, int energy, Animal father, Animal mother, int energyToReproduce) {
         this.position = position;
         this.genome = genome;
         this.energy = energy;
         this.father = father;
         this.mother = mother;
+        this.color = new AnimalColor(this, energyToReproduce);
         this.orientation = MapDirection.NORTH.rotate(RandomNumGenerator.randomInt(0, 7));
     }
 
-    public Animal(Vector2d position, Genome genome, int energy) {
-        this(position, genome, energy, null, null);
+    public Animal(Vector2d position, Genome genome, int energy, int energyToReproduce) {
+        this(position, genome, energy, null, null, energyToReproduce);
     }
 
     private void familyTreeDFS(Animal animal, Set<Animal> visited) {
@@ -92,7 +94,7 @@ public class Animal implements WorldElement {
         }
     }
 
-    public Animal makeChild(Animal animal, int reproduceCost) {//w założeniu wywyołujemy tą metodę jeśli wiemy że this jest silniejszy
+    public Animal makeChild(Animal animal, int reproduceCost, int energyToReproduce) {
         Animal father = this;
         Animal mother = animal;
 
@@ -116,7 +118,7 @@ public class Animal implements WorldElement {
 
         Genome childGenome = new Genome(genome.isBackAndForth(), genome.getMinMutations(), genome.getMaxMutations(), childGenes);
         childGenome.mutate();
-        Animal child = new Animal(position, childGenome, 2 * reproduceCost, father, mother);//todo
+        Animal child = new Animal(position, childGenome, 2 * reproduceCost, father, mother, energyToReproduce);
         child.updateFamilyTree();
 
         father.updateEnergy(-reproduceCost);
@@ -153,10 +155,6 @@ public class Animal implements WorldElement {
         return age;
     }
 
-    public int getDayOfDeath() {
-        return dayOfDeath;
-    }
-
     public List<Integer> getGenes() {
         return genome.getGenes();
     }
@@ -164,20 +162,20 @@ public class Animal implements WorldElement {
     @Override
     public String toString() {
         return "Animal:\n" +
-                "\tgenome:\n"+
-                "\t"+genome +"\n"+
-                "\tactive part of genome="+genome.getCurrentGeneIndex()+"\n"+
-                "\tenergy=" + energy +"\n"+
-                "\tkidsNumber=" + kidsNumber +"\n"+
-                "\tdescendantsNumber=" + descendantsNumber +"\n"+
-                "\tage=" + age +"\n"+
-                "\tdayOfDeath=" + dayOfDeath +"\n"+
-                "\tplantsEaten=" + plantsEaten+"\n";
+                "\tgenome: " + genome + "\n" +
+                "\tactive part of genome: " + genome.getCurrentGeneIndex() + "\n" +
+                "\tactive gene: " + genome.getCurrentGene() + "\n" +
+                "\tenergy: " + energy + "\n" +
+                "\tkids number: " + kidsNumber + "\n" +
+                "\tdescendants number: " + descendantsNumber + "\n" +
+                "\tage: " + age + "\n" +
+                "\tday of death: " + dayOfDeath + "\n" +
+                "\tplants eaten: " + plantsEaten + "\n";
     }
 
     @Override
     public Color getColor() {
-        return Color.hsb(30, Math.min(0.8, (double) energy / 100) + 0.2, 0.7);
+        return color.getColor();
     }
 
     @Override

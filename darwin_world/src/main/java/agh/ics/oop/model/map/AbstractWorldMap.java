@@ -102,7 +102,7 @@ public abstract class AbstractWorldMap implements WorldMap {
 
                 findStrongest(restOfAnimals).ifPresent(mother -> {
                     if (canAnimalReproduce(father) && canAnimalReproduce(mother)) {
-                        Animal child = father.makeChild(mother, config.animalsEnergyReproduceCost());
+                        Animal child = father.makeChild(mother, config.animalsEnergyReproduceCost(), config.animalsEnergyToReproduce());
                         place(child);
                         newborns.add(child);
                     }

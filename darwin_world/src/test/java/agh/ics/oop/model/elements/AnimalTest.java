@@ -18,7 +18,7 @@ class AnimalTest {
     void move() {
         List<Integer> genes = List.of(1, 1, 1, 1);
         Genome genome = new Genome(false, 0, 0, genes);
-        Animal animal = new Animal(new Vector2d(5, 5), genome, 100);
+        Animal animal = new Animal(new Vector2d(5, 5), genome, 100, 50);
 
         try {
             Field declaredField = Animal.class.getDeclaredField("orientation");
@@ -51,10 +51,10 @@ class AnimalTest {
     void makeChild() {
         Genome genome1 = new Genome(false, 0, 0, 10);
         Genome genome2 = new Genome(false, 0, 0, 10);
-        Animal animal1 = new Animal(new Vector2d(2, 2), genome1, 70);
-        Animal animal2 = new Animal(new Vector2d(2, 2), genome2, 30);
+        Animal animal1 = new Animal(new Vector2d(2, 2), genome1, 70, 50);
+        Animal animal2 = new Animal(new Vector2d(2, 2), genome2, 30, 50);
 
-        Animal animal3 = animal1.makeChild(animal2, 20);
+        Animal animal3 = animal1.makeChild(animal2, 20, 50);
 
         assertEquals(40, animal3.getEnergy());
         assertEquals(new Vector2d(2, 2), animal3.getPosition());
@@ -76,14 +76,14 @@ class AnimalTest {
     void updateFamilyTree() {
         Genome genome1 = new Genome(false, 0, 0, 10);
         Genome genome2 = new Genome(false, 0, 0, 10);
-        Animal animal1 = new Animal(new Vector2d(2, 2), genome1, 100);
-        Animal animal2 = new Animal(new Vector2d(2, 2), genome2, 100);
+        Animal animal1 = new Animal(new Vector2d(2, 2), genome1, 100, 50);
+        Animal animal2 = new Animal(new Vector2d(2, 2), genome2, 100, 50);
 
-        Animal animal3 = animal1.makeChild(animal2, 10);
-        Animal animal4 = animal1.makeChild(animal2, 10);
+        Animal animal3 = animal1.makeChild(animal2, 10, 50);
+        Animal animal4 = animal1.makeChild(animal2, 10, 50);
 
-        Animal animal5 = animal3.makeChild(animal4, 10);
-        Animal animal6 = animal3.makeChild(animal4, 10);
+        Animal animal5 = animal3.makeChild(animal4, 10, 50);
+        Animal animal6 = animal3.makeChild(animal4, 10, 50);
 
 
         assertEquals(2, animal1.getKidsNumber());
@@ -101,7 +101,7 @@ class AnimalTest {
     @Test
     void eat() {
         Genome genome = new Genome(false, 0, 0, 5);
-        Animal animal = new Animal(new Vector2d(5, 0), genome, 100);
+        Animal animal = new Animal(new Vector2d(5, 0), genome, 100, 50);
 
         animal.eat(20);
 
@@ -112,8 +112,8 @@ class AnimalTest {
     void updatePosition() {
         List<Integer> genes = List.of(0, 0, 0, 0, 0);
         Genome genome = new Genome(false, 0, 0, genes);
-        Animal animal1 = new Animal(new Vector2d(5, 0), genome, 100);
-        Animal animal2 = new Animal(new Vector2d(10, 4), genome, 100);
+        Animal animal1 = new Animal(new Vector2d(5, 0), genome, 100, 50);
+        Animal animal2 = new Animal(new Vector2d(10, 4), genome, 100, 50);
 
         try {
             Field declaredField = Animal.class.getDeclaredField("orientation");
