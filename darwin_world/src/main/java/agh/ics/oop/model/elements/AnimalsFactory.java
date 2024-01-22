@@ -9,10 +9,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class AnimalFactory {
+public class AnimalsFactory {
     private final Configuration config;
 
-    public AnimalFactory(Configuration config) {
+    public AnimalsFactory(Configuration config) {
         this.config = config;
     }
 

@@ -2,7 +2,7 @@ package agh.ics.oop.simulation;
 
 import agh.ics.oop.model.*;
 import agh.ics.oop.model.elements.Animal;
-import agh.ics.oop.model.elements.AnimalFactory;
+import agh.ics.oop.model.elements.AnimalsFactory;
 import agh.ics.oop.model.map.EquatorMap;
 import agh.ics.oop.model.map.PoisonedMap;
 import agh.ics.oop.model.map.WorldMap;
@@ -15,32 +15,36 @@ public class DarwinSimulation implements Simulation {
     private final List<MapChangeListener> listeners = new ArrayList<>();
     private final Set<Animal> animals;
     private final WorldMap worldMap;
-    private final AnimalFactory animalFactory;
     private boolean paused = false;
     private boolean stopped = false;
     private int dayOfSimulation = 0;
     private Statistics statistics;
-    private final String directoryToSaveFile;
+    private final String directoryToSaveStats;
     private final UUID id = UUID.randomUUID();
 
-    public DarwinSimulation(Configuration config, String directoryToSave) {
-        animals = new HashSet<>(config.animalsStartNum());
-        animalFactory = new AnimalFactory(config);
+    public DarwinSimulation(Configuration config, String directoryToSaveStats) {
+        this.directoryToSaveStats = directoryToSaveStats;
+
+        AnimalsFactory animalsFactory = new AnimalsFactory(config);
+
         worldMap = config.plantsGrowthVariantPoison() ?
-                new PoisonedMap(config, animalFactory) :
-                new EquatorMap(config, animalFactory);
-        directoryToSaveFile = directoryToSave;
-        generateAnimals(config);
+                new PoisonedMap(config, animalsFactory) :
+                new EquatorMap(config, animalsFactory);
+
+        animals = generateAnimals(config, animalsFactory, worldMap);
     }
 
-    private void generateAnimals(Configuration c) {
+    private Set<Animal> generateAnimals(Configuration c, AnimalsFactory animalsFactory, WorldMap map) {
+        Set<Animal> animalsSet = new HashSet<>(c.animalsStartNum());
         RandomPositionGenerator positionGenerator = new RandomPositionGenerator(c.mapWidth(), c.mapHeight(), c.animalsStartNum());
 
         for (Vector2d position : positionGenerator) {
-            Animal animal = animalFactory.createInitalAnimal(position);
-            animals.add(animal);
-            worldMap.place(animal);
+            Animal animal = animalsFactory.createInitalAnimal(position);
+            animalsSet.add(animal);
+            map.place(animal);
         }
+
+        return animalsSet;
     }
 
     @Override
@@ -68,7 +72,7 @@ public class DarwinSimulation implements Simulation {
                 growPlants();
 
                 generateStatistics();
-//                statistics.saveToFile(id, dayOfSimulation,directoryToSaveFile);
+                saveStatisticsToFile();
 
                 mapChanged();
             }
@@ -110,6 +114,12 @@ public class DarwinSimulation implements Simulation {
 
     private void generateStatistics() {
         this.statistics = new Statistics(worldMap);
+    }
+
+    private void saveStatisticsToFile() {
+        if (directoryToSaveStats != null) {
+            statistics.saveToFile(id, dayOfSimulation, directoryToSaveStats);
+        }
     }
 
     private void mapChanged() {

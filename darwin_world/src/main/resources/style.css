@@ -13,3 +13,7 @@ Spinner {
     -fx-pref-width: 220;
     -fx-pref-height: 50;
 }
+
+.folder-chosen {
+    -fx-text-fill: rgb(0, 100, 0);
+}

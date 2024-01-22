@@ -3,29 +3,25 @@ package agh.ics.oop.model.map;
 import agh.ics.oop.model.Configuration;
 import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.model.elements.Animal;
-import agh.ics.oop.model.elements.AnimalFactory;
+import agh.ics.oop.model.elements.AnimalsFactory;
 import agh.ics.oop.model.elements.Plant;
 import agh.ics.oop.model.elements.WorldElement;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public abstract class AbstractWorldMap implements WorldMap {
     private final Map<Vector2d, Set<Animal>> animals;
     protected final Map<Vector2d, Plant> plants;
     protected final Configuration config;
-    private final AnimalFactory animalFactory;
+    private final AnimalsFactory animalsFactory;
     private int sumOfSurvivedDays=0;
     private int sumOfDeadAnimals=0;
 
-    public AbstractWorldMap(Configuration configuration, AnimalFactory animalFactory) {
+    public AbstractWorldMap(Configuration configuration, AnimalsFactory animalsFactory) {
         config = configuration;
-        this.animalFactory = animalFactory;
+        this.animalsFactory = animalsFactory;
         animals = new ConcurrentHashMap<>(config.mapWidth()*config.mapHeight());
         plants = new ConcurrentHashMap<>(config.mapWidth()*config.mapHeight());
     }
@@ -109,7 +105,7 @@ public abstract class AbstractWorldMap implements WorldMap {
             findStrongest(animalSet).ifPresent(father -> {
                 findStrongestExcept(animalSet, father).ifPresent(mother -> {
                     if (canAnimalReproduce(father) && canAnimalReproduce(mother)) {
-                        Animal child = animalFactory.makeChild(father, mother);
+                        Animal child = animalsFactory.makeChild(father, mother);
                         place(child);
                         newborns.add(child);
                     }

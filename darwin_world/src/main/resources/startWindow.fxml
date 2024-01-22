@@ -131,12 +131,12 @@
                                 <padding>
                                     <Insets top="15" />
                                 </padding>
-                                <Button text="Zapisz" onAction="#onSimlationSaveToFile"/>
+                                <Button text="Zapisz" onAction="#onSimulationSaveToFile"/>
                             </VBox>
                         </VBox>
                         <VBox alignment="CENTER" minWidth="300" >
                             <Label text="Wybierz zapisaną Konfigurację" minHeight="50" />
-                            <ComboBox fx:id="savedConfigurations" minHeight="30" prefWidth="150"/>
+                            <ComboBox fx:id="savedConfigurations" minHeight="30" prefWidth="150" />
                         </VBox>
                         <VBox alignment="CENTER" minWidth="300">
                             <Label text="Wybierz folder do zapisu statystyk" minHeight="50" />

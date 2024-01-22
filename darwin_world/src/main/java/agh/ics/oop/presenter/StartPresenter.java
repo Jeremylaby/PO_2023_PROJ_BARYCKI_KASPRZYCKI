@@ -59,8 +59,7 @@ public class StartPresenter implements Initializable {
     @FXML
     private Button chooseDir;
     private static final String PATH_TO_CONFIG_FILE = "src/main/resources/configurations/configurations.json";
-    private static final String PATH_TO_STATS_FILE = "src/main/resources/statistics/";
-    private String directoryToSave = PATH_TO_STATS_FILE;
+    private String directoryToSave = null;
     private SimulationEngine engine;
 
     @Override
@@ -183,7 +182,7 @@ public class StartPresenter implements Initializable {
         }
     }
 
-    public void onSimlationSaveToFile() {
+    public void onSimulationSaveToFile() {
         String fileName = PATH_TO_CONFIG_FILE;
         Map<String, Configuration> configurations = loadConfigurationsFromFile();
         String configName = configurationName.getText();
@@ -195,7 +194,7 @@ public class StartPresenter implements Initializable {
             try {
                 ObjectMapper objectMapper = new ObjectMapper();
                 objectMapper.writeValue(new File(fileName), configurations);
-                showSuccesAlert(configName);
+                showSuccessAlert(configName);
                 System.out.println("Konfiguracje zapisane do pliku JSON ");
             } catch (Exception e) {
                 e.printStackTrace();
@@ -205,31 +204,30 @@ public class StartPresenter implements Initializable {
 
     }
 
-    private void showSuccesAlert(String name) {
+    private void showSuccessAlert(String name) {
         Alert informationAlert = new Alert(Alert.AlertType.INFORMATION);
         informationAlert.setTitle("Informacja");
         informationAlert.setHeaderText("OK");
-        informationAlert.setContentText("Konfiguracja o Nazwie: " + name + "\n Zosatala pomysnie zapisana do pliku JSON.");
+        informationAlert.setContentText("Konfiguracja o nazwie \"" + name + "\"\n Została pomyślnie zapisana do pliku JSON.");
         informationAlert.showAndWait();
     }
 
     private void showAlert(String name) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("INVALID NAME");
-        alert.setContentText("Konfiguracja o takiej nazwie:" + name + " juz istnieje");
+        alert.setContentText("Konfiguracja o nazwie \"" + name + "\" już istnieje");
         alert.showAndWait();
     }
 
     public void chooseDirectory() {
         DirectoryChooser directoryChooser = new DirectoryChooser();
-        directoryChooser.setTitle("Wybierz folder do zapisu pliku");
+        directoryChooser.setTitle("Wybierz folder do zapisu statystyk");
         File selectedDirectory = directoryChooser.showDialog(new Stage());
+
         if (selectedDirectory != null) {
             directoryToSave = selectedDirectory.getAbsolutePath().replace("\\","/")+"/";
-            System.out.println("Wybrany folder: " + directoryToSave);
-        } else {
-            System.out.println("Nie wybrano żadnego folderu.");
-            directoryToSave = PATH_TO_STATS_FILE;
+            chooseDir.setText("Wybrano folder: " + selectedDirectory.getName());
+            chooseDir.getStyleClass().add("folder-chosen");
         }
     }
 
