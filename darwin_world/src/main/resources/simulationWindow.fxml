@@ -7,29 +7,47 @@
 <?import javafx.scene.layout.*?>
 
 <?import java.net.URL?>
+<?import javafx.geometry.Insets?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="agh.ics.oop.presenter.SimulationPresenter"
-            prefHeight="650.0" prefWidth="900.0"
-            styleClass="border-pane">
+            prefHeight="700.0" prefWidth="1200.0">
     <stylesheets>
 <!--        <URL value="@style.css" />-->
     </stylesheets>
     <left>
-        <VBox >
-            <Label fx:id="dayOfSimulation"/>
-            <Label fx:id="statistics" />
-            <Label fx:id="animalLabel" visible="false"/>
-            <HBox alignment="CENTER"><Button fx:id="animalButton" text="unfollow" onAction="#stopFollow" visible="false"/></HBox>
-            <HBox alignment="CENTER"><Button fx:id="pauseResumeButton" text="pause" onAction="#onSimulationPauseClicked"/></HBox>
-        </VBox>
-    </left>
-    <center>
-        <HBox alignment="CENTER">
-            <VBox styleClass="centerBar">
-                <GridPane styleClass="grid-pane" fx:id="mapGrid" style="-fx-background-color: rgb(217,193,193)" />
+        <HBox >
+            <padding>
+                <Insets left="50" top="50" />
+            </padding>
+            <VBox style="-fx-font-size: 15" >
+                <Label fx:id="dayOfSimulation"/>
+                <Label fx:id="statistics" minHeight="250" />
+                <HBox alignment="CENTER">
+                    <padding>
+                        <Insets top="10" bottom="10" />
+                    </padding>
+                    <Button fx:id="pauseResumeButton" minHeight="40" minWidth="100" text="pause" onAction="#onSimulationPauseClicked" style="-fx-font-size: 18"/>
+                </HBox>
+                <Label fx:id="animalLabel" visible="false"/>
+                <HBox alignment="CENTER">
+                    <padding>
+                        <Insets top="10" bottom="10" />
+                    </padding>
+                    <Button fx:id="animalButton" minHeight="40" minWidth="100" text="unfollow" onAction="#stopFollow" visible="false" style="-fx-font-size: 18"/>
+                </HBox>
             </VBox>
         </HBox>
-    </center>
+    </left>
+    <right>
+        <HBox alignment="CENTER">
+            <padding>
+                <Insets right="50" />
+            </padding>
+            <VBox alignment="CENTER">
+                <GridPane fx:id="mapGrid" style="-fx-background-color: rgb(217,193,193)" />
+            </VBox>
+        </HBox>
+    </right>
 
 </BorderPane>

@@ -1,36 +1,15 @@
-.topBar{
-    -fx-alignment: center;
-    -fx-spacing: 10;
-    -fx-padding: 20;
-    -fx-start-margin: 100;
+Spinner {
+    -fx-pref-width: 120;
+    -fx-min-height: 35;
+}
 
-}
-.topBar Label{
-    -fx-text-fill: white;
-}
-.centerBar{
+.config-row {
     -fx-alignment: center;
-    -fx-spacing: 10;
+    -fx-min-height: 45;
 }
-#infoLabel{
-    -fx-text-fill: white;
-}
-.bottomBar{
-    -fx-spacing: 10;
-    -fx-alignment: center;
-}
-.bottomBar Label{
-    -fx-text-fill: white;
-}
-.border-pane{
-    -fx-background-color: #1f1f1f;
 
-}.border-pane bottom{
-    -fx-start-margin: 10;
- }
-#mapGrid Line{
-    -fx-stroke: #a4a2a2;
-}
-#mapGrid Label{
-    -fx-text-fill: white;
+.start-button {
+    -fx-font-size: 18;
+    -fx-pref-width: 220;
+    -fx-pref-height: 50;
 }
