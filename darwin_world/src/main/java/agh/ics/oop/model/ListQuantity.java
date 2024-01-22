@@ -12,6 +12,8 @@ public record ListQuantity(List<Integer> list,Integer quantity) {
     }
 
     public String getListString() {
-        return list.stream().map(Object::toString).collect(Collectors.joining("", "[", "]"));
+        return list.stream()
+                .map(Object::toString)
+                .collect(Collectors.joining("", "[", "]"));
     }
 }

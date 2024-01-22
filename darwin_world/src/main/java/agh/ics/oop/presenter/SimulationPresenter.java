@@ -5,7 +5,6 @@ import agh.ics.oop.model.elements.WorldElement;
 import agh.ics.oop.model.map.WorldMap;
 import agh.ics.oop.simulation.Simulation;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;

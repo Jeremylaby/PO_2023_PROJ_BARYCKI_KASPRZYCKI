@@ -18,7 +18,7 @@ public class RandomNumGenerator {
     }
 
     public static int randomIntWithoutK(int min, int max, int k) {
-        List<Integer> list = new ArrayList<>();
+        List<Integer> list = new ArrayList<>(max-min);
         for (int i = min; i <= max; i++) {
             if (i != k) {
                 list.add(i);

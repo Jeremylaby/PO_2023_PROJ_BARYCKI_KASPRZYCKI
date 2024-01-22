@@ -1,11 +1,11 @@
 package agh.ics.oop.presenter;
 
+import agh.ics.oop.simulation.DarwinSimulation;
 import agh.ics.oop.simulation.Simulation;
 import agh.ics.oop.simulation.SimulationEngine;
 import agh.ics.oop.model.Configuration;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -101,7 +101,7 @@ public class StartPresenter implements Initializable {
 
     private void startSimulationWithConfig(Configuration configuration) {
         try {
-            Simulation simulation = new Simulation(configuration, directoryToSave);
+            Simulation simulation = new DarwinSimulation(configuration, directoryToSave);
             startSimulation(simulation);
         } catch (Exception e) {
             e.printStackTrace();
