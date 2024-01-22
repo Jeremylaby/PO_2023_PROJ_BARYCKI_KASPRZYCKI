@@ -53,7 +53,7 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     private void displayDayOfSimulation() {
-        dayOfSimulation.setText("DAY: " + String.valueOf(simulation.getDayOfSimulation()));
+        dayOfSimulation.setText("DAY: " + simulation.getDayOfSimulation());
     }
 
     private void drawFollowedElement() {
@@ -67,13 +67,12 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     private void drawWorldElements() {
-        map.getElements().forEach((element) -> {
-            mapGrid.add(
-                    createGridCell(element),
-                    element.getPosition().x(),
-                    element.getPosition().y()
-            );
-        });
+        map.getElements().forEach(element ->
+                mapGrid.add(
+                        createGridCell(element),
+                        element.getPosition().x(),
+                        element.getPosition().y()
+                ));
     }
 
     private Node createGridCell(WorldElement element) {
@@ -82,12 +81,7 @@ public class SimulationPresenter implements MapChangeListener {
         if (element.isSelectable()) {
             elementBox.setOnMouseClicked(event -> {
                 selectedElement = element.equals(selectedElement) ? null : element;
-
-                if (selectedElement == null) {
-                    changeVisible(false);
-                } else {
-                    changeVisible(true);
-                }
+                changeAnimalInfoVisibility(selectedElement != null);
                 mapChanged(map, "");
             });
         }
@@ -115,12 +109,10 @@ public class SimulationPresenter implements MapChangeListener {
 
     public void stopFollow() {
         selectedElement = null;
-        changeVisible(false);
-
+        changeAnimalInfoVisibility(false);
     }
 
-    private void changeVisible(boolean flag) {
-        animalLabel.setVisible(flag);
+    private void changeAnimalInfoVisibility(boolean flag) {
         animalButton.setVisible(flag);
         if (!flag) {
             animalLabel.setText("");

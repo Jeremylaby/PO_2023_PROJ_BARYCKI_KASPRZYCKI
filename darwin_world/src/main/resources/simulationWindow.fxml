@@ -29,7 +29,7 @@
                     </padding>
                     <Button fx:id="pauseResumeButton" minHeight="40" minWidth="100" text="pause" onAction="#onSimulationPauseClicked" style="-fx-font-size: 18"/>
                 </HBox>
-                <Label fx:id="animalLabel" visible="false"/>
+                <Label fx:id="animalLabel"/>
                 <HBox alignment="CENTER">
                     <padding>
                         <Insets top="10" bottom="10" />

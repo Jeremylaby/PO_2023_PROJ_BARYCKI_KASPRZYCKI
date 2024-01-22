@@ -46,12 +46,12 @@
                         <HBox styleClass="config-row">
                             <Label text="Początkowa liczba roślin" />
                             <Region HBox.hgrow="ALWAYS" />
-                            <Spinner fx:id="plantsStartNum" min="0" max="100" initialValue="50" editable="true" />
+                            <Spinner fx:id="plantsStartNum" min="0" max="1000" initialValue="50" editable="true" />
                         </HBox>
                         <HBox styleClass="config-row">
                             <Label text="Wartość energii pojedynczej rośliny" />
                             <Region HBox.hgrow="ALWAYS" />
-                            <Spinner fx:id="plantsEnergyValue" min="0" max="100" initialValue="10" editable="true" />
+                            <Spinner fx:id="plantsEnergyValue" min="0" max="500" initialValue="10" editable="true" />
                         </HBox>
                         <HBox styleClass="config-row">
                             <Label text="Liczba roślin rosnących każdego dnia" />
@@ -76,22 +76,22 @@
                         <HBox styleClass="config-row">
                             <Label text="Początkowa liczba zwierząt" />
                             <Region HBox.hgrow="ALWAYS" />
-                            <Spinner fx:id="animalsStartNum" min="0" max="100" initialValue="15" />
+                            <Spinner fx:id="animalsStartNum" min="0" max="1000" initialValue="15" />
                         </HBox>
                         <HBox styleClass="config-row">
                             <Label text="Początkowa energia zwierząt" />
                             <Region HBox.hgrow="ALWAYS" />
-                            <Spinner fx:id="animalsStartEnergy" min="0" max="100" initialValue="30" editable="true" />
+                            <Spinner fx:id="animalsStartEnergy" min="0" max="1000" initialValue="30" editable="true" />
                         </HBox>
                         <HBox styleClass="config-row">
                             <Label text="Energia zwierzęcia wymagana do reprodukcji" />
                             <Region HBox.hgrow="ALWAYS" />
-                            <Spinner fx:id="animalsEnergyToReproduce" min="0" max="100" initialValue="50" editable="true" />
+                            <Spinner fx:id="animalsEnergyToReproduce" min="0" max="500" initialValue="50" editable="true" />
                         </HBox>
                         <HBox styleClass="config-row">
                             <Label text="Koszt reprodukcji zwierzęcia" />
                             <Region HBox.hgrow="ALWAYS" />
-                            <Spinner fx:id="animalsEnergyReproduceCost" min="0" max="100" initialValue="10" editable="true" />
+                            <Spinner fx:id="animalsEnergyReproduceCost" min="0" max="500" initialValue="10" editable="true" />
                         </HBox>
                         <HBox styleClass="config-row">
                             <Label text="Minimalna liczba mutujących genów" />
@@ -106,7 +106,7 @@
                         <HBox styleClass="config-row">
                             <Label text="Długość genomu zwierzęcia" />
                             <Region HBox.hgrow="ALWAYS" />
-                            <Spinner fx:id="genomeSize" min="0" max="100" initialValue="20" editable="true" />
+                            <Spinner fx:id="genomeSize" min="0" max="100" initialValue="10" editable="true" />
                         </HBox>
                         <HBox styleClass="config-row" style="-fx-min-height: 80">
                             <Label text="Wariant sekwencjonowania genów" />
