@@ -76,7 +76,7 @@
                         <HBox styleClass="config-row">
                             <Label text="Początkowa liczba zwierząt" />
                             <Region HBox.hgrow="ALWAYS" />
-                            <Spinner fx:id="animalsStartNum" min="0" max="1000" initialValue="15" />
+                            <Spinner fx:id="animalsStartNum" min="0" max="1000" initialValue="15" editable="true" />
                         </HBox>
                         <HBox styleClass="config-row">
                             <Label text="Początkowa energia zwierząt" />
@@ -131,7 +131,7 @@
                                 <padding>
                                     <Insets top="15" />
                                 </padding>
-                                <Button text="Zapisz" onAction="#onSimulationSaveToFile"/>
+                                <Button text="Zapisz" onAction="#onConfigurationSaveToFile"/>
                             </VBox>
                         </VBox>
                         <VBox alignment="CENTER" minWidth="300" >
@@ -140,7 +140,7 @@
                         </VBox>
                         <VBox alignment="CENTER" minWidth="300">
                             <Label text="Wybierz folder do zapisu statystyk" minHeight="50" />
-                            <Button fx:id="chooseDir" text="Wybierz Folder" onAction="#chooseDirectory" />
+                            <Button fx:id="chooseDirectoryForStats" text="Wybierz Folder" onAction="#chooseDirectory" />
                         </VBox>
                     </HBox>
                 </bottom>

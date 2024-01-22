@@ -4,8 +4,6 @@ import agh.ics.oop.simulation.DarwinSimulation;
 import agh.ics.oop.simulation.Simulation;
 import agh.ics.oop.simulation.SimulationEngine;
 import agh.ics.oop.model.Configuration;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -19,8 +17,6 @@ import javafx.util.converter.IntegerStringConverter;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 public class StartPresenter implements Initializable {
@@ -57,8 +53,7 @@ public class StartPresenter implements Initializable {
     @FXML
     private ComboBox<String> savedConfigurations;
     @FXML
-    private Button chooseDir;
-    private static final String PATH_TO_CONFIG_FILE = "src/main/resources/configurations/configurations.json";
+    private Button chooseDirectoryForStats;
     private String directoryToSave = null;
     private SimulationEngine engine;
 
@@ -94,7 +89,7 @@ public class StartPresenter implements Initializable {
         if (savedConfigurations.getValue() == null) {
             startSimulationWithConfig(getConfiguration());
         } else {
-            startSimulationWithConfig(loadConfigurationsFromFile().get(savedConfigurations.getValue()));
+            startSimulationWithConfig(ConfigurationLoader.loadConfiguration(savedConfigurations.getValue()));
         }
     }
 
@@ -146,7 +141,7 @@ public class StartPresenter implements Initializable {
 
     private void updateComboBox() {
         savedConfigurations.getItems().clear();
-        savedConfigurations.getItems().addAll(loadConfigurationsFromFile().keySet());
+        savedConfigurations.getItems().addAll(ConfigurationLoader.loadConfigurationsNames());
     }
 
     private static void configureStage(BorderPane viewRoot, Stage stage) {
@@ -165,41 +160,15 @@ public class StartPresenter implements Initializable {
         }
     }
 
-    private static Map<String, Configuration> loadConfigurationsFromFile() {
-
+    public void onConfigurationSaveToFile() {
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            File file = new File(PATH_TO_CONFIG_FILE);
-            if (file.exists()) {
-                return objectMapper.readValue(file, new TypeReference<Map<String, Configuration>>() {
-                });
-            } else {
-                return new HashMap<>();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new HashMap<>();
-        }
-    }
-
-    public void onSimulationSaveToFile() {
-        String fileName = PATH_TO_CONFIG_FILE;
-        Map<String, Configuration> configurations = loadConfigurationsFromFile();
-        String configName = configurationName.getText();
-        if (configurations.containsKey(configName)) {
-            showAlert(configName);
-            System.out.println("Konfiguracja o takiej nazwie istnieje");
-        } else {
-            configurations.put(configName, getConfiguration());
-            try {
-                ObjectMapper objectMapper = new ObjectMapper();
-                objectMapper.writeValue(new File(fileName), configurations);
-                showSuccessAlert(configName);
-                System.out.println("Konfiguracje zapisane do pliku JSON ");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            ConfigurationLoader.saveToFile(configurationName.getText(), getConfiguration());
+            showSuccessAlert(configurationName.getText());
             updateComboBox();
+        } catch (ConfigurationAlreadyExistsException e) {
+            showErrorAlert(e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
     }
@@ -212,10 +181,10 @@ public class StartPresenter implements Initializable {
         informationAlert.showAndWait();
     }
 
-    private void showAlert(String name) {
+    private void showErrorAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("INVALID NAME");
-        alert.setContentText("Konfiguracja o nazwie \"" + name + "\" już istnieje");
+        alert.setContentText(message);
         alert.showAndWait();
     }
 
@@ -226,8 +195,8 @@ public class StartPresenter implements Initializable {
 
         if (selectedDirectory != null) {
             directoryToSave = selectedDirectory.getAbsolutePath().replace("\\","/")+"/";
-            chooseDir.setText("Wybrano folder: " + selectedDirectory.getName());
-            chooseDir.getStyleClass().add("folder-chosen");
+            chooseDirectoryForStats.setText("Wybrano folder: " + selectedDirectory.getName());
+            chooseDirectoryForStats.getStyleClass().add("folder-chosen");
         }
     }
 
