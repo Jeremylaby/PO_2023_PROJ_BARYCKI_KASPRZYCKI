@@ -121,7 +121,7 @@ public class DarwinSimulation implements Simulation {
     }
 
     private void mapChanged() {
-        listeners.forEach(listener -> listener.mapChanged(worldMap, ""));
+        listeners.forEach(listener -> listener.mapChanged(worldMap));
     }
 
     @Override

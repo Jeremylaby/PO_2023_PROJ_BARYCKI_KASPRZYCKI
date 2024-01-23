@@ -155,7 +155,7 @@ public class Animal implements WorldElement {
     }
 
     @Override
-    public boolean hasDominatingGenome(List<Integer> dominatingGenes){
+    public boolean hasDominatingGenes(List<Integer> dominatingGenes){
         return this.genome.getGenes().equals(dominatingGenes);
     }
 }

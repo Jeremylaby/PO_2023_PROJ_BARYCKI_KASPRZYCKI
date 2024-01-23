@@ -10,7 +10,7 @@ public interface WorldElement {
 
     Color getColor();
 
-    default boolean hasDominatingGenome(List<Integer> dominatingGenes) {
+    default boolean hasDominatingGenes(List<Integer> dominatingGenes) {
         return false;
     }
 

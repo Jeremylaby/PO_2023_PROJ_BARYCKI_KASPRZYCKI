@@ -32,7 +32,7 @@ public class SimulationPresenter implements MapChangeListener {
     private WorldElement selectedElement;
 
     @Override
-    public void mapChanged(WorldMap worldMap, String message) {
+    public void mapChanged(WorldMap worldMap) {
         Platform.runLater(this::drawMap);
     }
 
@@ -88,18 +88,18 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     private Node createGridCell(WorldElement element) {
-        VBox elementBox = new WorldElementBox(
+        Node elementBox = new WorldElementBox(
                 element,
                 cellSize,
                 element.equals(selectedElement),
-                simulation.getMostPopularGenes()
+                element.hasDominatingGenes(simulation.getMostPopularGenes())
         ).getFxElement();
 
         if (element.isSelectable()) {
             elementBox.setOnMouseClicked(event -> {
                 selectedElement = element.equals(selectedElement) ? null : element;
                 changeAnimalInfoVisibility(selectedElement != null);
-                mapChanged(map, "");
+                mapChanged(map);
             });
         }
 
@@ -127,11 +127,12 @@ public class SimulationPresenter implements MapChangeListener {
     public void stopFollow() {
         selectedElement = null;
         changeAnimalInfoVisibility(false);
+        mapChanged(map);
     }
 
-    private void changeAnimalInfoVisibility(boolean flag) {
-        animalButton.setVisible(flag);
-        if (!flag) {
+    private void changeAnimalInfoVisibility(boolean isVisible) {
+        animalButton.setVisible(isVisible);
+        if (!isVisible) {
             animalLabel.setText("");
         }
     }
