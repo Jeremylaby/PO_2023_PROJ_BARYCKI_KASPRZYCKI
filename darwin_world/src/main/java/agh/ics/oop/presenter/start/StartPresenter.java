@@ -28,6 +28,7 @@ public class StartPresenter implements Initializable {
     private RadioButton genomeSequenceVariantBackAndForth;
     @FXML
     private RadioButton genomeSequenceVariantCycle;
+
     @FXML
     private Spinner<Integer> mapWidth;
     @FXML
@@ -52,13 +53,17 @@ public class StartPresenter implements Initializable {
     private Spinner<Integer> mutationsMaxNum;
     @FXML
     private Spinner<Integer> genomeSize;
+
     @FXML
     private TextField configurationName;
+    @FXML
+    private TextField statsFileName;
+
     @FXML
     private ComboBox<String> savedConfigurations;
     @FXML
     private Button chooseDirectoryForStats;
-    private String directoryToSave = null;
+    private String filePathToSaveStats = null;
     private SimulationEngine engine;
 
     @Override
@@ -100,7 +105,7 @@ public class StartPresenter implements Initializable {
     @FXML
     private void onSimulationStartClicked() {
         try {
-            Simulation simulation = new DarwinSimulation(getConfiguration(), directoryToSave);
+            Simulation simulation = new DarwinSimulation(getConfiguration(), filePathToSaveStats);
             startSimulation(simulation);
         } catch (IllegalConfigurationValueException e) {
             AlertDisplay.showErrorAlert("Niepoprawna Wartość!", e.getMessage());
@@ -111,6 +116,11 @@ public class StartPresenter implements Initializable {
 
     @FXML
     public void onConfigurationSaveClicked() {
+        if (configurationName.getText().isBlank()) {
+            AlertDisplay.showErrorAlert("Niepoprawna Wartość!", "Niepoprawna nazwa dla konfiguracji");
+            return;
+        }
+
         try {
             ConfigurationLoader.saveToFile(configurationName.getText(), getConfiguration());
             AlertDisplay.showSuccessAlert(
@@ -123,17 +133,22 @@ public class StartPresenter implements Initializable {
         } catch (IOException e) {
             AlertDisplay.showErrorAlert("Coś poszło nie tak!", e.getMessage());
         }
-
     }
 
     @FXML
     private void onChooseDirectoryClicked() {
+        if (statsFileName.getText().isBlank()) {
+            AlertDisplay.showErrorAlert("Niepoprawna Wartość", "Podaj nazwę pliku dla statystyk");
+            return;
+        }
+
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Wybierz folder do zapisu statystyk");
         File selectedDirectory = directoryChooser.showDialog(new Stage());
 
         if (selectedDirectory != null) {
-            directoryToSave = selectedDirectory.getAbsolutePath().replace("\\","/")+"/";
+            String directory = selectedDirectory.getAbsolutePath().replace("\\","/");
+            filePathToSaveStats = directory + "/" + statsFileName.getText();
             chooseDirectoryForStats.setText("Wybrano folder: " + selectedDirectory.getName());
             chooseDirectoryForStats.getStyleClass().add("folder-chosen");
         }

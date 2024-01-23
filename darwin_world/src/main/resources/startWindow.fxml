@@ -140,7 +140,13 @@
                         </VBox>
                         <VBox alignment="CENTER" minWidth="300">
                             <Label text="Wybierz folder do zapisu statystyk" minHeight="50" />
-                            <Button fx:id="chooseDirectoryForStats" text="Wybierz Folder" onAction="#onChooseDirectoryClicked" />
+                            <TextField fx:id="statsFileName" promptText="nazwa pliku dla statystyk" minHeight="30"/>
+                            <VBox alignment="CENTER">
+                                <padding>
+                                    <Insets top="15" />
+                                </padding>
+                                <Button fx:id="chooseDirectoryForStats" text="Wybierz Folder" onAction="#onChooseDirectoryClicked" />
+                            </VBox>
                         </VBox>
                     </HBox>
                 </bottom>

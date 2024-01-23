@@ -20,11 +20,10 @@ public class DarwinSimulation implements Simulation {
     private boolean stopped = false;
     private int dayOfSimulation = 0;
     private Statistics statistics;
-    private final String directoryToSaveStats;
-    private final UUID id = UUID.randomUUID();
+    private final String filePathToSaveStats;
 
-    public DarwinSimulation(Configuration config, String directoryToSaveStats) {
-        this.directoryToSaveStats = directoryToSaveStats;
+    public DarwinSimulation(Configuration config, String filePathToSaveStats) {
+        this.filePathToSaveStats = filePathToSaveStats;
 
         AnimalsFactory animalsFactory = new AnimalsFactory(config);
 
@@ -118,8 +117,8 @@ public class DarwinSimulation implements Simulation {
     }
 
     private void saveStatisticsToFile() {
-        if (directoryToSaveStats != null) {
-            statistics.saveToFile(id, dayOfSimulation, directoryToSaveStats);
+        if (filePathToSaveStats != null) {
+            statistics.saveToFile(dayOfSimulation, filePathToSaveStats);
         }
     }
 
