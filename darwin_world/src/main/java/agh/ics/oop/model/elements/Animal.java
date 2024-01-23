@@ -153,4 +153,7 @@ public class Animal implements WorldElement {
     public boolean isSelectable() {
         return true;
     }
+    public boolean isdominating(List<Integer> list){
+        return this.genome.getGenes().equals(list);
+    }
 }

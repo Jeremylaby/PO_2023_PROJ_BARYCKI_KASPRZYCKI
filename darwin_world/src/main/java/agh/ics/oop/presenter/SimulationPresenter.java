@@ -76,7 +76,7 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     private Node createGridCell(WorldElement element) {
-        VBox elementBox = new WorldElementBox(element, cellSize, element.equals(selectedElement)).getFxElement();
+        VBox elementBox = new WorldElementBox(element, cellSize, element.equals(selectedElement),simulation.getStatistics().getMostPopularGene()).getFxElement();
 
         if (element.isSelectable()) {
             elementBox.setOnMouseClicked(event -> {
