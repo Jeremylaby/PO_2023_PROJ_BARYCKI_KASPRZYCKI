@@ -46,21 +46,21 @@ public class EquatorMap extends AbstractWorldMap {
             boolean plantOnEquator = Math.random() < PLANT_ON_EQUATOR_PROBABILITY;
 
             if (!availableEquatorPositions.isEmpty() && plantOnEquator) {
-                addPlantFrom(availableEquatorPositions);
+                addPlantFrom(availableEquatorPositions,true);
             } else if (!availableWastelandPositions.isEmpty()) {
-                addPlantFrom(availableWastelandPositions);
+                addPlantFrom(availableWastelandPositions,false);
             }
         }
     }
 
-    private void addPlantFrom(List<Vector2d> availablePositions) {
+    private void addPlantFrom(List<Vector2d> availablePositions,boolean isEquator) {
         int lastIndex = availablePositions.size() - 1;
         int index = RandomNumGenerator.randomInt(0, lastIndex);
 
         Collections.swap(availablePositions, index, lastIndex);
 
         Vector2d position = availablePositions.get(lastIndex);
-        plants.put(position, new Plant(position));
+        plants.put(position, new Plant(position,false,isEquator));
         availablePositions.remove(lastIndex);
     }
 
