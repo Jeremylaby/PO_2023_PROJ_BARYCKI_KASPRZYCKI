@@ -1,6 +1,6 @@
 package agh.ics.oop;
 
-import agh.ics.oop.presenter.StartPresenter;
+import agh.ics.oop.presenter.start.StartPresenter;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -22,8 +22,6 @@ public class SimulationApp extends Application {
     }
 
     private void configureStage(Stage primaryStage, BorderPane viewRoot) {
-//        Image icon = new Image("/images/pig.png");
-//        primaryStage.getIcons().add(icon);
         var scene = new Scene(viewRoot);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Simulation app");

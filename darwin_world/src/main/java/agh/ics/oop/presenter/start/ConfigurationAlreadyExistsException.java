@@ -1,4 +1,4 @@
-package agh.ics.oop.presenter;
+package agh.ics.oop.presenter.start;
 
 public class ConfigurationAlreadyExistsException extends Exception {
     public ConfigurationAlreadyExistsException(String configurationName) {

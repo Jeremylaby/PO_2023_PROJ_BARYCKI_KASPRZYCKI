@@ -1,4 +1,4 @@
-package agh.ics.oop.presenter;
+package agh.ics.oop.presenter.start;
 
 import agh.ics.oop.model.configuration.Configuration;
 import com.fasterxml.jackson.core.type.TypeReference;

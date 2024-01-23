@@ -19,7 +19,7 @@
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             minHeight="750.0" minWidth="1200.0"
-            fx:controller="agh.ics.oop.presenter.StartPresenter">
+            fx:controller="agh.ics.oop.presenter.start.StartPresenter">
     <stylesheets>
         <URL value="@style.css"/>
     </stylesheets>
@@ -131,7 +131,7 @@
                                 <padding>
                                     <Insets top="15" />
                                 </padding>
-                                <Button text="Zapisz" onAction="#onConfigurationSaveToFile"/>
+                                <Button text="Zapisz" onAction="#onConfigurationSaveClicked"/>
                             </VBox>
                         </VBox>
                         <VBox alignment="CENTER" minWidth="300" >
@@ -140,7 +140,7 @@
                         </VBox>
                         <VBox alignment="CENTER" minWidth="300">
                             <Label text="Wybierz folder do zapisu statystyk" minHeight="50" />
-                            <Button fx:id="chooseDirectoryForStats" text="Wybierz Folder" onAction="#chooseDirectory" />
+                            <Button fx:id="chooseDirectoryForStats" text="Wybierz Folder" onAction="#onChooseDirectoryClicked" />
                         </VBox>
                     </HBox>
                 </bottom>

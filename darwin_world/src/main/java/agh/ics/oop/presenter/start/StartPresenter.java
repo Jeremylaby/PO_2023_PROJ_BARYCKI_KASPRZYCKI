@@ -1,16 +1,15 @@
-package agh.ics.oop.presenter;
+package agh.ics.oop.presenter.start;
 
 import agh.ics.oop.model.configuration.IllegalConfigurationValueException;
+import agh.ics.oop.presenter.AlertDisplay;
+import agh.ics.oop.presenter.simulation.SimulationPresenter;
 import agh.ics.oop.simulation.DarwinSimulation;
 import agh.ics.oop.simulation.Simulation;
 import agh.ics.oop.simulation.SimulationEngine;
 import agh.ics.oop.model.configuration.Configuration;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import javafx.util.converter.IntegerStringConverter;
@@ -66,8 +65,8 @@ public class StartPresenter implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         engine = new SimulationEngine();
         attachTextFormatters();
-        updateComboBox();
         attachSavedConfigurationListener();
+        updateComboBox();
     }
 
     private void attachTextFormatters() {
@@ -98,20 +97,56 @@ public class StartPresenter implements Initializable {
         spinner.getEditor().setTextFormatter(formatter);
     }
 
+    @FXML
+    private void onSimulationStartClicked() {
+        try {
+            Simulation simulation = new DarwinSimulation(getConfiguration(), directoryToSave);
+            startSimulation(simulation);
+        } catch (IllegalConfigurationValueException e) {
+            AlertDisplay.showErrorAlert("Niepoprawna Wartość!", e.getMessage());
+        } catch (IOException e) {
+            AlertDisplay.showErrorAlert("Coś poszło nie tak!", e.getMessage());
+        }
+    }
+
+    @FXML
+    public void onConfigurationSaveClicked() {
+        try {
+            ConfigurationLoader.saveToFile(configurationName.getText(), getConfiguration());
+            AlertDisplay.showSuccessAlert(
+                    "Konfiguracja o nazwie \"%s\"\n Została pomyślnie zapisana."
+                            .formatted(configurationName.getText())
+            );
+            updateComboBox();
+        } catch (ConfigurationAlreadyExistsException | IllegalConfigurationValueException e) {
+            AlertDisplay.showErrorAlert("Niepoprawna Wartość!", e.getMessage());
+        } catch (IOException e) {
+            AlertDisplay.showErrorAlert("Coś poszło nie tak!", e.getMessage());
+        }
+
+    }
+
+    @FXML
+    private void onChooseDirectoryClicked() {
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle("Wybierz folder do zapisu statystyk");
+        File selectedDirectory = directoryChooser.showDialog(new Stage());
+
+        if (selectedDirectory != null) {
+            directoryToSave = selectedDirectory.getAbsolutePath().replace("\\","/")+"/";
+            chooseDirectoryForStats.setText("Wybrano folder: " + selectedDirectory.getName());
+            chooseDirectoryForStats.getStyleClass().add("folder-chosen");
+        }
+    }
+
     private void loadConfiguration(String configName) {
         Configuration config = ConfigurationLoader.loadConfiguration(configName);
 
-        if (config.genomeSequenceVariantBackAndForth()) {
-            genomeSequenceVariantBackAndForth.setSelected(true);
-        } else {
-            genomeSequenceVariantCycle.setSelected(true);
-        }
+        genomeSequenceVariantBackAndForth.setSelected(config.genomeSequenceVariantBackAndForth());
+        genomeSequenceVariantCycle.setSelected(!config.genomeSequenceVariantBackAndForth());
 
-        if (config.plantsGrowthVariantPoison()) {
-            plantsGrowthVariantPoison.setSelected(true);
-        } else {
-            plantsGrowthVariantEquator.setSelected(true);
-        }
+        plantsGrowthVariantPoison.setSelected(config.plantsGrowthVariantPoison());
+        plantsGrowthVariantEquator.setSelected(!config.plantsGrowthVariantPoison());
 
         setSpinnerValue(mapWidth, config.mapWidth());
         setSpinnerValue(mapHeight, config.mapHeight());
@@ -129,17 +164,6 @@ public class StartPresenter implements Initializable {
 
     private void setSpinnerValue(Spinner<Integer> spinner, int value) {
         spinner.getValueFactory().setValue(value);
-    }
-
-    public void onSimulationStartClicked() {
-        try {
-            Simulation simulation = new DarwinSimulation(getConfiguration(), directoryToSave);
-            startSimulation(simulation);
-        } catch (IllegalConfigurationValueException e) {
-            showErrorAlert(e.getMessage());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private Configuration getConfiguration() throws IllegalConfigurationValueException {
@@ -162,21 +186,10 @@ public class StartPresenter implements Initializable {
     }
 
     private void startSimulation(Simulation simulation) throws IOException {
-        SimulationPresenter presenter = createSimulationWindow(simulation);
+        SimulationPresenter presenter = WindowFactory.createSimulationWindow(simulation);
         presenter.setSimulation(simulation);
         simulation.addListener(presenter);
         engine.runSimulation(simulation);
-    }
-
-    private SimulationPresenter createSimulationWindow(Simulation simulation) throws IOException {
-        Stage stage = new Stage();
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("simulationWindow.fxml"));
-        BorderPane viewRoot = loader.load();
-        SimulationPresenter presenter = loader.getController();
-        configureStage(viewRoot, stage);
-        stage.setOnCloseRequest(event -> simulation.stop());
-        stage.show();
-        return presenter;
     }
 
     private void updateComboBox() {
@@ -184,59 +197,11 @@ public class StartPresenter implements Initializable {
         savedConfigurations.getItems().addAll(ConfigurationLoader.loadConfigurationsNames());
     }
 
-    private static void configureStage(BorderPane viewRoot, Stage stage) {
-//        Image icon = new Image("/images/pig2.png");
-//        newStage.getIcons().add(icon);
-        Scene scene = new Scene(viewRoot);
-        stage.setScene(scene);
-        stage.setTitle("Simulation Window");
-    }
-
     public void shutdown() {
         try {
             engine.shutdown();
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
-    }
-
-    public void onConfigurationSaveToFile() {
-        try {
-            ConfigurationLoader.saveToFile(configurationName.getText(), getConfiguration());
-            showSuccessAlert(configurationName.getText());
-            updateComboBox();
-        } catch (ConfigurationAlreadyExistsException | IllegalConfigurationValueException e) {
-            showErrorAlert(e.getMessage());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    private void showSuccessAlert(String name) {
-        Alert informationAlert = new Alert(Alert.AlertType.INFORMATION);
-        informationAlert.setTitle("Informacja");
-        informationAlert.setHeaderText("OK");
-        informationAlert.setContentText("Konfiguracja o nazwie \"" + name + "\"\n Została pomyślnie zapisana do pliku JSON.");
-        informationAlert.showAndWait();
-    }
-
-    private void showErrorAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("NIEPOPRAWNA WARTOŚĆ");
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
-    public void chooseDirectory() {
-        DirectoryChooser directoryChooser = new DirectoryChooser();
-        directoryChooser.setTitle("Wybierz folder do zapisu statystyk");
-        File selectedDirectory = directoryChooser.showDialog(new Stage());
-
-        if (selectedDirectory != null) {
-            directoryToSave = selectedDirectory.getAbsolutePath().replace("\\","/")+"/";
-            chooseDirectoryForStats.setText("Wybrano folder: " + selectedDirectory.getName());
-            chooseDirectoryForStats.getStyleClass().add("folder-chosen");
         }
     }
 

@@ -1,4 +1,4 @@
-package agh.ics.oop.presenter;
+package agh.ics.oop.presenter.simulation;
 
 import agh.ics.oop.model.elements.WorldElement;
 import javafx.geometry.Pos;
