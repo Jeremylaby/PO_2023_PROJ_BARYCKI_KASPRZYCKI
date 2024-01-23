@@ -13,7 +13,7 @@ public class WorldElementBox {
     private final VBox fxElement;
 
     public WorldElementBox(WorldElement element, double size, boolean isSelected, List<Integer> genes) {
-        fxElement = createFxElement(getLabel(element.getColor(), size, isSelected,element.isdominating(genes)));
+        fxElement = createFxElement(getLabel(element.getColor(), size, isSelected,element.hasDominatingGenome(genes)));
         if (element.isSelectable()) {
             fxElement.setUserData(element.getPosition());
         }

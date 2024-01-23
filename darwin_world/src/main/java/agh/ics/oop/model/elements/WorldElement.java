@@ -10,6 +10,11 @@ public interface WorldElement {
 
     Color getColor();
 
-    boolean isSelectable();
-    boolean isdominating(List<Integer> list);
+    default boolean hasDominatingGenome(List<Integer> list) {
+        return false;
+    }
+
+    default boolean isSelectable() {
+        return false;
+    }
 }

@@ -3,6 +3,7 @@ package agh.ics.oop.model.map;
 import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.model.elements.Animal;
 import agh.ics.oop.model.elements.Plant;
+import agh.ics.oop.model.elements.PreferredPosition;
 import agh.ics.oop.model.elements.WorldElement;
 
 import java.util.*;
@@ -18,6 +19,10 @@ public interface WorldMap {
     Optional<Set<Animal>> animalsAt(Vector2d position);
 
     Stream<WorldElement> getElements();
+
+    default Stream<PreferredPosition> getPreferredPlantPositions() {
+        return Stream.empty();
+    };
 
     int getWidth();
 

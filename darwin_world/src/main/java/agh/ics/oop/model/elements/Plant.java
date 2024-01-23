@@ -13,16 +13,18 @@ public class Plant implements WorldElement {
     private final boolean isPoisonous;
     private final boolean isEquator;
 
-    public Plant(Vector2d position, boolean isPoisonous,boolean isEquator) {
+    public Plant(Vector2d position, boolean isPoisonous, boolean isEquator) {
         this.position = position;
         this.isPoisonous = isPoisonous;
-        this.isEquator=isEquator;
+        this.isEquator = isEquator;
     }
+
     public Plant(Vector2d position, boolean isPoisonous) {
-        this(position,isPoisonous,false);
+        this(position, isPoisonous, false);
     }
-    public Plant(Vector2d position){
-        this(position,false,false);
+
+    public Plant(Vector2d position) {
+        this(position, false, false);
     }
 
     public boolean isPoisonous() {
@@ -42,13 +44,5 @@ public class Plant implements WorldElement {
     @Override
     public Color getColor() {
         return isPoisonous ? POISONED_PLANT_COLOR : isEquator ? EQUATOR_PLANT_COLOR : STANDARD_PLANT_COLOR ;
-    }
-
-    @Override
-    public boolean isSelectable() {
-        return false;
-    }
-    public boolean isdominating(List<Integer> list){
-        return false;
     }
 }

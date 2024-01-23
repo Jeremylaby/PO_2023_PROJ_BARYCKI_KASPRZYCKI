@@ -47,19 +47,31 @@ public class SimulationPresenter implements MapChangeListener {
     public void drawMap() {
         clearGrid();
         statistics.setText(simulation.getStatistics().toString());
+        drawPreferredPlantPositions();
         drawFollowedElement();
         displayDayOfSimulation();
         drawWorldElements();
     }
 
-    private void displayDayOfSimulation() {
-        dayOfSimulation.setText("DAY: " + simulation.getDayOfSimulation());
+    private void drawPreferredPlantPositions() {
+        synchronized (map.getPreferredPlantPositions()) {
+            map.getPreferredPlantPositions().forEach(element ->
+                    mapGrid.add(
+                            createGridCell(element),
+                            element.getPosition().x(),
+                            element.getPosition().y()
+                    ));
+        }
     }
 
     private void drawFollowedElement() {
         if (selectedElement != null) {
             animalLabel.setText(selectedElement.toString());
         }
+    }
+
+    private void displayDayOfSimulation() {
+        dayOfSimulation.setText("DAY: " + simulation.getDayOfSimulation());
     }
 
     private void clearGrid() {
