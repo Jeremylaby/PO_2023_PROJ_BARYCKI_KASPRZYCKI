@@ -20,10 +20,10 @@ public class DarwinSimulation implements Simulation {
     private boolean stopped = false;
     private int dayOfSimulation = 0;
     private Statistics statistics;
-    private final String filePathToSaveStats;
+    private final StatisticsCsvWriter statsWriter;
 
     public DarwinSimulation(Configuration config, String filePathToSaveStats) {
-        this.filePathToSaveStats = filePathToSaveStats;
+        statsWriter = new StatisticsCsvWriter(filePathToSaveStats);
 
         AnimalsFactory animalsFactory = new AnimalsFactory(config);
 
@@ -117,9 +117,7 @@ public class DarwinSimulation implements Simulation {
     }
 
     private void saveStatisticsToFile() {
-        if (filePathToSaveStats != null) {
-            statistics.saveToFile(dayOfSimulation, filePathToSaveStats);
-        }
+        statsWriter.saveToFile(dayOfSimulation, statistics);
     }
 
     private void mapChanged() {

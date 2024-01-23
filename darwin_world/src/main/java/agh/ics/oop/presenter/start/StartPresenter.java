@@ -106,6 +106,7 @@ public class StartPresenter implements Initializable {
     private void onSimulationStartClicked() {
         try {
             Simulation simulation = new DarwinSimulation(getConfiguration(), filePathToSaveStats);
+            resetDirectoryChoice();
             startSimulation(simulation);
         } catch (IllegalConfigurationValueException e) {
             AlertDisplay.showErrorAlert("Niepoprawna Wartość!", e.getMessage());
@@ -152,6 +153,13 @@ public class StartPresenter implements Initializable {
             chooseDirectoryForStats.setText("Wybrano folder: " + selectedDirectory.getName());
             chooseDirectoryForStats.getStyleClass().add("folder-chosen");
         }
+    }
+
+    private void resetDirectoryChoice() {
+        statsFileName.setText("");
+        filePathToSaveStats = null;
+        chooseDirectoryForStats.getStyleClass().remove("folder-chosen");
+        chooseDirectoryForStats.setText("Wybierz folder");
     }
 
     private void loadConfiguration(String configName) {

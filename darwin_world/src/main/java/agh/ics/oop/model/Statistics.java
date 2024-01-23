@@ -84,59 +84,6 @@ public class Statistics {
         return numOfAllPositions - numOfOccupiedPositions;
     }
 
-    private String formatMostPopularGenes(){
-        StringBuilder genesBuilder = new StringBuilder();
-        for (ListQuantity gene : mostPopularGenes) {
-            genesBuilder
-                    .append(gene.getListString())
-                    .append(":")
-                    .append(gene.quantity())
-                    .append(";");
-        }
-        if (!genesBuilder.isEmpty()) {
-            genesBuilder.deleteCharAt(genesBuilder.length() - 1);
-        }
-
-        return genesBuilder.toString();
-    }
-
-    public void saveToFile(int day, String filePath) {
-        String filename = filePath + ".csv";
-        boolean isNewFile = !Files.exists(Paths.get(filename));
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
-            if (isNewFile) {
-                String firstLine = "numOfDay;" +
-                        "numOfAnimals;" +
-                        "numOfPlants;" +
-                        "numOfEmptyPos;" +
-                        "avgKidsNumber;" +
-                        "avgEnergy;" +
-                        "avgDaySurvived;" +
-                        "mostPopularGenes Top " + TOP_GENES_SHOW_NUMBER;
-                writer.write(firstLine);
-                writer.newLine();
-            }
-            String line = toCSV(day);
-            writer.write(line);
-            writer.newLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public String toCSV(int day){
-        return String.format("%d;%d;%d;%d;%d;%f;%f;%s",
-                day,
-                numOfAnimals,
-                numOfPlants,
-                numOfEmptyPos,
-                avgKidsNumber,
-                avgEnergy,
-                avgDaySurvived,
-                formatMostPopularGenes()
-        );
-    }
-
     @Override
     public String toString() {
         return "Statistics:" +'\n'+
@@ -157,5 +104,33 @@ public class Statistics {
 
     public List<Integer> getMostPopularGenes(){
         return mostPopularGenes.get(0).list();
+    }
+
+    public List<ListQuantity> getMostPopularGenesList() {
+        return Collections.unmodifiableList(mostPopularGenes);
+    }
+
+    public int getNumOfAnimals() {
+        return numOfAnimals;
+    }
+
+    public int getNumOfPlants() {
+        return numOfPlants;
+    }
+
+    public int getNumOfEmptyPos() {
+        return numOfEmptyPos;
+    }
+
+    public double getAvgEnergy() {
+        return avgEnergy;
+    }
+
+    public double getAvgDaySurvived() {
+        return avgDaySurvived;
+    }
+
+    public int getAvgKidsNumber() {
+        return avgKidsNumber;
     }
 }
