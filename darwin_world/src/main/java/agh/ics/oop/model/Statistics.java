@@ -154,9 +154,8 @@ public class Statistics {
                 .mapToObj(i -> "%d:  %s".formatted(i+1, mostPopularGenes.get(i)))
                 .collect(Collectors.joining("\t\t", "\t\t", ""));
     }
-    public List<Integer> getMostPopularGene(){
+
+    public List<Integer> getMostPopularGenes(){
         return mostPopularGenes.get(0).list();
     }
-
-
 }

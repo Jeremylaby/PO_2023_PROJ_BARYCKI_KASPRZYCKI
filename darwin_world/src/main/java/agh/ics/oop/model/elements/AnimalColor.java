@@ -18,6 +18,6 @@ public class AnimalColor {
     }
 
     private double getSaturation() {
-        return Math.min(1, Math.max((double) animal.getEnergy() / (1.5 * energyToReproduce), 0) + 0.2);
+        return Math.min(1, Math.max((double) animal.getEnergy() / (1.5 * energyToReproduce), 0) + 0.1);
     }
 }

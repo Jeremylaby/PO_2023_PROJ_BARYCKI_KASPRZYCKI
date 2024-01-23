@@ -148,6 +148,11 @@ public class DarwinSimulation implements Simulation {
     }
 
     @Override
+    public List<Integer> getMostPopularGenes() {
+        return statistics.getMostPopularGenes();
+    }
+
+    @Override
     public int getDayOfSimulation() {
         return dayOfSimulation;
     }

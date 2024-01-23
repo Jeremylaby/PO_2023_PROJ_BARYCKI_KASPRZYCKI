@@ -153,7 +153,9 @@ public class Animal implements WorldElement {
     public boolean isSelectable() {
         return true;
     }
-    public boolean hasDominatingGenome(List<Integer> list){
-        return this.genome.getGenes().equals(list);
+
+    @Override
+    public boolean hasDominatingGenome(List<Integer> dominatingGenes){
+        return this.genome.getGenes().equals(dominatingGenes);
     }
 }

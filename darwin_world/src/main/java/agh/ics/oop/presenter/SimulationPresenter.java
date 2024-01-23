@@ -53,6 +53,10 @@ public class SimulationPresenter implements MapChangeListener {
         drawWorldElements();
     }
 
+    private void clearGrid() {
+        mapGrid.getChildren().clear();
+    }
+
     private void drawPreferredPlantPositions() {
         synchronized (map.getPreferredPlantPositions()) {
             map.getPreferredPlantPositions().forEach(element ->
@@ -74,10 +78,6 @@ public class SimulationPresenter implements MapChangeListener {
         dayOfSimulation.setText("DAY: " + simulation.getDayOfSimulation());
     }
 
-    private void clearGrid() {
-        mapGrid.getChildren().clear();
-    }
-
     private void drawWorldElements() {
         map.getElements().forEach(element ->
                 mapGrid.add(
@@ -88,7 +88,12 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     private Node createGridCell(WorldElement element) {
-        VBox elementBox = new WorldElementBox(element, cellSize, element.equals(selectedElement),simulation.getStatistics().getMostPopularGene()).getFxElement();
+        VBox elementBox = new WorldElementBox(
+                element,
+                cellSize,
+                element.equals(selectedElement),
+                simulation.getMostPopularGenes()
+        ).getFxElement();
 
         if (element.isSelectable()) {
             elementBox.setOnMouseClicked(event -> {

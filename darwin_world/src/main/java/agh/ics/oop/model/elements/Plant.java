@@ -43,6 +43,8 @@ public class Plant implements WorldElement {
 
     @Override
     public Color getColor() {
-        return isPoisonous ? POISONED_PLANT_COLOR : isEquator ? EQUATOR_PLANT_COLOR : STANDARD_PLANT_COLOR ;
+        if (isPoisonous) return POISONED_PLANT_COLOR;
+        if (isEquator) return EQUATOR_PLANT_COLOR;
+        return STANDARD_PLANT_COLOR;
     }
 }
