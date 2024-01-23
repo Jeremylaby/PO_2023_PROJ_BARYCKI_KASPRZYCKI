@@ -65,7 +65,7 @@
                                 <fx:define>
                                     <ToggleGroup fx:id="plantsGrowthVariant"/>
                                 </fx:define>
-                                <RadioButton text="zalesione równiki" toggleGroup="$plantsGrowthVariant" minHeight="30" selected="true" />
+                                <RadioButton fx:id="plantsGrowthVariantEquator" text="zalesione równiki" toggleGroup="$plantsGrowthVariant" minHeight="30" selected="true" />
                                 <RadioButton fx:id="plantsGrowthVariantPoison" text="zatrute owoce" toggleGroup="$plantsGrowthVariant" minHeight="30" />
                             </VBox>
                         </HBox>
@@ -86,12 +86,12 @@
                         <HBox styleClass="config-row">
                             <Label text="Energia zwierzęcia wymagana do reprodukcji" />
                             <Region HBox.hgrow="ALWAYS" />
-                            <Spinner fx:id="animalsEnergyToReproduce" min="0" max="500" initialValue="50" editable="true" />
+                            <Spinner fx:id="animalsEnergyToReproduce" min="2" max="500" initialValue="50" editable="true" />
                         </HBox>
                         <HBox styleClass="config-row">
                             <Label text="Koszt reprodukcji zwierzęcia" />
                             <Region HBox.hgrow="ALWAYS" />
-                            <Spinner fx:id="animalsEnergyReproduceCost" min="0" max="500" initialValue="10" editable="true" />
+                            <Spinner fx:id="animalsEnergyReproduceCost" min="1" max="500" initialValue="10" editable="true" />
                         </HBox>
                         <HBox styleClass="config-row">
                             <Label text="Minimalna liczba mutujących genów" />
@@ -115,7 +115,7 @@
                                 <fx:define>
                                     <ToggleGroup fx:id="genomeSequenceVariant"/>
                                 </fx:define>
-                                <RadioButton text="pełna predestynacja" toggleGroup="$genomeSequenceVariant" minHeight="30" selected="true" />
+                                <RadioButton fx:id="genomeSequenceVariantCycle" text="pełna predestynacja" toggleGroup="$genomeSequenceVariant" minHeight="30" selected="true" />
                                 <RadioButton fx:id="genomeSequenceVariantBackAndForth" text="tam i z powrotem" toggleGroup="$genomeSequenceVariant" minHeight="30" />
                             </VBox>
                         </HBox>

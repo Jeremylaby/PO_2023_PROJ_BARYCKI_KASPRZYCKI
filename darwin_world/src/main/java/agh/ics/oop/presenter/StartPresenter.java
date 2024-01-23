@@ -1,9 +1,10 @@
 package agh.ics.oop.presenter;
 
+import agh.ics.oop.model.configuration.IllegalConfigurationValueException;
 import agh.ics.oop.simulation.DarwinSimulation;
 import agh.ics.oop.simulation.Simulation;
 import agh.ics.oop.simulation.SimulationEngine;
-import agh.ics.oop.model.Configuration;
+import agh.ics.oop.model.configuration.Configuration;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -23,7 +24,11 @@ public class StartPresenter implements Initializable {
     @FXML
     private RadioButton plantsGrowthVariantPoison;
     @FXML
+    private RadioButton plantsGrowthVariantEquator;
+    @FXML
     private RadioButton genomeSequenceVariantBackAndForth;
+    @FXML
+    private RadioButton genomeSequenceVariantCycle;
     @FXML
     private Spinner<Integer> mapWidth;
     @FXML
@@ -62,6 +67,7 @@ public class StartPresenter implements Initializable {
         engine = new SimulationEngine();
         attachTextFormatters();
         updateComboBox();
+        attachSavedConfigurationListener();
     }
 
     private void attachTextFormatters() {
@@ -79,49 +85,83 @@ public class StartPresenter implements Initializable {
         attachFormatter(genomeSize);
     }
 
+    private void attachSavedConfigurationListener() {
+        savedConfigurations
+                .getSelectionModel()
+                .selectedItemProperty()
+                .addListener((options, oldValue, newValue) -> loadConfiguration(newValue));
+    }
+
     private void attachFormatter(Spinner<Integer> spinner) {
         IntegerStringConverter converter = new IntegerStringConverter();
         TextFormatter<Integer> formatter = new TextFormatter<>(converter, spinner.getValue());
         spinner.getEditor().setTextFormatter(formatter);
     }
 
-    public void onSimulationStartClicked() {
-        if (savedConfigurations.getValue() == null) {
-            startSimulationWithConfig(getConfiguration());
+    private void loadConfiguration(String configName) {
+        Configuration config = ConfigurationLoader.loadConfiguration(configName);
+
+        if (config.genomeSequenceVariantBackAndForth()) {
+            genomeSequenceVariantBackAndForth.setSelected(true);
         } else {
-            startSimulationWithConfig(ConfigurationLoader.loadConfiguration(savedConfigurations.getValue()));
+            genomeSequenceVariantCycle.setSelected(true);
         }
+
+        if (config.plantsGrowthVariantPoison()) {
+            plantsGrowthVariantPoison.setSelected(true);
+        } else {
+            plantsGrowthVariantEquator.setSelected(true);
+        }
+
+        setSpinnerValue(mapWidth, config.mapWidth());
+        setSpinnerValue(mapHeight, config.mapHeight());
+        setSpinnerValue(plantsStartNum, config.plantsStartNum());
+        setSpinnerValue(plantsEnergyValue, config.plantsEnergyValue());
+        setSpinnerValue(plantsNumPerDay, config.plantsNumPerDay());
+        setSpinnerValue(animalsStartNum, config.animalsStartNum());
+        setSpinnerValue(animalsStartEnergy, config.animalsStartEnergy());
+        setSpinnerValue(animalsEnergyToReproduce, config.animalsEnergyToReproduce());
+        setSpinnerValue(animalsEnergyReproduceCost, config.animalsEnergyReproduceCost());
+        setSpinnerValue(mutationsMinNum, config.mutationsMinNum());
+        setSpinnerValue(mutationsMaxNum, config.mutationsMaxNum());
+        setSpinnerValue(genomeSize, config.genomeSize());
     }
 
-    private void startSimulationWithConfig(Configuration configuration) {
+    private void setSpinnerValue(Spinner<Integer> spinner, int value) {
+        spinner.getValueFactory().setValue(value);
+    }
+
+    public void onSimulationStartClicked() {
         try {
-            Simulation simulation = new DarwinSimulation(configuration, directoryToSave);
+            Simulation simulation = new DarwinSimulation(getConfiguration(), directoryToSave);
             startSimulation(simulation);
-        } catch (Exception e) {
+        } catch (IllegalConfigurationValueException e) {
+            showErrorAlert(e.getMessage());
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private Configuration getConfiguration() {
-        return new Configuration(
-                mapWidth.getValue(),
-                mapHeight.getValue(),
-                plantsStartNum.getValue(),
-                plantsEnergyValue.getValue(),
-                plantsNumPerDay.getValue(),
-                plantsGrowthVariantPoison.isSelected(),
-                animalsStartNum.getValue(),
-                animalsStartEnergy.getValue(),
-                animalsEnergyToReproduce.getValue(),
-                animalsEnergyReproduceCost.getValue(),
-                mutationsMinNum.getValue(),
-                mutationsMaxNum.getValue(),
-                genomeSize.getValue(),
-                genomeSequenceVariantBackAndForth.isSelected()
-        );
+    private Configuration getConfiguration() throws IllegalConfigurationValueException {
+        return new Configuration.Builder()
+                .setMapWidth(mapWidth.getValue())
+                .setMapHeight(mapHeight.getValue())
+                .setPlantsStartNum(plantsStartNum.getValue())
+                .setPlantsEnergyValue(plantsEnergyValue.getValue())
+                .setPlantsNumPerDay(plantsNumPerDay.getValue())
+                .setPlantsGrowthVariantPoison(plantsGrowthVariantPoison.isSelected())
+                .setAnimalsStartNum(animalsStartNum.getValue())
+                .setAnimalsStartEnergy(animalsStartEnergy.getValue())
+                .setAnimalsEnergyToReproduce(animalsEnergyToReproduce.getValue())
+                .setAnimalsEnergyReproduceCost(animalsEnergyReproduceCost.getValue())
+                .setMutationsMinNum(mutationsMinNum.getValue())
+                .setMutationsMaxNum(mutationsMaxNum.getValue())
+                .setGenomeSize(genomeSize.getValue())
+                .setGenomeSequenceVariantBackAndForth(genomeSequenceVariantBackAndForth.isSelected())
+                .build();
     }
 
-    private void startSimulation(Simulation simulation) throws Exception {
+    private void startSimulation(Simulation simulation) throws IOException {
         SimulationPresenter presenter = createSimulationWindow(simulation);
         presenter.setSimulation(simulation);
         simulation.addListener(presenter);
@@ -165,7 +205,7 @@ public class StartPresenter implements Initializable {
             ConfigurationLoader.saveToFile(configurationName.getText(), getConfiguration());
             showSuccessAlert(configurationName.getText());
             updateComboBox();
-        } catch (ConfigurationAlreadyExistsException e) {
+        } catch (ConfigurationAlreadyExistsException | IllegalConfigurationValueException e) {
             showErrorAlert(e.getMessage());
         } catch (IOException e) {
             e.printStackTrace();
@@ -183,7 +223,7 @@ public class StartPresenter implements Initializable {
 
     private void showErrorAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("INVALID NAME");
+        alert.setTitle("NIEPOPRAWNA WARTOŚĆ");
         alert.setContentText(message);
         alert.showAndWait();
     }

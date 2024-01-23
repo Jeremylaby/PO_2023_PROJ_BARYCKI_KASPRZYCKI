@@ -1,6 +1,6 @@
 package agh.ics.oop.model.elements;
 
-import agh.ics.oop.model.Configuration;
+import agh.ics.oop.model.configuration.Configuration;
 import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.model.util.RandomNumGenerator;
 

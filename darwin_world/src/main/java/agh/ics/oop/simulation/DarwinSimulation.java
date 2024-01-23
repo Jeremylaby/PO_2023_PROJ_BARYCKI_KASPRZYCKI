@@ -1,6 +1,7 @@
 package agh.ics.oop.simulation;
 
 import agh.ics.oop.model.*;
+import agh.ics.oop.model.configuration.Configuration;
 import agh.ics.oop.model.elements.Animal;
 import agh.ics.oop.model.elements.AnimalsFactory;
 import agh.ics.oop.model.map.EquatorMap;

@@ -1,6 +1,6 @@
 package agh.ics.oop.presenter;
 
-import agh.ics.oop.model.Configuration;
+import agh.ics.oop.model.configuration.Configuration;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
