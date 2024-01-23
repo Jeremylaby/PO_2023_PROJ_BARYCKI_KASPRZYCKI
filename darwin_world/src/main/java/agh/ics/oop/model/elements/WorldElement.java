@@ -8,5 +8,7 @@ public interface WorldElement {
 
     Color getColor();
 
-    boolean isSelectable();
+    default boolean isSelectable() {
+        return false;
+    }
 }

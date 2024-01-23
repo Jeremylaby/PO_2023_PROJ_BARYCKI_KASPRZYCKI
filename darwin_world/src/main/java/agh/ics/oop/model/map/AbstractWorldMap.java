@@ -135,7 +135,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     @Override
     public Stream<WorldElement> getElements() {
         return Stream.concat(
-                plants.values().stream().filter(plant -> !animals.containsKey(plant.getPosition())),
+                plants.values().stream().filter(plant -> !isAnimal(plant.getPosition())),
                 animals.values().stream().map(this::findStrongest).map(Optional::get)
         );
     }

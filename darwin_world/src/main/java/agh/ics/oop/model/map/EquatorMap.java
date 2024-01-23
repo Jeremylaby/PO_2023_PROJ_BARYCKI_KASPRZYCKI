@@ -4,9 +4,11 @@ import agh.ics.oop.model.Configuration;
 import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.model.elements.AnimalsFactory;
 import agh.ics.oop.model.elements.Plant;
+import agh.ics.oop.model.elements.PreferredPosition;
 import agh.ics.oop.model.util.RandomNumGenerator;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 public class EquatorMap extends AbstractWorldMap {
     public static final double PLANT_ON_EQUATOR_PROBABILITY = 0.8;
@@ -26,7 +28,7 @@ public class EquatorMap extends AbstractWorldMap {
         equatorStart = Math.round((float) (height - numOfRows) / 2);
         equatorEnd = equatorStart + numOfRows - 1;
 
-        availableEquatorPositions = new ArrayList<>(numOfRows * width);
+        availableEquatorPositions = Collections.synchronizedList(new ArrayList<>(numOfRows * width));
         availableWastelandPositions = new ArrayList<>((height - numOfRows) * width);
 
         for (int y = 0; y < height; y++) {
@@ -72,5 +74,12 @@ public class EquatorMap extends AbstractWorldMap {
             availableWastelandPositions.add(position);
         }
         super.removePlant(position);
+    }
+
+    @Override
+    public Stream<PreferredPosition> getPreferredPlantPositions() {
+        synchronized (availableEquatorPositions) {
+            return availableEquatorPositions.stream().map(PreferredPosition::new);
+        }
     }
 }

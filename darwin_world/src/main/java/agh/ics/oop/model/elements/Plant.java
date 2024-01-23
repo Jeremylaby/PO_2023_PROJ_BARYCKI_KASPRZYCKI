@@ -36,9 +36,4 @@ public class Plant implements WorldElement {
     public Color getColor() {
         return isPoisonous ? POISONED_PLANT_COLOR : STANDARD_PLANT_COLOR;
     }
-
-    @Override
-    public boolean isSelectable() {
-        return false;
-    }
 }
