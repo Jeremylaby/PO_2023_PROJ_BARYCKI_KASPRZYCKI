@@ -39,7 +39,7 @@ public class DarwinSimulation implements Simulation {
         RandomPositionGenerator positionGenerator = new RandomPositionGenerator(c.mapWidth(), c.mapHeight(), c.animalsStartNum());
 
         for (Vector2d position : positionGenerator) {
-            Animal animal = animalsFactory.createInitalAnimal(position);
+            Animal animal = animalsFactory.createInitialAnimal(position);
             animalsSet.add(animal);
             map.place(animal);
         }

@@ -13,8 +13,8 @@ class GenomeTest {
 
     @Test
     void sequenceCurrentGene() {
-        List<Integer> genes = List.of(1, 2, 3, 4, 5);
-        Genome genome = new Genome(false, 0, 0, genes);
+        var genes = List.of(1, 2, 3, 4, 5);
+        var genome = new Genome(false, 0, 0, genes);
         int index = genome.getCurrentGeneIndex();
 
         int gene1 = genome.sequenceCurrentGene();
@@ -27,11 +27,11 @@ class GenomeTest {
 
     @Test
     void sequenceCurrentGeneBackAndForth() throws NoSuchFieldException, IllegalAccessException {
-        List<Integer> genes = List.of(1, 2, 3, 4, 5);
-        Genome genome = new Genome(true, 0, 0, genes);
+        var genes = List.of(1, 2, 3, 4, 5);
+        var genome = new Genome(true, 0, 0, genes);
         int index = 3;
 
-        Field geneIndexField = genome.getClass().getDeclaredField("currentGeneIndex");
+        var geneIndexField = genome.getClass().getDeclaredField("currentGeneIndex");
         geneIndexField.setAccessible(true);
         geneIndexField.setInt(genome, index);
 
@@ -46,11 +46,11 @@ class GenomeTest {
 
     @Test
     void getRightGenesSlice() {
-        List<Integer> genes = List.of(1, 2, 3, 4, 5, 6);
-        Genome genome = new Genome(true, 0, 0, genes);
+        var genes = List.of(1, 2, 3, 4, 5, 6);
+        var genome = new Genome(true, 0, 0, genes);
 
-        List<Integer> rightGenesSlice1 = genome.getRightGenesSlice(3);
-        List<Integer> rightGenesSlice2 = genome.getRightGenesSlice(4);
+        var rightGenesSlice1 = genome.getRightGenesSlice(3);
+        var rightGenesSlice2 = genome.getRightGenesSlice(4);
 
         assertEquals(List.of(4, 5, 6), rightGenesSlice1);
         assertEquals(List.of(3, 4, 5, 6), rightGenesSlice2);
@@ -58,11 +58,11 @@ class GenomeTest {
 
     @Test
     void getLeftGenesSlice() {
-        List<Integer> genes = List.of(1, 2, 3, 4, 5, 6);
-        Genome genome = new Genome(true, 0, 0, genes);
+        var genes = List.of(1, 2, 3, 4, 5, 6);
+        var genome = new Genome(true, 0, 0, genes);
 
-        List<Integer> leftGenesSlice1 = genome.getLeftGenesSlice(3);
-        List<Integer> leftGenesSlice2 = genome.getLeftGenesSlice(4);
+        var leftGenesSlice1 = genome.getLeftGenesSlice(3);
+        var leftGenesSlice2 = genome.getLeftGenesSlice(4);
 
         assertEquals(List.of(1, 2, 3), leftGenesSlice1);
         assertEquals(List.of(1, 2, 3, 4), leftGenesSlice2);
@@ -70,8 +70,8 @@ class GenomeTest {
 
     @Test
     void mutate() {
-        List<Integer> genes = List.of(1, 2, 3, 4, 5, 6);
-        Genome genome = new Genome(true, 2, 4, new ArrayList<>(genes));
+        var genes = List.of(1, 2, 3, 4, 5, 6);
+        var genome = new Genome(true, 2, 4, new ArrayList<>(genes));
 
         genome.mutate();
 

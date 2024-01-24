@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Genome {
-    private static final int MIN_GENE = 0;
-    private static final int MAX_GENE = 7;
+    public static final int MIN_GENE = 0;
+    public static final int MAX_GENE = 7;
     private final List<Integer> genes;
     private final boolean isBackAndForth;
     private final int minMutations;

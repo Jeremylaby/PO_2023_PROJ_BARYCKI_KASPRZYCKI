@@ -16,7 +16,7 @@ public class AnimalsFactory {
         this.config = config;
     }
 
-    public Animal createInitalAnimal(Vector2d position) {
+    public Animal createInitialAnimal(Vector2d position) {
         Genome genome = new Genome(
                 config.genomeSequenceVariantBackAndForth(),
                 config.mutationsMinNum(),
@@ -87,7 +87,7 @@ public class AnimalsFactory {
         );
     }
 
-    void updateFamilyTree(Animal animal) {
+    private void updateFamilyTree(Animal animal) {
         Set<Animal> visited = new HashSet<>();
 
         animal.getMother().kidsNumberIncrement();
