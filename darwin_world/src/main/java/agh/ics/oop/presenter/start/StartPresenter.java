@@ -65,6 +65,8 @@ public class StartPresenter implements Initializable {
     private ComboBox<String> savedConfigurations;
     @FXML
     private Button chooseDirectoryForStats;
+    @FXML
+    private Button deleteConfiguration;
     private String filePathToSaveStats = null;
     private SimulationEngine engine;
 
@@ -150,7 +152,7 @@ public class StartPresenter implements Initializable {
         File selectedDirectory = directoryChooser.showDialog(new Stage());
 
         if (selectedDirectory != null) {
-            String directory = selectedDirectory.getAbsolutePath().replace("\\","/");
+            String directory = selectedDirectory.getAbsolutePath().replace("\\", "/");
             filePathToSaveStats = directory + "/" + statsFileName.getText();
 
             boolean alreadyExistsFile = Files.exists(Paths.get(filePathToSaveStats + ".csv"));
@@ -163,6 +165,25 @@ public class StartPresenter implements Initializable {
             chooseDirectoryForStats.setText("Wybrano folder: " + selectedDirectory.getName());
             chooseDirectoryForStats.getStyleClass().add("folder-chosen");
         }
+    }
+
+    @FXML
+    private void deleteChoosedConfiguration() {
+        if (savedConfigurations.getValue().isBlank()) {
+            AlertDisplay.showErrorAlert("Niepoprawna Wartość!", "Nie możesz usunąć tej pozycji");
+            return;
+        }
+        try {
+            ConfigurationLoader.removeFromFile(savedConfigurations.getValue());
+            AlertDisplay.showSuccessAlert(
+                    "Konfiguracja o nazwie \"%s\"\n Została pomyślnie usunięta."
+                            .formatted(savedConfigurations.getValue())
+            );
+            updateComboBox();
+        } catch (IOException e) {
+            AlertDisplay.showErrorAlert("Coś poszło nie tak!", e.getMessage());
+        }
+        updateComboBox();
     }
 
     private void resetDirectoryChoice() {
