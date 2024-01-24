@@ -73,7 +73,7 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     private void displayStatistics(Statistics stats) {
-        dayOfSimulation.setText("Dzień symulacji: " + simulation.getDayOfSimulation());
+        dayOfSimulation.setText("" + simulation.getDayOfSimulation());
         numberOfAnimals.setText("" + stats.getNumOfAnimals());
         numberOfPlants.setText("" + stats.getNumOfPlants());
         numberOfEmptyPositions.setText("" + stats.getNumOfEmptyPos());

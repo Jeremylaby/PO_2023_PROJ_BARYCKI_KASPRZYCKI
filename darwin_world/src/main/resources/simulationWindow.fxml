@@ -24,6 +24,7 @@
             <TitledPane text="Statystyki" minWidth="350">
                 <VBox>
                     <HBox styleClass="statistics-row">
+                        <Label text="Dzień symulacji: "/>
                         <Label fx:id="dayOfSimulation"/>
                     </HBox>
                     <HBox styleClass="statistics-row">
