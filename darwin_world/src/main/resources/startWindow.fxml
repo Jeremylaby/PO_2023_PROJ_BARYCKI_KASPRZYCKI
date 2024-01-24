@@ -25,7 +25,7 @@
         <URL value="@style.css"/>
     </stylesheets>
     <top>
-        <VBox alignment="CENTER" minHeight="80">
+        <VBox alignment="CENTER" minHeight="60">
             <Label style="-fx-font-size: 25" text="Darwin World"/>
         </VBox>
     </top>
@@ -135,6 +135,10 @@
                     </TitledPane>
                 </right>
                 <bottom>
+                    <HBox>
+                    <padding>
+                        <Insets top="10"/>
+                    </padding>
                     <TitledPane text="Ustawienia konfiguracji i statystyk">
                         <HBox alignment="CENTER" minHeight="160">
                             <VBox alignment="CENTER" minWidth="300">
@@ -166,6 +170,7 @@
                             </VBox>
                         </HBox>
                     </TitledPane>
+                    </HBox>
                 </bottom>
             </BorderPane>
         </VBox>
@@ -173,7 +178,7 @@
     <bottom>
         <VBox alignment="CENTER">
             <padding>
-                <Insets bottom="30"/>
+                <Insets top="10" bottom="10"/>
             </padding>
             <Button styleClass="start-button" text="Rozpocznij symulację" onAction="#onSimulationStartClicked"/>
         </VBox>
