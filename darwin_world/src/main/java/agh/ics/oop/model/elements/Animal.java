@@ -4,7 +4,9 @@ import agh.ics.oop.model.MapDirection;
 import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.model.util.RandomNumGenerator;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class Animal implements WorldElement {
@@ -132,15 +134,17 @@ public class Animal implements WorldElement {
 
     @Override
     public String toString() {
-        return "genom: " + genome + "\n" +
+        String result = "genom: " + genome + "\n" +
                 "aktywna część genomu: " + genome.getCurrentGeneIndex() + "\n" +
-                "aktywny gen" + genome.getCurrentGene() + "\n" +
+                "aktywny gen: " + genome.getCurrentGene() + "\n" +
                 "energia: " + energy + "\n" +
                 "liczba dzieci: " + kidsNumber + "\n" +
                 "liczba potomków: " + descendantsNumber + "\n" +
                 "przeżyte dni: " + age + "\n" +
                 "dzień śmierci: " + dayOfDeath + "\n" +
                 "liczba zjedzonych roślin: " + plantsEaten + "\n";
+
+        return new String(result.getBytes(), StandardCharsets.UTF_8);
     }
 
     @Override
