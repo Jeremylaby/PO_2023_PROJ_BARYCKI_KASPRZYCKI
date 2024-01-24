@@ -28,7 +28,7 @@ public class Animal implements WorldElement {
         this.father = father;
         this.mother = mother;
         this.color = new AnimalColor(this, energyToReproduce);
-        this.orientation = MapDirection.NORTH.rotate(RandomNumGenerator.randomInt(0, 7));
+        this.orientation = MapDirection.NORTH.rotate(RandomNumGenerator.randomInt(Genome.MIN_GENE, Genome.MAX_GENE));
     }
 
     public Animal(Vector2d position, Genome genome, int energy, int energyToReproduce) {
@@ -43,8 +43,8 @@ public class Animal implements WorldElement {
         updatePosition(width, height);
     }
 
-    public void dodge(int width, int height, int n){
-        rotate(n);
+    public void dodge(int width, int height){
+        rotate(RandomNumGenerator.randomInt(Genome.MIN_GENE, Genome.MAX_GENE));
         updatePosition(width, height);
     }
 

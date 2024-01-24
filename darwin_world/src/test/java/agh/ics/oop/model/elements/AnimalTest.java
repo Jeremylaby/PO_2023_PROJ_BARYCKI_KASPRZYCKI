@@ -41,7 +41,24 @@ class AnimalTest {
 
     @Test
     void dodge() {
-        // TODO
+        Genome genome = new Genome(false, 0, 0, 5);
+        Vector2d initialPosition = new Vector2d(5, 5);
+        Animal animal = new Animal(initialPosition, genome, 100, 50);
+        List<Vector2d> possiblePositions = List.of(
+                new Vector2d(4, 4),
+                new Vector2d(5, 4),
+                new Vector2d(6, 4),
+                new Vector2d(6, 5),
+                new Vector2d(6, 6),
+                new Vector2d(5, 6),
+                new Vector2d(4, 6),
+                new Vector2d(4, 5)
+        );
+
+        animal.dodge(10, 10);
+
+        assertNotEquals(animal.getPosition(), initialPosition);
+        assertTrue(possiblePositions.contains(animal.getPosition()));
     }
 
     @Test
