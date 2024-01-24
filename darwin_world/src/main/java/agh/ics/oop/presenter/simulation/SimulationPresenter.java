@@ -15,17 +15,31 @@ public class SimulationPresenter implements MapChangeListener {
     private final static double GRID_SIZE = 600;
 
     @FXML
+    private Label numberOfAnimals;
+    @FXML
+    private Label numberOfPlants;
+    @FXML
+    private Label numberOfEmptyPositions;
+    @FXML
+    private Label avgAnimalEnergy;
+    @FXML
+    private Label avgDaySurvived;
+    @FXML
+    private Label avgKidsNumber;
+    @FXML
+    private Label mostPopularGenes;
+
+    @FXML
     private Button pauseResumeButton;
     @FXML
     private GridPane mapGrid;
     @FXML
-    private Label statistics;
+    private Label selectedAnimalLabel;
     @FXML
-    private Label animalLabel;
-    @FXML
-    private Button animalButton;
+    private Button unfollowAnimalButton;
     @FXML
     private Label dayOfSimulation;
+
     private Simulation simulation;
     private WorldMap map;
     private double cellSize = 0;
@@ -38,23 +52,33 @@ public class SimulationPresenter implements MapChangeListener {
 
     public void onSimulationPauseClicked() {
         if (simulation.toggle()) {
-            pauseResumeButton.setText("resume");
+            pauseResumeButton.setText("wznów");
         } else {
-            pauseResumeButton.setText("pause");
+            pauseResumeButton.setText("zatrzymaj");
         }
     }
 
     public void drawMap() {
         clearGrid();
-        statistics.setText(simulation.getStatistics().toString());
         drawPreferredPlantPositions();
-        drawFollowedElement();
-        displayDayOfSimulation();
         drawWorldElements();
+        displayFollowedElement();
+        displayStatistics(simulation.getStatistics());
     }
 
     private void clearGrid() {
         mapGrid.getChildren().clear();
+    }
+
+    private void displayStatistics(Statistics stats) {
+        dayOfSimulation.setText("Dzień symulacji: " + simulation.getDayOfSimulation());
+        numberOfAnimals.setText("" + stats.getNumOfAnimals());
+        numberOfPlants.setText("" + stats.getNumOfPlants());
+        numberOfEmptyPositions.setText("" + stats.getNumOfEmptyPos());
+        avgAnimalEnergy.setText("%.2f".formatted(stats.getAvgEnergy()));
+        avgDaySurvived.setText("%.2f".formatted(stats.getAvgDaySurvived()));
+        avgKidsNumber.setText("" + stats.getAvgKidsNumber());
+        mostPopularGenes.setText(stats.getMostPopularGenesForDisplay());
     }
 
     private void drawPreferredPlantPositions() {
@@ -68,14 +92,10 @@ public class SimulationPresenter implements MapChangeListener {
         }
     }
 
-    private void drawFollowedElement() {
+    private void displayFollowedElement() {
         if (selectedElement != null) {
-            animalLabel.setText(selectedElement.toString());
+            selectedAnimalLabel.setText(selectedElement.toString());
         }
-    }
-
-    private void displayDayOfSimulation() {
-        dayOfSimulation.setText("DAY: " + simulation.getDayOfSimulation());
     }
 
     private void drawWorldElements() {
@@ -131,9 +151,9 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     private void changeAnimalInfoVisibility(boolean isVisible) {
-        animalButton.setVisible(isVisible);
+        unfollowAnimalButton.setVisible(isVisible);
         if (!isVisible) {
-            animalLabel.setText("");
+            selectedAnimalLabel.setText("");
         }
     }
 }

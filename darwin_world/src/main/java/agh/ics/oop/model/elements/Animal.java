@@ -132,16 +132,15 @@ public class Animal implements WorldElement {
 
     @Override
     public String toString() {
-        return "Animal:\n" +
-                "\tgenome: " + genome + "\n" +
-                "\tactive part of genome: " + genome.getCurrentGeneIndex() + "\n" +
-                "\tactive gene: " + genome.getCurrentGene() + "\n" +
-                "\tenergy: " + energy + "\n" +
-                "\tkids number: " + kidsNumber + "\n" +
-                "\tdescendants number: " + descendantsNumber + "\n" +
-                "\tage: " + age + "\n" +
-                "\tday of death: " + dayOfDeath + "\n" +
-                "\tplants eaten: " + plantsEaten + "\n";
+        return "genom: " + genome + "\n" +
+                "aktywna część genomu: " + genome.getCurrentGeneIndex() + "\n" +
+                "aktywny gen" + genome.getCurrentGene() + "\n" +
+                "energia: " + energy + "\n" +
+                "liczba dzieci: " + kidsNumber + "\n" +
+                "liczba potomków: " + descendantsNumber + "\n" +
+                "przeżyte dni: " + age + "\n" +
+                "dzień śmierci: " + dayOfDeath + "\n" +
+                "liczba zjedzonych roślin: " + plantsEaten + "\n";
     }
 
     @Override

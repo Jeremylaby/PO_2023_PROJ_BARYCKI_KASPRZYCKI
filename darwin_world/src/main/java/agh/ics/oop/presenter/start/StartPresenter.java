@@ -17,6 +17,8 @@ import javafx.util.converter.IntegerStringConverter;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ResourceBundle;
 
 public class StartPresenter implements Initializable {
@@ -150,6 +152,14 @@ public class StartPresenter implements Initializable {
         if (selectedDirectory != null) {
             String directory = selectedDirectory.getAbsolutePath().replace("\\","/");
             filePathToSaveStats = directory + "/" + statsFileName.getText();
+
+            boolean alreadyExistsFile = Files.exists(Paths.get(filePathToSaveStats + ".csv"));
+            if (alreadyExistsFile) {
+                AlertDisplay.showErrorAlert("Niepoprawna Wartość", "Plik do zapisu statystyk o takiej nazwię już istnieje");
+                resetDirectoryChoice();
+                return;
+            }
+
             chooseDirectoryForStats.setText("Wybrano folder: " + selectedDirectory.getName());
             chooseDirectoryForStats.getStyleClass().add("folder-chosen");
         }

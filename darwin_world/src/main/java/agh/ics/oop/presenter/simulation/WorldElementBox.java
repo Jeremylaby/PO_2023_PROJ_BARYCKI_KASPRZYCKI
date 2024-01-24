@@ -32,9 +32,9 @@ public class WorldElementBox {
     }
 
     private static String getStyles(Color color, boolean isSelected, boolean hasDominatingGenes) {
-        StringBuilder styles = new StringBuilder();
+        StringBuilder stylesBuilder = new StringBuilder();
 
-        styles
+        stylesBuilder
                 .append("-fx-background-color: rgb(")
                 .append(255 * color.getRed()).append(",")
                 .append(255 * color.getGreen()).append(",")
@@ -43,18 +43,18 @@ public class WorldElementBox {
                 .append("-fx-border-width: 5;");
 
         if (hasDominatingGenes || isSelected) {
-            styles.append("-fx-border-color: ");
+            stylesBuilder.append("-fx-border-color: ");
 
             if (hasDominatingGenes && isSelected) {
-                styles.append(DOMINATING_AND_SELECTED);
+                stylesBuilder.append(DOMINATING_AND_SELECTED);
             } else if (isSelected) {
-                styles.append(SELECTED);
+                stylesBuilder.append(SELECTED);
             } else {
-                styles.append(DOMINATING);
+                stylesBuilder.append(DOMINATING);
             }
         }
 
-        return styles.toString();
+        return stylesBuilder.toString();
     }
 
     public Node getFxElement() {

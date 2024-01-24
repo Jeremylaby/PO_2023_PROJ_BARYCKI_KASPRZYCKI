@@ -7,7 +7,7 @@ public record ListQuantity(List<Integer> list,Integer quantity) {
     @Override
     public String toString() {
         return getListString() +
-                ", quantity:" + quantity +
+                ", wystąpienia:" + quantity +
                 '\n';
     }
 

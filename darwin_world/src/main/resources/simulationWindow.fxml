@@ -11,43 +11,83 @@
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="agh.ics.oop.presenter.simulation.SimulationPresenter"
-            prefHeight="700.0" prefWidth="1200.0">
+            prefHeight="Infinity" prefWidth="Infinity"
+            style="-fx-font-size: 15">
     <stylesheets>
-<!--        <URL value="@style.css" />-->
+        <URL value="@style.css" />
     </stylesheets>
     <left>
-        <HBox >
+        <VBox alignment="CENTER">
             <padding>
-                <Insets left="50" top="50" />
+                <Insets left="30" />
             </padding>
-            <VBox style="-fx-font-size: 15" >
-                <Label fx:id="dayOfSimulation"/>
-                <Label fx:id="statistics" minHeight="250" />
-                <HBox alignment="CENTER">
-                    <padding>
-                        <Insets top="10" bottom="10" />
-                    </padding>
-                    <Button fx:id="pauseResumeButton" minHeight="40" minWidth="100" text="pause" onAction="#onSimulationPauseClicked" style="-fx-font-size: 18"/>
-                </HBox>
-                <Label fx:id="animalLabel"/>
-                <HBox alignment="CENTER">
-                    <padding>
-                        <Insets top="10" bottom="10" />
-                    </padding>
-                    <Button fx:id="animalButton" minHeight="40" minWidth="100" text="unfollow" onAction="#stopFollow" visible="false" style="-fx-font-size: 18"/>
-                </HBox>
-            </VBox>
-        </HBox>
+            <TitledPane text="Statystyki" minWidth="350">
+                <VBox>
+                    <HBox styleClass="statistics-row">
+                        <Label fx:id="dayOfSimulation"/>
+                    </HBox>
+                    <HBox styleClass="statistics-row">
+                        <Label text="liczba zwierząt: " />
+                        <Label fx:id="numberOfAnimals" />
+                    </HBox>
+                    <HBox styleClass="statistics-row">
+                        <Label text="liczba roślin: " />
+                        <Label fx:id="numberOfPlants" />
+                    </HBox>
+                    <HBox styleClass="statistics-row">
+                        <Label text="liczba wolnych pól: " />
+                        <Label fx:id="numberOfEmptyPositions" />
+                    </HBox>
+                    <HBox styleClass="statistics-row">
+                        <Label text="średnia energia zwierzęcia: " />
+                        <Label fx:id="avgAnimalEnergy" />
+                    </HBox>
+                    <HBox styleClass="statistics-row">
+                        <Label text="średnia przeżytych dni: " />
+                        <Label fx:id="avgDaySurvived" />
+                    </HBox>
+                    <HBox styleClass="statistics-row">
+                        <Label text="średnia liczba dzieci: " />
+                        <Label fx:id="avgKidsNumber" />
+                    </HBox>
+                    <VBox styleClass="statistics-row" style="-fx-border-width: 0">
+                            <Label text="najpopularniejsze geny: " style="-fx-padding: 0 0 10 0" />
+                            <Label fx:id="mostPopularGenes" />
+                    </VBox>
+                </VBox>
+            </TitledPane>
+            <HBox alignment="CENTER">
+                <padding>
+                    <Insets top="20" />
+                </padding>
+                <Button fx:id="pauseResumeButton" minHeight="40" minWidth="100" text="zatrzymaj" onAction="#onSimulationPauseClicked" style="-fx-font-size: 18"/>
+            </HBox>
+        </VBox>
     </left>
-    <right>
+    <center>
         <HBox alignment="CENTER">
-            <padding>
-                <Insets right="50" />
-            </padding>
             <VBox alignment="CENTER">
                 <GridPane fx:id="mapGrid" style="-fx-background-color: rgb(217,193,193)" />
             </VBox>
         </HBox>
+    </center>
+    <right>
+        <VBox alignment="CENTER">
+            <padding>
+                <Insets right="50" />
+            </padding>
+            <TitledPane text="Śledzone zwierzę" minWidth="300">
+                <VBox>
+                    <Label fx:id="selectedAnimalLabel" />
+                    <HBox alignment="CENTER">
+                        <padding>
+                            <Insets top="20" />
+                        </padding>
+                        <Button fx:id="unfollowAnimalButton" minHeight="40" minWidth="100" text="przestań śledzić" onAction="#stopFollow" visible="false" style="-fx-font-size: 18"/>
+                    </HBox>
+                </VBox>
+            </TitledPane>
+        </VBox>
     </right>
 
 </BorderPane>

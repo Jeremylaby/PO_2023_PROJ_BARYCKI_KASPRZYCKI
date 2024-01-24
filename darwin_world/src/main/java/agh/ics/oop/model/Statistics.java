@@ -84,22 +84,10 @@ public class Statistics {
         return numOfAllPositions - numOfOccupiedPositions;
     }
 
-    @Override
-    public String toString() {
-        return "Statistics:" +'\n'+
-                "\tnumber of animals: " + numOfAnimals +'\n'+
-                "\tnumber of plants: " + numOfPlants +'\n'+
-                "\tnumber of empty positions: " + numOfEmptyPos +'\n'+
-                "\taverage energy: %.2f".formatted(avgEnergy) +'\n'+
-                "\taverage day survived: %.2f".formatted(avgDaySurvived) +'\n'+
-                "\taverage kids number: " + avgKidsNumber+'\n' +
-                "\tmost popular genomes: \n" + getMostPopularGenesForDisplay();
-    }
-
-    private String getMostPopularGenesForDisplay() {
+    public String getMostPopularGenesForDisplay() {
         return IntStream.range(0, mostPopularGenes.size())
                 .mapToObj(i -> "%d:  %s".formatted(i+1, mostPopularGenes.get(i)))
-                .collect(Collectors.joining("\t\t", "\t\t", ""));
+                .collect(Collectors.joining("\t", "\t", ""));
     }
 
     public List<Integer> getMostPopularGenes(){
