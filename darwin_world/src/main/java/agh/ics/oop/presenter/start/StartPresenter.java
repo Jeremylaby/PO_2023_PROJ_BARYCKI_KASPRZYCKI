@@ -169,7 +169,7 @@ public class StartPresenter implements Initializable {
 
     @FXML
     private void deleteChoosedConfiguration() {
-        if (savedConfigurations.getValue().isBlank()) {
+        if (savedConfigurations.getValue() == null) {
             AlertDisplay.showErrorAlert("Niepoprawna Wartość!", "Nie możesz usunąć tej pozycji");
             return;
         }
