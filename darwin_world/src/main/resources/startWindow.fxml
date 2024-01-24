@@ -115,7 +115,7 @@
                             <HBox styleClass="config-row">
                                 <Label text="Długość genomu zwierzęcia"/>
                                 <Region HBox.hgrow="ALWAYS"/>
-                                <Spinner fx:id="genomeSize" min="0" max="100" initialValue="10" editable="true"/>
+                                <Spinner fx:id="genomeSize" min="1" max="100" initialValue="10" editable="true"/>
                             </HBox>
                             <HBox styleClass="config-row" style="-fx-min-height: 80">
                                 <Label text="Wariant sekwencjonowania genów"/>

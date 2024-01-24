@@ -13,8 +13,11 @@ public record ListQuantity(List<Integer> list,Integer quantity) {
     }
 
     public String getListString() {
+        String exceededSize = list.size() > 20 ? "..." : "";
+
         return list.stream()
                 .map(Object::toString)
-                .collect(Collectors.joining("", "[", "]"));
+                .limit(15)
+                .collect(Collectors.joining("", "[", exceededSize +"]"));
     }
 }

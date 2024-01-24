@@ -72,20 +72,16 @@ class AnimalTest {
     }
 
     @Test
-    void updatePosition() {
+    void updatePosition() throws NoSuchFieldException, IllegalAccessException {
         List<Integer> genes = List.of(0, 0, 0, 0, 0);
         Genome genome = new Genome(false, 0, 0, genes);
         Animal animal1 = new Animal(new Vector2d(5, 0), genome, 100, 50);
         Animal animal2 = new Animal(new Vector2d(10, 4), genome, 100, 50);
 
-        try {
-            Field declaredField = Animal.class.getDeclaredField("orientation");
-            declaredField.setAccessible(true);
-            declaredField.set(animal1, MapDirection.SOUTH);
-            declaredField.set(animal2, MapDirection.EAST);
-        } catch (Exception e) {
-            fail();
-        }
+        Field declaredField = Animal.class.getDeclaredField("orientation");
+        declaredField.setAccessible(true);
+        declaredField.set(animal1, MapDirection.SOUTH);
+        declaredField.set(animal2, MapDirection.EAST);
 
         animal1.move(10, 10);
         animal2.move(10, 10);

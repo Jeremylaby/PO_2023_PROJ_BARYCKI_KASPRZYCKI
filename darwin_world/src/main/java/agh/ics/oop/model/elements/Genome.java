@@ -97,8 +97,10 @@ public class Genome {
 
     @Override
     public String toString() {
+        String exceededSize = genes.size() > 25 ? "..." : "";
+
         return genes.stream()
                 .map(Object::toString)
-                .collect(Collectors.joining("", "[", "]"));
+                .collect(Collectors.joining("", "[", exceededSize + "]"));
     }
 }
