@@ -26,7 +26,7 @@
     </stylesheets>
     <top>
         <VBox alignment="CENTER" minHeight="80">
-            <Label style="-fx-font-size: 25" text="Darwin World" />
+            <Label style="-fx-font-size: 25" text="Darwin World"/>
         </VBox>
     </top>
     <center>
@@ -36,39 +36,41 @@
                     <TitledPane text="Ustawienia mapy i roślin">
                         <VBox minWidth="450">
                             <HBox styleClass="config-row">
-                                <Label text="Szerokość mapy" />
-                                <Region HBox.hgrow="ALWAYS" />
-                                <Spinner fx:id="mapWidth" min="2" max="100" initialValue="20" editable="true" />
+                                <Label text="Szerokość mapy"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Spinner fx:id="mapWidth" min="2" max="100" initialValue="20" editable="true"/>
                             </HBox>
                             <HBox styleClass="config-row">
-                                <Label text="Wysokość mapy" />
-                                <Region HBox.hgrow="ALWAYS" />
-                                <Spinner fx:id="mapHeight" min="2" max="100" initialValue="20" editable="true" />
+                                <Label text="Wysokość mapy"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Spinner fx:id="mapHeight" min="2" max="100" initialValue="20" editable="true"/>
                             </HBox>
                             <HBox styleClass="config-row">
-                                <Label text="Początkowa liczba roślin" />
-                                <Region HBox.hgrow="ALWAYS" />
-                                <Spinner fx:id="plantsStartNum" min="0" max="1000" initialValue="50" editable="true" />
+                                <Label text="Początkowa liczba roślin"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Spinner fx:id="plantsStartNum" min="0" max="1000" initialValue="50" editable="true"/>
                             </HBox>
                             <HBox styleClass="config-row">
-                                <Label text="Wartość energii pojedynczej rośliny" />
-                                <Region HBox.hgrow="ALWAYS" />
-                                <Spinner fx:id="plantsEnergyValue" min="0" max="500" initialValue="10" editable="true" />
+                                <Label text="Wartość energii pojedynczej rośliny"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Spinner fx:id="plantsEnergyValue" min="0" max="500" initialValue="10" editable="true"/>
                             </HBox>
                             <HBox styleClass="config-row">
-                                <Label text="Liczba roślin rosnących każdego dnia" />
-                                <Region HBox.hgrow="ALWAYS" />
-                                <Spinner fx:id="plantsNumPerDay" min="0" max="100" initialValue="5" editable="true" />
+                                <Label text="Liczba roślin rosnących każdego dnia"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Spinner fx:id="plantsNumPerDay" min="0" max="100" initialValue="5" editable="true"/>
                             </HBox>
                             <HBox styleClass="config-row" style="-fx-min-height: 80">
-                                <Label text="Wariant wzrostu roślin" />
-                                <Region HBox.hgrow="ALWAYS" />
+                                <Label text="Wariant wzrostu roślin"/>
+                                <Region HBox.hgrow="ALWAYS"/>
                                 <VBox alignment="CENTER_LEFT">
                                     <fx:define>
                                         <ToggleGroup fx:id="plantsGrowthVariant"/>
                                     </fx:define>
-                                    <RadioButton fx:id="plantsGrowthVariantEquator" text="zalesione równiki" toggleGroup="$plantsGrowthVariant" minHeight="30" selected="true" />
-                                    <RadioButton fx:id="plantsGrowthVariantPoison" text="zatrute owoce" toggleGroup="$plantsGrowthVariant" minHeight="30" />
+                                    <RadioButton fx:id="plantsGrowthVariantEquator" text="zalesione równiki"
+                                                 toggleGroup="$plantsGrowthVariant" minHeight="30" selected="true"/>
+                                    <RadioButton fx:id="plantsGrowthVariantPoison" text="zatrute owoce"
+                                                 toggleGroup="$plantsGrowthVariant" minHeight="30"/>
                                 </VBox>
                             </HBox>
                         </VBox>
@@ -78,49 +80,54 @@
                     <TitledPane text="Ustawienia zwierząt">
                         <VBox alignment="CENTER" minWidth="450">
                             <HBox styleClass="config-row">
-                                <Label text="Początkowa liczba zwierząt" />
-                                <Region HBox.hgrow="ALWAYS" />
-                                <Spinner fx:id="animalsStartNum" min="0" max="1000" initialValue="15" editable="true" />
+                                <Label text="Początkowa liczba zwierząt"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Spinner fx:id="animalsStartNum" min="0" max="1000" initialValue="15" editable="true"/>
                             </HBox>
                             <HBox styleClass="config-row">
-                                <Label text="Początkowa energia zwierząt" />
-                                <Region HBox.hgrow="ALWAYS" />
-                                <Spinner fx:id="animalsStartEnergy" min="0" max="1000" initialValue="30" editable="true" />
+                                <Label text="Początkowa energia zwierząt"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Spinner fx:id="animalsStartEnergy" min="0" max="1000" initialValue="30"
+                                         editable="true"/>
                             </HBox>
                             <HBox styleClass="config-row">
-                                <Label text="Energia zwierzęcia wymagana do reprodukcji" />
-                                <Region HBox.hgrow="ALWAYS" />
-                                <Spinner fx:id="animalsEnergyToReproduce" min="2" max="500" initialValue="50" editable="true" />
+                                <Label text="Energia zwierzęcia wymagana do reprodukcji"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Spinner fx:id="animalsEnergyToReproduce" min="2" max="500" initialValue="50"
+                                         editable="true"/>
                             </HBox>
                             <HBox styleClass="config-row">
-                                <Label text="Koszt reprodukcji zwierzęcia" />
-                                <Region HBox.hgrow="ALWAYS" />
-                                <Spinner fx:id="animalsEnergyReproduceCost" min="1" max="500" initialValue="10" editable="true" />
+                                <Label text="Koszt reprodukcji zwierzęcia"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Spinner fx:id="animalsEnergyReproduceCost" min="1" max="500" initialValue="10"
+                                         editable="true"/>
                             </HBox>
                             <HBox styleClass="config-row">
-                                <Label text="Minimalna liczba mutujących genów" />
-                                <Region HBox.hgrow="ALWAYS" />
-                                <Spinner fx:id="mutationsMinNum" min="0" max="100" initialValue="0" editable="true" />
+                                <Label text="Minimalna liczba mutujących genów"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Spinner fx:id="mutationsMinNum" min="0" max="100" initialValue="0" editable="true"/>
                             </HBox>
                             <HBox styleClass="config-row">
-                                <Label text="Maksymalna liczba mutujących genów" />
-                                <Region HBox.hgrow="ALWAYS" />
-                                <Spinner fx:id="mutationsMaxNum" min="0" max="100" initialValue="5" editable="true" />
+                                <Label text="Maksymalna liczba mutujących genów"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Spinner fx:id="mutationsMaxNum" min="0" max="100" initialValue="5" editable="true"/>
                             </HBox>
                             <HBox styleClass="config-row">
-                                <Label text="Długość genomu zwierzęcia" />
-                                <Region HBox.hgrow="ALWAYS" />
-                                <Spinner fx:id="genomeSize" min="0" max="100" initialValue="10" editable="true" />
+                                <Label text="Długość genomu zwierzęcia"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Spinner fx:id="genomeSize" min="0" max="100" initialValue="10" editable="true"/>
                             </HBox>
                             <HBox styleClass="config-row" style="-fx-min-height: 80">
-                                <Label text="Wariant sekwencjonowania genów" />
-                                <Region HBox.hgrow="ALWAYS" />
+                                <Label text="Wariant sekwencjonowania genów"/>
+                                <Region HBox.hgrow="ALWAYS"/>
                                 <VBox alignment="CENTER_LEFT">
                                     <fx:define>
                                         <ToggleGroup fx:id="genomeSequenceVariant"/>
                                     </fx:define>
-                                    <RadioButton fx:id="genomeSequenceVariantCycle" text="pełna predestynacja" toggleGroup="$genomeSequenceVariant" minHeight="30" selected="true" />
-                                    <RadioButton fx:id="genomeSequenceVariantBackAndForth" text="tam i z powrotem" toggleGroup="$genomeSequenceVariant" minHeight="30" />
+                                    <RadioButton fx:id="genomeSequenceVariantCycle" text="pełna predestynacja"
+                                                 toggleGroup="$genomeSequenceVariant" minHeight="30" selected="true"/>
+                                    <RadioButton fx:id="genomeSequenceVariantBackAndForth" text="tam i z powrotem"
+                                                 toggleGroup="$genomeSequenceVariant" minHeight="30"/>
                                 </VBox>
                             </HBox>
 
@@ -128,32 +135,37 @@
                     </TitledPane>
                 </right>
                 <bottom>
-                    <HBox alignment="CENTER" minHeight="160">
-                        <VBox alignment="CENTER" minWidth="300">
-                            <Label text="Zapisz konfigurację" minHeight="40" />
-                            <TextField fx:id="configurationName" promptText="nazwa konfiguracji" minHeight="30"/>
-                            <VBox alignment="CENTER">
-                                <padding>
-                                    <Insets top="15" />
-                                </padding>
-                                <Button text="Zapisz" onAction="#onConfigurationSaveClicked"/>
+                    <TitledPane text="Ustawienia konfiguracji i statystyk">
+                        <HBox alignment="CENTER" minHeight="160">
+                            <VBox alignment="CENTER" minWidth="300">
+                                <Label text="Zapisz konfigurację" minHeight="40"/>
+                                <TextField fx:id="configurationName" promptText="nazwa konfiguracji" minHeight="30"/>
+                                <VBox alignment="CENTER">
+                                    <padding>
+                                        <Insets top="15"/>
+                                    </padding>
+                                    <Button text="Zapisz" onAction="#onConfigurationSaveClicked"/>
+                                </VBox>
                             </VBox>
-                        </VBox>
-                        <VBox alignment="CENTER" minWidth="300" >
-                            <Label text="Wybierz zapisaną Konfigurację" minHeight="50" />
-                            <ComboBox fx:id="savedConfigurations" minHeight="30" prefWidth="150" />
-                        </VBox>
-                        <VBox alignment="CENTER" minWidth="300">
-                            <Label text="Wybierz folder do zapisu statystyk" minHeight="50" />
-                            <TextField fx:id="statsFileName" promptText="nazwa pliku dla statystyk" minHeight="30"/>
-                            <VBox alignment="CENTER">
-                                <padding>
-                                    <Insets top="15" />
-                                </padding>
-                                <Button fx:id="chooseDirectoryForStats" text="Wybierz Folder" onAction="#onChooseDirectoryClicked" />
+                            <VBox alignment="CENTER" minWidth="300">
+                                <Label text="Wybierz zapisaną Konfigurację" minHeight="50"/>
+                                <ComboBox fx:id="savedConfigurations" minHeight="30" prefWidth="150"/>
+                                <Label text="Usuń wybraną konfigurację" minHeight="50"/>
+                                <Button fx:id="deleteConfiguration" text="Usuń" onAction="#deleteChoosedConfiguration"/>
                             </VBox>
-                        </VBox>
-                    </HBox>
+                            <VBox alignment="CENTER" minWidth="300">
+                                <Label text="Wybierz folder do zapisu statystyk" minHeight="50"/>
+                                <TextField fx:id="statsFileName" promptText="nazwa pliku dla statystyk" minHeight="30"/>
+                                <VBox alignment="CENTER">
+                                    <padding>
+                                        <Insets top="15"/>
+                                    </padding>
+                                    <Button fx:id="chooseDirectoryForStats" text="Wybierz Folder"
+                                            onAction="#onChooseDirectoryClicked"/>
+                                </VBox>
+                            </VBox>
+                        </HBox>
+                    </TitledPane>
                 </bottom>
             </BorderPane>
         </VBox>
@@ -161,7 +173,7 @@
     <bottom>
         <VBox alignment="CENTER">
             <padding>
-                <Insets bottom="30" />
+                <Insets bottom="30"/>
             </padding>
             <Button styleClass="start-button" text="Rozpocznij symulację" onAction="#onSimulationStartClicked"/>
         </VBox>

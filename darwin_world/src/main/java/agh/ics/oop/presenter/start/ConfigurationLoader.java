@@ -24,7 +24,11 @@ public class ConfigurationLoader {
             objectMapper.writeValue(new File(PATH_TO_CONFIG_FILE), configurations);
         }
     }
-
+    public static void removeFromFile(String configName) throws IOException {
+        Map<String,Configuration> configurations=loadConfigurationsFromFile();
+        configurations.remove(configName);
+        objectMapper.writeValue(new File(PATH_TO_CONFIG_FILE),configurations);
+    }
     public static Configuration loadConfiguration(String configName) {
         return loadConfigurationsFromFile().get(configName);
     }
