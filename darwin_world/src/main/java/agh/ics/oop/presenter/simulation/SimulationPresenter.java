@@ -11,6 +11,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 
+import java.nio.charset.StandardCharsets;
+
 public class SimulationPresenter implements MapChangeListener {
     private final static double GRID_SIZE = 600;
 
@@ -52,7 +54,7 @@ public class SimulationPresenter implements MapChangeListener {
 
     public void onSimulationPauseClicked() {
         if (simulation.toggle()) {
-            pauseResumeButton.setText("wznów");
+            pauseResumeButton.setText(new String(("wznów").getBytes(), StandardCharsets.UTF_8));
         } else {
             pauseResumeButton.setText("zatrzymaj");
         }
