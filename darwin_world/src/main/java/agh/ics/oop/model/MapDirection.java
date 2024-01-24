@@ -71,11 +71,8 @@ public enum MapDirection {
     }
 
     public MapDirection rotate(int value) {
+        if (value < 0) throw new IllegalArgumentException();
         int newValue = (toInteger() + value) % MapDirection.values().length;
-        try {
-            return intToMapDirection(newValue);
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException(e);
-        }
+        return intToMapDirection(newValue);
     }
 }
