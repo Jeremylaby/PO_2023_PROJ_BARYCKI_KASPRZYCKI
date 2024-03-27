@@ -1,4 +1,6 @@
 # PO_2023_PROJ_BARYCKI_KASPRZYCKI
+### Nasza konfoguracja
+F4 Zatrute owoce , Tam i z powrotem
 # Projekt: Darwin World
 
 Niniejsza treść została zaadaptowana przez Aleksandra Smywińskiego-Pohla na podstawie opisu oraz ilustracji przygotowanych przez Wojciecha Kosiora. Inspiracją dla niego była z kolei książka "Land of Lisp" Conrada Barskiego, który zaś zainspirował się artykułem w "Scientific American". A na końcu modyfikacje wprowadził Radosław Łazarz, bazując częściowo na książce "Algorytmy genetyczne i ich zastosowania" Davida E. Goldberga. Dużo ludzi jak na jeden projekcik.:-)
