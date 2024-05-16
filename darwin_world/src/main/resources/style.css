@@ -1,0 +1,29 @@
+Spinner {
+    -fx-pref-width: 120;
+    -fx-min-height: 35;
+}
+
+TitledPane {
+    -fx-collapsible: false;
+}
+
+.config-row {
+    -fx-alignment: center;
+    -fx-min-height: 45;
+}
+
+.start-button {
+    -fx-font-size: 18;
+    -fx-pref-width: 220;
+    -fx-pref-height: 50;
+}
+
+.folder-chosen {
+    -fx-text-fill: rgb(0, 100, 0);
+}
+
+.statistics-row {
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: black;
+    -fx-padding: 10;
+}
